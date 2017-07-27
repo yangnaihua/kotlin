@@ -34,3 +34,5 @@ sourceSets {
     "main" { java.srcDir("../compiler/tests-common") }
     "test" {}
 }
+
+testsJar {}

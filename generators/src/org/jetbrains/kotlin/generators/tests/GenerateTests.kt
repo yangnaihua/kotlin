@@ -1312,6 +1312,12 @@ fun main(args: Array<String>) {
         }
     }
 
+    testGroup("jps-plugin/jps-tests-java9/test", "jps-plugin/testData") {
+        testClass(baseTestClassName = "org.jetbrains.kotlin.jps.build.AbstractIncrementalJava9JpsTest") {
+            model("incremental/java9", extension = null, recursive = false)
+        }
+    }
+
     testGroup("compiler/incremental-compilation-impl/test", "jps-plugin/testData") {
         testClass<AbstractIncrementalJvmCompilerRunnerTest> {
             model("incremental/pureKotlin", extension = null, recursive = false)
