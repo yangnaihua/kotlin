@@ -140,9 +140,9 @@ class KotlinJpsBuildTestIncremental : KotlinJpsBuildTest() {
 
 open class KotlinJpsBuildTest : AbstractKotlinJpsBuildTestCase() {
     companion object {
-        private val PROJECT_NAME = "kotlinProject"
+        val PROJECT_NAME = "kotlinProject"
+        val JDK_NAME = "IDEA_JDK"
         private val ADDITIONAL_MODULE_NAME = "module2"
-        private val JDK_NAME = "IDEA_JDK"
 
         private val EXCLUDE_FILES = arrayOf("Excluded.class", "YetAnotherExcluded.class")
         private val NOTHING = arrayOf<String>()

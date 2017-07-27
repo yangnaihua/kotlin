@@ -1,0 +1,7 @@
+package exported;
+
+public class Exported2 {
+    public static Exported test() {
+        return ExportedKt.exported();
+    }
+}

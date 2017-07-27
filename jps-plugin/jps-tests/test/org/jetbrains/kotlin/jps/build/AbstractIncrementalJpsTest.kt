@@ -39,9 +39,11 @@ import org.jetbrains.jps.builders.logging.BuildLoggingManager
 import org.jetbrains.jps.cmdline.ProjectDescriptor
 import org.jetbrains.jps.incremental.*
 import org.jetbrains.jps.incremental.messages.BuildMessage
+import org.jetbrains.jps.model.JpsDummyElement
 import org.jetbrains.jps.model.JpsModuleRootModificationUtil
 import org.jetbrains.jps.model.java.JpsJavaDependencyScope
 import org.jetbrains.jps.model.java.JpsJavaExtensionService
+import org.jetbrains.jps.model.library.sdk.JpsSdk
 import org.jetbrains.jps.util.JpsPathUtil
 import org.jetbrains.kotlin.config.IncrementalCompilation
 import org.jetbrains.kotlin.incremental.CacheVersion
@@ -53,7 +55,10 @@ import org.jetbrains.kotlin.jps.incremental.getKotlinCache
 import org.jetbrains.kotlin.test.KotlinTestUtils
 import org.jetbrains.kotlin.utils.Printer
 import org.jetbrains.kotlin.utils.keysToMap
-import java.io.*
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.PrintStream
 import java.util.*
 import java.util.concurrent.Future
 import kotlin.reflect.jvm.javaField
@@ -384,7 +389,7 @@ abstract class AbstractIncrementalJpsTest(
 
         JpsJavaExtensionService.getInstance().getOrCreateProjectExtension(myProject).outputUrl = JpsPathUtil.pathToUrl(getAbsolutePath("out"))
 
-        val jdk = addJdk("my jdk")
+        val jdk = createJdk()
         val moduleDependencies = readModuleDependencies()
         mapWorkingToOriginalFile = hashMapOf()
 
@@ -418,6 +423,7 @@ abstract class AbstractIncrementalJpsTest(
         return moduleNames
     }
 
+    protected open fun createJdk(): JpsSdk<JpsDummyElement> = addJdk("my jdk")
 
     protected open fun preProcessSources(srcDir: File) {
     }

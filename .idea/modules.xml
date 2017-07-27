@@ -68,6 +68,7 @@
       <module fileurl="file://$PROJECT_DIR$/compiler/javac-wrapper/javac-wrapper.iml" filepath="$PROJECT_DIR$/compiler/javac-wrapper/javac-wrapper.iml" group="compiler" />
       <module fileurl="file://$PROJECT_DIR$/jps-plugin/jps-plugin.iml" filepath="$PROJECT_DIR$/jps-plugin/jps-plugin.iml" group="ide/jps" />
       <module fileurl="file://$PROJECT_DIR$/jps-plugin/jps-tests/jps-tests.iml" filepath="$PROJECT_DIR$/jps-plugin/jps-tests/jps-tests.iml" group="ide/jps" />
+      <module fileurl="file://$PROJECT_DIR$/jps-plugin/jps-tests-java9/jps-tests-java9.iml" filepath="$PROJECT_DIR$/jps-plugin/jps-tests-java9/jps-tests-java9.iml" group="ide/jps" />
       <module fileurl="file://$PROJECT_DIR$/js/js.ast/js.ast.iml" filepath="$PROJECT_DIR$/js/js.ast/js.ast.iml" group="compiler/js" />
       <module fileurl="file://$PROJECT_DIR$/js/js.dce/js.dce.iml" filepath="$PROJECT_DIR$/js/js.dce/js.dce.iml" group="compiler/js" />
       <module fileurl="file://$PROJECT_DIR$/js/js.frontend/js.frontend.iml" filepath="$PROJECT_DIR$/js/js.frontend/js.frontend.iml" group="compiler/js" />
