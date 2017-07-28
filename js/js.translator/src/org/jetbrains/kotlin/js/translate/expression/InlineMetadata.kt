@@ -66,13 +66,7 @@ class InlineMetadata(val tag: JsStringLiteral, val function: FunctionWithWrapper
             if (callExpression !is JsInvocation) return null
 
             val qualifier = callExpression.qualifier as? JsNameRef ?: return null
-            if (qualifier.qualifier != null) {
-                val qualifierQualifier = qualifier.qualifier as? JsNameRef ?: return null
-                if (qualifierQualifier.qualifier != null || qualifier.ident != Namer.WRAP_FUNCTION) return null
-            }
-            else {
-                if (qualifier.name?.specialFunction != SpecialFunction.WRAP_FUNCTION) return null
-            }
+            if (qualifier.name?.specialFunction != SpecialFunction.WRAP_FUNCTION) return null
             if (callExpression.arguments.size != 1) return null
 
             val argument = callExpression.arguments[0] as? JsFunction ?: return null
