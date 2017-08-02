@@ -23,6 +23,7 @@ inline fun shouldBeInlined() {
 
 fun box(): String {
     val result = foo()
-    if (result != "([(OK)])") return "fail: $result"
+    if (result != "([(OK)])") return "fail1: $result"
+    if (global != "shouldBeInlined") return "fail2: $global"
     return "OK"
 }
