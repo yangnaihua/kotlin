@@ -19,13 +19,10 @@ package org.jetbrains.kotlin.js.dce
 import com.google.gwt.dev.js.rhino.CodePosition
 import com.google.gwt.dev.js.rhino.ErrorReporter
 import org.jetbrains.kotlin.js.backend.ast.*
-import org.jetbrains.kotlin.js.backend.ast.metadata.SpecialFunction
-import org.jetbrains.kotlin.js.backend.ast.metadata.specialFunction
 import org.jetbrains.kotlin.js.dce.Context.Node
 import org.jetbrains.kotlin.js.inline.util.collectDefinedNames
 import org.jetbrains.kotlin.js.inline.util.fixForwardNameReferences
 import org.jetbrains.kotlin.js.parser.parse
-import org.jetbrains.kotlin.js.translate.utils.JsAstUtils
 import java.io.File
 
 class DeadCodeElimination(val logConsumer: (String) -> Unit) {
