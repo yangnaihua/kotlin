@@ -91,8 +91,8 @@ class Analyzer(private val context: Context) : JsVisitor() {
                     }
                 }
 
-                // Object.defineProperty()
                 when {
+                    // Object.defineProperty()
                     context.isObjectDefineProperty(function) ->
                         handleObjectDefineProperty(x, expression.arguments.getOrNull(0), expression.arguments.getOrNull(1),
                                                    expression.arguments.getOrNull(2))
