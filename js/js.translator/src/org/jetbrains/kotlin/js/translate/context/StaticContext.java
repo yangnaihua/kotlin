@@ -43,6 +43,7 @@ import org.jetbrains.kotlin.js.translate.intrinsic.Intrinsics;
 import org.jetbrains.kotlin.js.translate.utils.AnnotationsUtils;
 import org.jetbrains.kotlin.js.translate.utils.JsAstUtils;
 import org.jetbrains.kotlin.js.translate.utils.SignatureUtilsKt;
+import org.jetbrains.kotlin.js.translate.utils.TranslationUtils;
 import org.jetbrains.kotlin.name.ClassId;
 import org.jetbrains.kotlin.name.FqName;
 import org.jetbrains.kotlin.resolve.BindingContext;
@@ -867,7 +868,7 @@ public final class StaticContext {
     public JsName getNameForSpecialFunction(@NotNull SpecialFunction specialFunction) {
         return specialFunctions.computeIfAbsent(specialFunction, f -> {
             JsExpression expression = Namer.createSpecialFunction(specialFunction);
-            JsName name = importDeclaration(f.getSuggestedName(), "special:" + f.name(), expression);
+            JsName name = importDeclaration(f.getSuggestedName(), TranslationUtils.getTagForSpecialFunction(f), expression);
             MetadataProperties.setSpecialFunction(name, f);
             return name;
         });

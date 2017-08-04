@@ -829,7 +829,7 @@ public class TranslationContext {
             return staticContext.getNameForSpecialFunction(function);
         }
         else {
-            String tag = "special:" + function.name();
+            String tag = TranslationUtils.getTagForSpecialFunction(function);
             return inlineFunctionContext.getImports().computeIfAbsent(tag, t -> {
                 JsExpression imported = Namer.createSpecialFunction(function);
                 JsName result = JsScope.declareTemporaryName(function.getSuggestedName());

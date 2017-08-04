@@ -460,4 +460,9 @@ public final class TranslationUtils {
         JsName name = context.getNameForSpecialFunction(function);
         return new JsInvocation(pureFqn(name, null), arguments);
     }
+
+    @NotNull
+    public static String getTagForSpecialFunction(@NotNull SpecialFunction specialFunction) {
+        return "special:" + specialFunction.name();
+    }
 }
