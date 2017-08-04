@@ -17,6 +17,7 @@
 package org.jetbrains.kotlin.compilerRunner
 
 import com.intellij.util.xmlb.XmlSerializerUtil
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.jps.api.GlobalOptions
 import org.jetbrains.kotlin.cli.common.ExitCode
 import org.jetbrains.kotlin.cli.common.KOTLIN_COMPILER_ENVIRONMENT_KEEPALIVE_PROPERTY
@@ -62,6 +63,8 @@ class JpsKotlinCompilerRunner : KotlinCompilerRunner<JpsCompilerEnvironment>() {
 
             return _jpsCompileServiceSession
         }
+
+        const val FAIL_ON_FALLBACK_PROPERTY = "test.kotlin.jps.compiler.runner.fail.on.fallback"
     }
 
     fun runK2JvmCompiler(
@@ -182,6 +185,10 @@ class JpsKotlinCompilerRunner : KotlinCompilerRunner<JpsCompilerEnvironment>() {
             compilerClassName: String,
             environment: JpsCompilerEnvironment
     ): ExitCode {
+        if ("true" == System.getProperty("kotlin.jps.tests") && "true" == System.getProperty(FAIL_ON_FALLBACK_PROPERTY)) {
+            error("Fallback strategy is disabled in tests!")
+        }
+
         // otherwise fallback to in-process
         log.info("Compile in-process")
 

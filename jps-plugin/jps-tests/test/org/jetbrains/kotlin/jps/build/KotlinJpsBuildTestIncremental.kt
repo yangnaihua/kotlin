@@ -16,7 +16,17 @@
 
 package org.jetbrains.kotlin.jps.build
 
+import org.jetbrains.jps.builders.JpsBuildTestCase
+import org.jetbrains.kotlin.compilerRunner.JpsKotlinCompilerRunner
 import org.jetbrains.kotlin.config.IncrementalCompilation
+import org.jetbrains.kotlin.daemon.client.CompileServiceSession
+import org.jetbrains.kotlin.daemon.common.COMPILE_DAEMON_ENABLED_PROPERTY
+import org.jetbrains.kotlin.daemon.common.isDaemonEnabled
+import org.jetbrains.org.objectweb.asm.ClassReader
+import org.jetbrains.org.objectweb.asm.util.TraceClassVisitor
+import java.io.File
+import java.io.PrintWriter
+import java.io.StringWriter
 
 class KotlinJpsBuildTestIncremental : KotlinJpsBuildTest() {
     var isICEnabledBackup: Boolean = false
@@ -30,6 +40,69 @@ class KotlinJpsBuildTestIncremental : KotlinJpsBuildTest() {
     override fun tearDown() {
         IncrementalCompilation.setIsEnabled(isICEnabledBackup)
         super.tearDown()
+    }
+
+    fun testJpsDaemonIC() {
+        fun classToString(classFile: File): String {
+            val out = StringWriter()
+            val traceVisitor = TraceClassVisitor(PrintWriter(out))
+            ClassReader(classFile.readBytes()).accept(traceVisitor, 0)
+            return out.toString()
+        }
+
+        fun checkBytecodeContains(bc: String, substring: String) {
+            if (bc.indexOf(substring) < 0) {
+                error("Bytecode should contain '$substring':\n$bc")
+            }
+        }
+
+        fun checkBytecodeNotContains(bc: String, substring: String) {
+            if (bc.indexOf(substring) >= 0) {
+                error("Bytecode should not contain '$substring':\n$bc")
+            }
+        }
+
+        fun testImpl() {
+            assert(isDaemonEnabled()) { "Daemon was not enabled!" }
+
+            doTest()
+            val module = myProject.modules.get(0)
+            val mainKtClassFile = findFileInOutputDir(module, "MainKt.class")
+            assert(mainKtClassFile.exists()) { "$mainKtClassFile does not exist!" }
+            val mainBytecode1 = classToString(mainKtClassFile)
+            checkBytecodeContains(mainBytecode1, "Fizz")
+            checkBytecodeNotContains(mainBytecode1, "Buzz")
+
+            JpsBuildTestCase.change(File(workDir, "src/utils.kt").absolutePath, """
+                package foo
+
+                const val BAR = "Buzz"
+            """.trimIndent())
+            val buildAllModules = buildAllModules()
+            buildAllModules.assertSuccessful()
+
+            assertCompiled(KotlinBuilder.KOTLIN_BUILDER_NAME, "src/main.kt", "src/utils.kt")
+            val mainBytecode2 = classToString(mainKtClassFile)
+            checkBytecodeContains(mainBytecode2, "Buzz")
+            checkBytecodeNotContains(mainBytecode2, "Fizz")
+
+            val session = run {
+                val klass = JpsKotlinCompilerRunner::class.java
+                val compileServiceField = klass.getDeclaredField("_jpsCompileServiceSession")
+                compileServiceField.isAccessible = true
+                val session = compileServiceField.get(klass)
+                compileServiceField.isAccessible = false
+                session as? CompileServiceSession
+            } ?: error("Could not connect to daemon!")
+
+            session.compileService.scheduleShutdown(graceful = true)
+        }
+
+        withSystemProperty(COMPILE_DAEMON_ENABLED_PROPERTY, "true") {
+            withSystemProperty(JpsKotlinCompilerRunner.FAIL_ON_FALLBACK_PROPERTY, "true") {
+                testImpl()
+            }
+        }
     }
 
     fun testManyFiles() {

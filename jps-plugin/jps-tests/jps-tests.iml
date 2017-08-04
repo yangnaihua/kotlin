@@ -21,5 +21,6 @@
     <orderEntry type="library" name="kotlin-reflect" level="project" />
     <orderEntry type="module" module-name="cli" scope="TEST" />
     <orderEntry type="library" scope="PROVIDED" name="native-platform-uberjar" level="project" />
+    <orderEntry type="module" module-name="daemon-client" scope="TEST" />
   </component>
 </module>
