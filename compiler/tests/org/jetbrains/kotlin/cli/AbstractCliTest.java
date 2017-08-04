@@ -132,7 +132,7 @@ public abstract class AbstractCliTest extends TestCaseWithTmpdir {
                 diagnostics.add("File is a directory: " + fileName);
             }
             else {
-                String text = FilesKt.readText(file, Charsets.UTF_8);
+                String text = FilesKt.readText(file, Charsets.UTF_8).replace("\r\n", "\n");
                 if (!text.contains(contentToSearch)) {
                     diagnostics.add("File " + fileName + " does not contain string: " + contentToSearch);
                 }
