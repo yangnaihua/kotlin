@@ -9,7 +9,8 @@ include ':kotlin-gradle-plugin-api',
         // plugin markers:
         ':kotlin-gradle-plugin:plugin-marker',
         ':kotlin-allopen:plugin-marker',
-        ':kotlin-noarg:plugin-marker'
+        ':kotlin-noarg:plugin-marker',
+        ':kotlin-sam-with-receiver:plugin-marker'
 
 project(':kotlin-gradle-plugin-api').projectDir = file("../kotlin-gradle-plugin-api")
 project(':kotlin-gradle-plugin').projectDir = file("../kotlin-gradle-plugin")
@@ -23,4 +24,5 @@ project(':kotlin-gradle-subplugin-example').projectDir = file("../../examples/ko
 project(':kotlin-gradle-plugin:plugin-marker').projectDir = file("../kotlin-gradle-plugin/plugin-marker")
 project(':kotlin-allopen:plugin-marker').projectDir = file("../kotlin-allopen/plugin-marker")
 project(':kotlin-noarg:plugin-marker').projectDir = file("../kotlin-noarg/plugin-marker")
+project(':kotlin-sam-with-receiver:plugin-marker').projectDir = file("../kotlin-sam-with-receiver/plugin-marker")
 

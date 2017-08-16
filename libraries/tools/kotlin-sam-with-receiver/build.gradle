@@ -40,3 +40,12 @@ compileKotlin.dependsOn preprocessSources
 jar {
     from(targetSrc) { include("META-INF/**") }
 }
+
+pluginBundle {
+    plugins {
+        kotlinSamWithReceiverPlugin {
+            id = 'org.jetbrains.kotlin.plugin.sam-with-receiver'
+            description = displayName = 'Kotlin SAM with receiver compiler plugin'
+        }
+    }
+}
