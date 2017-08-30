@@ -505,8 +505,10 @@ class ClassTranslator private constructor(
     }
 
     private fun generateEnumStandardMethods(entries: List<ClassDescriptor>) {
-        if (classDeclaration is PsiElement) // synthetic enums aren't supported yet
+        // synthetic enums aren't supported yet
+        if (classDeclaration is PsiElement) {
             EnumTranslator(context(), descriptor, entries, classDeclaration).generateStandardMethods()
+        }
     }
 
     private fun mayBeAddThrowableProperties(context: TranslationContext) {

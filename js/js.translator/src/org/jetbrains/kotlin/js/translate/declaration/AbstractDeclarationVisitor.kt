@@ -116,18 +116,20 @@ abstract class AbstractDeclarationVisitor : TranslatorVisitor<Unit>()  {
         return innerContext.wrapWithInlineMetadata(function, descriptor, context.config)
     }
 
-    // public api for extensions
-    public abstract fun addFunction(
+    // used from kotlinx.serialization
+    abstract fun addFunction(
             descriptor: FunctionDescriptor,
             expression: JsExpression?,
             psi: KtElement?
     )
 
-    public abstract fun addProperty(
+    // used from kotlinx.serialization
+    abstract fun addProperty(
             descriptor: PropertyDescriptor,
             getter: JsExpression,
             setter: JsExpression?
     )
 
-    public abstract fun getBackingFieldReference(descriptor: PropertyDescriptor): JsExpression
+    // used from kotlinx.serialization
+    abstract fun getBackingFieldReference(descriptor: PropertyDescriptor): JsExpression
 }

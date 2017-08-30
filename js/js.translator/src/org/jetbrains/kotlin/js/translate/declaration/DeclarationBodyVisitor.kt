@@ -28,8 +28,8 @@ import org.jetbrains.kotlin.js.translate.utils.BindingUtils.getClassDescriptor
 import org.jetbrains.kotlin.js.translate.utils.JsAstUtils.pureFqn
 import org.jetbrains.kotlin.js.translate.utils.JsDescriptorUtils.getSupertypesWithoutFakes
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.descriptorUtil.hasOwnParametersWithDefaultValue
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasOrInheritsParametersWithDefaultValue
+import org.jetbrains.kotlin.resolve.descriptorUtil.hasOwnParametersWithDefaultValue
 
 class DeclarationBodyVisitor(
         private val containingClass: ClassDescriptor,
@@ -105,7 +105,7 @@ class DeclarationBodyVisitor(
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor, data: TranslationContext) { }
 
-    // public api for extensions
+    // used from kotlinx.serialization
     fun addInitializerStatement(statement: JsStatement) {
         initializerStatements.add(statement)
     }
