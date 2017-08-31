@@ -289,6 +289,8 @@ message Function {
   // Index into the SinceKotlinInfoTable
   optional int32 sinceKotlinInfo = 31;
 
+  optional Contract contract = 32;
+
   extensions 100 to 199;
 }
 
@@ -458,4 +460,62 @@ message PackageFragment {
   repeated Class class = 4;
 
   extensions 100 to 199;
+}
+
+
+
+message Contract {
+  repeated Effect effect = 1;
+}
+
+message Effect {
+  // RHS of Conditional effect
+  optional Expression conclusion = 1;
+
+  // ReturnsEffect
+  optional Expression returnValue = 2;
+
+  // CallsEffect
+  enum InvocationKind {
+    AT_MOST_ONCE = 1;
+    EXACTLY_ONCE = 2;
+    AT_LEAST_ONCE = 3;
+  }
+  optional Expression callable = 3;
+
+  // Absence of 'kind' means that exact amount of invocations is unknown
+  optional InvocationKind kind = 4;
+}
+
+// We use some trickery to optimize memory footprint of contract-expressions:
+// exact type of Expression is determined based on its contents.
+message Expression {
+  optional int32 variableName = 1;
+
+  enum ConstantValue {
+    TRUE = 1;
+    FALSE = 2;
+    NULL = 3;
+  }
+  optional ConstantValue constantValue = 2;
+
+  // present => this expression is IsInstancePredicate with 'variableName' as argument
+  optional Type isInstanceType = 4;
+  optional int32 isInstanceTypeId = 5;
+
+  /*
+    isNegated => this expression should be negated
+    isIsNullPredicate => this expression is IsNullPredicate with 'variableName' as argument
+  */
+  optional int32 flags = 6;
+
+  // non-empty => this expression is boolean formula of form 'andArguments[0] && andArguments[1] && ...'
+  // Additionally, if first argument of formula is primitive expression (i.e. predicate or boolean value),
+  // it is optimized and inlined straight into this message
+  repeated Expression andArguments = 7;
+
+  // non-empty => this expression is boolean formula of form 'orArguments[0] || andArguments[1] || ...'
+  // Additionally, if first argument of formula is primitive expression (i.e. predicate or boolean value),
+  // it is optimized and inlined straight into this message.
+  repeated Expression orArguments = 8;
 }
