@@ -258,7 +258,9 @@ tasks {
     "core-libs-check" { dependsOn("core-libs-tests") }
 
     "compiler-tests" {
-        dependsOn("dist")
+        afterEvaluate {
+            dependsOn("dist")
+        }
         dependsOn(":compiler:check",
                   ":compiler:container:check",
                   ":compiler:tests-java8:check")
