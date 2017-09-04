@@ -244,88 +244,101 @@ tasks {
     }
 
     "core-libs-tests" {
-        dependsOn(":kotlin-test:kotlin-test-common:test",
-                  ":kotlin-test:kotlin-test-jvm:test",
-                  ":kotlin-test:kotlin-test-junit:test",
-//                  ":kotlin-test:kotlin-test-js:test",
-                  ":kotlin-stdlib:test",
-                  ":kotlin-stdlib-jre7:test",
-                  ":kotlin-stdlib-jre8:test",
-//                  ":kotlin-stdlib-js:test",
-//                  ":tools:binary-compatibility-validator:test",
-                  ":kotlin-reflect:test")
+        dependsOn(":kotlin-test:kotlin-test-common:check",
+                  ":kotlin-test:kotlin-test-jvm:check",
+                  ":kotlin-test:kotlin-test-junit:check",
+                  ":kotlin-test:kotlin-test-js:check",
+                  ":kotlin-stdlib:check",
+                  ":kotlin-stdlib-jre7:check",
+                  ":kotlin-stdlib-jre8:check",
+//                  ":kotlin-stdlib-js:check",
+                  ":tools:binary-compatibility-validator:check",
+                  ":kotlin-reflect:check")
     }
+    "core-libs-check" { dependsOn("core-libs-tests") }
 
     "compiler-tests" {
         dependsOn("dist")
-        dependsOn(":compiler:test",
-                  ":compiler:container:test",
-                  ":compiler:tests-java8:test")
+        dependsOn(":compiler:check",
+                  ":compiler:container:check",
+                  ":compiler:tests-java8:check")
     }
+    "compiler-check" { dependsOn("compiler-tests") }
 
     "js-tests" {
         dependsOn("dist")
-        dependsOn(":js:js.tests:test")
+        dependsOn(":js:js.tests:check")
     }
+    "js-check" { dependsOn("js-tests") }
 
     "jps-tests" {
         dependsOn("dist")
-        dependsOn(":jps-plugin:test")
+        dependsOn(":jps-plugin:check")
     }
+    "check" { dependsOn("test") }
 
     "idea-plugin-main-tests" {
         dependsOn("dist")
-        dependsOn(":idea:test")
+        dependsOn(":idea:check")
     }
+    "idea-plugin-main-check" { dependsOn("idea-plugin-main-tests") }
 
     "idea-plugin-additional-tests" {
         dependsOn("dist")
-        dependsOn(":idea:idea-gradle:test",
-                  ":idea:idea-maven:test",
-                  ":j2k:test",
-                  ":eval4j:test")
+        dependsOn(":idea:idea-gradle:check",
+                  ":idea:idea-maven:check",
+                  ":j2k:check",
+                  ":eval4j:check")
     }
+    "idea-plugin-additional-check" { dependsOn("idea-plugin-additional-tests") }
+
     "idea-plugin-tests" {
         dependsOn("dist")
         dependsOn("idea-plugin-main-tests",
                   "idea-plugin-additional-tests")
     }
+    "idea-plugin-check" { dependsOn("idea-plugin-tests") }
 
     "android-tests" {
         dependsOn("dist")
-        dependsOn(":plugins:android-extensions-idea:test",
-                  ":idea:idea-android:test",
-                  ":kotlin-annotation-processing:test",
-                  ":compiler:android-tests:test")
+        dependsOn(":plugins:android-extensions-idea:check",
+                  ":idea:idea-android:check",
+                  ":kotlin-annotation-processing:check",
+                  ":compiler:android-tests:check")
     }
+    "android-check" { dependsOn("android-tests") }
 
     "plugins-tests" {
         dependsOn("dist")
-        dependsOn(":plugins:plugins-tests:test",
-                  ":kotlin-annotation-processing:test",
-                  ":kotlin-source-sections-compiler-plugin:test",
-                  ":plugins:uast-kotlin:test",
-                  ":kotlin-annotation-processing-gradle:test")
+        dependsOn(":plugins:plugins-tests:check",
+                  ":kotlin-annotation-processing:check",
+                  ":kotlin-source-sections-compiler-plugin:check",
+                  ":plugins:uast-kotlin:check",
+                  ":kotlin-annotation-processing-gradle:check")
     }
+    "plugins-check" { dependsOn("plugins-tests") }
 
     "scripting-tests" {
         dependsOn("dist")
-        dependsOn(":kotlin-script-util:test",
-                  ":examples:kotlin-jsr223-local-example:test",
-                  ":examples:kotlin-jsr223-daemon-local-eval-example:test")
+        dependsOn(":kotlin-script-util:check",
+                  ":examples:kotlin-jsr223-local-example:check",
+                  ":examples:kotlin-jsr223-daemon-local-eval-example:check")
     }
+    "scripting-check" { dependsOn("scripting-tests") }
 
     "other-tests" {
         dependsOn("dist")
-        dependsOn(":kotlin-build-common:test",
-                  ":generators:test")
+        dependsOn(":kotlin-build-common:check",
+                  ":generators:check")
     }
+    "other-check" { dependsOn("other-tests") }
 
     "test" {
         doLast {
-            throw GradleException("Don't use directly, use aggregate tasks *-tests instead")
+            throw GradleException("Don't use directly, use aggregate tasks *-check instead")
         }
     }
+    "check" { dependsOn("test") }
 }
 
 fun jdkPath(version: String): String {
