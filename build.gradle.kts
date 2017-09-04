@@ -247,11 +247,9 @@ tasks {
         dependsOn(":kotlin-test:kotlin-test-common:check",
                   ":kotlin-test:kotlin-test-jvm:check",
                   ":kotlin-test:kotlin-test-junit:check",
-                  ":kotlin-test:kotlin-test-js:check",
                   ":kotlin-stdlib:check",
                   ":kotlin-stdlib-jre7:check",
                   ":kotlin-stdlib-jre8:check",
-                  ":kotlin-stdlib-js:check",
                   ":tools:binary-compatibility-validator:check",
                   ":kotlin-reflect:check")
     }
@@ -269,7 +267,11 @@ tasks {
 
     "js-tests" {
         dependsOn("dist")
-        dependsOn(":js:js.tests:check")
+        dependsOn(
+                ":kotlin-test:kotlin-test-js:check",
+                // TODO: uncommenting this breaks build in unexpected places, find the reason and restore
+                ":kotlin-stdlib-js:check",
+                ":js:js.tests:check")
     }
     "js-check" { dependsOn("js-tests") }
 
