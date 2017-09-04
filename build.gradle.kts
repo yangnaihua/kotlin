@@ -251,7 +251,7 @@ tasks {
                   ":kotlin-stdlib:check",
                   ":kotlin-stdlib-jre7:check",
                   ":kotlin-stdlib-jre8:check",
-//                  ":kotlin-stdlib-js:check",
+                  ":kotlin-stdlib-js:check",
                   ":tools:binary-compatibility-validator:check",
                   ":kotlin-reflect:check")
     }

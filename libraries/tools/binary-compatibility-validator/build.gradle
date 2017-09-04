@@ -42,4 +42,5 @@ test {
     jvmArgs '-ea'
 
     ignoreFailures = System.getenv("kotlin_build_ignore_test_failures") == 'yes'
+    environment("PROJECT_CLASSES_DIRS", sourceSets.test.output.classesDirs.asPath)
 }
