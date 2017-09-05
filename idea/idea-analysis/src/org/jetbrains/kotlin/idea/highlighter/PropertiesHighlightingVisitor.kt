@@ -29,8 +29,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 
-internal class PropertiesHighlightingVisitor(holder: AnnotationHolder, bindingContext: BindingContext)
-    : AfterAnalysisHighlightingVisitor(holder, bindingContext) {
+internal class PropertiesHighlightingVisitor(holder: AnnotationHolder, bindingContext: BindingContext) : AfterAnalysisHighlightingVisitor(holder, bindingContext) {
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         if (expression.parent is KtThisExpression) {
@@ -69,8 +68,9 @@ internal class PropertiesHighlightingVisitor(holder: AnnotationHolder, bindingCo
     }
 
     private fun highlightProperty(
-            elementToHighlight: PsiElement,
-            descriptor: PropertyDescriptor) {
+        elementToHighlight: PsiElement,
+        descriptor: PropertyDescriptor
+    ) {
 
         if (applyHighlighterExtensions(elementToHighlight, descriptor)) return
 

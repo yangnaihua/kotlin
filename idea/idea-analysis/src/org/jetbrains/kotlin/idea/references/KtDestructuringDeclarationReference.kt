@@ -36,7 +36,7 @@ class KtDestructuringDeclarationReference(element: KtDestructuringDeclarationEnt
 
     override fun canRename(): Boolean {
         val bindingContext = expression.analyze() //TODO: should it use full body resolve?
-        return resolveToDescriptors(bindingContext).all { it is CallableMemberDescriptor && it.kind == CallableMemberDescriptor.Kind.SYNTHESIZED}
+        return resolveToDescriptors(bindingContext).all { it is CallableMemberDescriptor && it.kind == CallableMemberDescriptor.Kind.SYNTHESIZED }
     }
 
     override fun handleElementRename(newElementName: String?): PsiElement? {

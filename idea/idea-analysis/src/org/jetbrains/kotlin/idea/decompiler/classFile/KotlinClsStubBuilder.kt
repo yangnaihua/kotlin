@@ -83,11 +83,13 @@ open class KotlinClsStubBuilder : ClsStubBuilder() {
                 val context = components.createContext(nameResolver, packageFqName, TypeTable(classProto.typeTable))
                 createTopLevelClassStub(classId, classProto, KotlinJvmBinarySourceElement(kotlinClass), context, header.isScript)
             }
+
             KotlinClassHeader.Kind.FILE_FACADE -> {
                 val (nameResolver, packageProto) = JvmProtoBufUtil.readPackageDataFrom(annotationData, strings)
                 val context = components.createContext(nameResolver, packageFqName, TypeTable(packageProto.typeTable))
                 createFileFacadeStub(packageProto, classId.asSingleFqName(), context)
             }
+
             else -> throw IllegalStateException("Should have processed " + file.path + " with header $header")
         }
     }
@@ -105,9 +107,9 @@ open class KotlinClsStubBuilder : ClsStubBuilder() {
 }
 
 class AnnotationLoaderForClassFileStubBuilder(
-        kotlinClassFinder: KotlinClassFinder,
-        private val cachedFile: VirtualFile,
-        private val cachedFileContent: ByteArray
+    kotlinClassFinder: KotlinClassFinder,
+    private val cachedFile: VirtualFile,
+    private val cachedFileContent: ByteArray
 ) : AbstractBinaryClassAnnotationAndConstantLoader<ClassId, Unit, ClassIdWithTarget>(LockBasedStorageManager.NO_LOCKS, kotlinClassFinder) {
 
     override fun getCachedFileContent(kotlinClass: KotlinJvmBinaryClass): ByteArray? {
@@ -123,17 +125,17 @@ class AnnotationLoaderForClassFileStubBuilder(
     override fun loadConstant(desc: String, initializer: Any) = null
 
     override fun loadAnnotation(
-            annotationClassId: ClassId, source: SourceElement, result: MutableList<ClassId>
+        annotationClassId: ClassId, source: SourceElement, result: MutableList<ClassId>
     ): KotlinJvmBinaryClass.AnnotationArgumentVisitor? {
         result.add(annotationClassId)
         return null
     }
 
     override fun loadPropertyAnnotations(
-            propertyAnnotations: List<ClassId>, fieldAnnotations: List<ClassId>, fieldUseSiteTarget: AnnotationUseSiteTarget
+        propertyAnnotations: List<ClassId>, fieldAnnotations: List<ClassId>, fieldUseSiteTarget: AnnotationUseSiteTarget
     ): List<ClassIdWithTarget> {
         return propertyAnnotations.map { ClassIdWithTarget(it, null) } +
-               fieldAnnotations.map { ClassIdWithTarget(it, fieldUseSiteTarget ) }
+               fieldAnnotations.map { ClassIdWithTarget(it, fieldUseSiteTarget) }
     }
 
     override fun transformAnnotations(annotations: List<ClassId>) = annotations.map { ClassIdWithTarget(it, null) }

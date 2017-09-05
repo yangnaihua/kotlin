@@ -65,15 +65,17 @@ import java.util.*
 //TODO: check if smart search is too expensive
 
 class ExpressionsOfTypeProcessor(
-        private val typeToSearch: FuzzyType,
-        private val classToSearch: PsiClass?,
-        private val searchScope: SearchScope,
-        private val project: Project,
-        private val possibleMatchHandler: (KtExpression) -> Unit,
-        private val possibleMatchesInScopeHandler: (SearchScope) -> Unit
+    private val typeToSearch: FuzzyType,
+    private val classToSearch: PsiClass?,
+    private val searchScope: SearchScope,
+    private val project: Project,
+    private val possibleMatchHandler: (KtExpression) -> Unit,
+    private val possibleMatchesInScopeHandler: (SearchScope) -> Unit
 ) {
+
     @TestOnly
     enum class Mode {
+
         ALWAYS_SMART,
         ALWAYS_PLAIN,
         PLAIN_WHEN_NEEDED // use plain search for LocalSearchScope and when unknown type of reference encountered
@@ -99,10 +101,12 @@ class ExpressionsOfTypeProcessor(
                 when (element) {
                     is PsiMethod -> fqName + element.parameterList.text
                     is KtFunction -> fqName + element.valueParameterList!!.text
+
                     is KtParameter -> {
                         val owner = element.ownerFunction?.let { logPresentation(it) } ?: element.parent.toString()
                         "parameter ${element.name} of $owner"
                     }
+
                     is KtDestructuringDeclaration -> element.entries.joinToString(", ", prefix = "(", postfix = ")") { it.text }
                     else -> fqName
                 }
@@ -116,6 +120,7 @@ class ExpressionsOfTypeProcessor(
 
     // note: a Task must define equals & hashCode!
     private interface Task {
+
         fun perform()
     }
 
@@ -150,9 +155,9 @@ class ExpressionsOfTypeProcessor(
 
         runReadAction {
             val scopeElements = scopesToUsePlainSearch.values
-                    .flatMap { it }
-                    .filter { it.isValid }
-                    .toTypedArray()
+                .flatMap { it }
+                .filter { it.isValid }
+                .toTypedArray()
             if (scopeElements.isNotEmpty()) {
                 possibleMatchesInScopeHandler(LocalSearchScope(scopeElements))
             }
@@ -214,14 +219,17 @@ class ExpressionsOfTypeProcessor(
                     val wasProcessed = when (element.language) {
                         KotlinLanguage.INSTANCE -> processClassUsageInKotlin(element)
                         JavaLanguage.INSTANCE -> processClassUsageInJava(element)
+
                         else -> {
                             when (element.language.displayName) {
                                 "Groovy" -> {
                                     processClassUsageInLanguageWithPsiClass(element)
                                     true
                                 }
+
                                 "Scala" -> false
                                 "Clojure" -> false
+
                                 else -> {
                                     // If there's no PsiClass - consider processed
                                     element.getParentOfType<PsiClass>(true) == null
@@ -291,9 +299,9 @@ class ExpressionsOfTypeProcessor(
                         val fqName = element.importedFqName?.asString()
                         if (fqName != null && fqName in possibleClassesNames) {
                             val ref = element.importedReference
-                                    ?.getQualifiedElementSelector()
-                                    ?.references
-                                    ?.firstOrNull()
+                                ?.getQualifiedElementSelector()
+                                ?.references
+                                ?.firstOrNull()
                             if (ref != null) {
                                 consumer.process(ref)
                             }
@@ -386,9 +394,11 @@ class ExpressionsOfTypeProcessor(
 
         @Suppress("NAME_SHADOWING")
         data class ProcessCallableUsagesTask(
-                val declaration: PsiElement,
-                val processor: ReferenceProcessor,
-                val scope: SearchScope) : Task {
+            val declaration: PsiElement,
+            val processor: ReferenceProcessor,
+            val scope: SearchScope
+        ) : Task {
+
             override fun perform() {
                 if (scope is LocalSearchScope) {
                     testLog { "Searched imported static member $declaration in ${scope.scope.toList()}" }

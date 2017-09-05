@@ -30,17 +30,22 @@ import org.jetbrains.kotlin.psi.psiUtil.replaceFileAnnotationList
 import org.jetbrains.kotlin.resolve.BindingContext
 
 class KotlinSuppressIntentionAction private constructor(
-        private val suppressAt: PsiElement,
-        private val suppressKey: String,
-        private val kind: AnnotationHostKind
+    private val suppressAt: PsiElement,
+    private val suppressKey: String,
+    private val kind: AnnotationHostKind
 ) : SuppressIntentionAction() {
-    constructor(suppressAt: KtExpression,
-                suppressKey: String,
-                kind: AnnotationHostKind) : this(suppressAt as PsiElement, suppressKey, kind)
 
-    constructor(suppressAt: KtFile,
-                suppressKey: String,
-                kind: AnnotationHostKind) : this(suppressAt as PsiElement, suppressKey, kind)
+    constructor(
+        suppressAt: KtExpression,
+        suppressKey: String,
+        kind: AnnotationHostKind
+    ) : this(suppressAt as PsiElement, suppressKey, kind)
+
+    constructor(
+        suppressAt: KtFile,
+        suppressKey: String,
+        kind: AnnotationHostKind
+    ) : this(suppressAt as PsiElement, suppressKey, kind)
 
     override fun getFamilyName() = KotlinBundle.message("suppress.warnings.family")
     override fun getText() = KotlinBundle.message("suppress.warning.for", suppressKey, kind.kind, kind.name)
@@ -118,7 +123,7 @@ class KotlinSuppressIntentionAction private constructor(
 
         val afterReplace = suppressAt.replace(annotatedExpression) as KtAnnotatedExpression
         val toReplace = afterReplace.findElementAt(afterReplace.textLength - 2)!!
-        assert (toReplace.text == placeholderText)
+        assert(toReplace.text == placeholderText)
         val result = toReplace.replace(copy)!!
 
         caretBox.positionCaretInCopy(result)
@@ -163,10 +168,11 @@ private fun KtPsiFactory.createWhiteSpace(kind: AnnotationHostKind): PsiElement 
     return if (kind.newLineNeeded) createNewLine() else createWhiteSpace()
 }
 
-private class CaretBox<out E: KtExpression>(
-        val expression: E,
-        private val editor: Editor?
+private class CaretBox<out E : KtExpression>(
+    val expression: E,
+    private val editor: Editor?
 ) {
+
     private val offsetInExpression: Int = (editor?.caretModel?.offset ?: 0) - expression.textRange!!.startOffset
 
     fun positionCaretInCopy(copy: PsiElement) {

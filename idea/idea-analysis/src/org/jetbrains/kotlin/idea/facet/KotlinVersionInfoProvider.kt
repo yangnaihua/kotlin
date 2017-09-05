@@ -31,41 +31,41 @@ interface KotlinVersionInfoProvider {
 
     fun getCompilerVersion(module: Module): String?
     fun getLibraryVersions(
-            module: Module,
-            targetPlatform: TargetPlatformKind<*>,
-            rootModel: ModuleRootModel?
+        module: Module,
+        targetPlatform: TargetPlatformKind<*>,
+        rootModel: ModuleRootModel?
     ): Collection<String>
 }
 
 fun getRuntimeLibraryVersions(
-        module: Module,
-        rootModel: ModuleRootModel?,
-        targetPlatform: TargetPlatformKind<*>
+    module: Module,
+    rootModel: ModuleRootModel?,
+    targetPlatform: TargetPlatformKind<*>
 ): Collection<String> {
     return KotlinVersionInfoProvider.EP_NAME
-                   .extensions
-                   .map { it.getLibraryVersions(module, targetPlatform, rootModel) }
-                   .firstOrNull { it.isNotEmpty() } ?: emptyList()
+               .extensions
+               .map { it.getLibraryVersions(module, targetPlatform, rootModel) }
+               .firstOrNull { it.isNotEmpty() } ?: emptyList()
 }
 
 fun getLibraryLanguageLevel(
-        module: Module,
-        rootModel: ModuleRootModel?,
-        targetPlatform: TargetPlatformKind<*>?
+    module: Module,
+    rootModel: ModuleRootModel?,
+    targetPlatform: TargetPlatformKind<*>?
 ): LanguageVersion {
     val minVersion = getRuntimeLibraryVersions(module, rootModel, targetPlatform ?: TargetPlatformKind.DEFAULT_PLATFORM)
-            .minWith(VersionComparatorUtil.COMPARATOR)
+        .minWith(VersionComparatorUtil.COMPARATOR)
     return getDefaultLanguageLevel(module, minVersion)
 }
 
 fun getDefaultLanguageLevel(
-        module: Module,
-        explicitVersion: String? = null
+    module: Module,
+    explicitVersion: String? = null
 ): LanguageVersion {
     val libVersion = explicitVersion
                      ?: KotlinVersionInfoProvider.EP_NAME.extensions
-                             .mapNotNull { it.getCompilerVersion(module) }
-                             .minWith(VersionComparatorUtil.COMPARATOR)
+                         .mapNotNull { it.getCompilerVersion(module) }
+                         .minWith(VersionComparatorUtil.COMPARATOR)
                      ?: return LanguageVersion.LATEST_STABLE
     return when {
         libVersion.startsWith("1.2") -> LanguageVersion.KOTLIN_1_2

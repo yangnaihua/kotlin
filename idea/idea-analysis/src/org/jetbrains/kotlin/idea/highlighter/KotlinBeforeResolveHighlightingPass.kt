@@ -36,8 +36,8 @@ import com.intellij.psi.PsiRecursiveElementVisitor
 import org.jetbrains.kotlin.psi.KtFile
 
 class KotlinBeforeResolveHighlightingPass(
-        private val file: KtFile,
-        document: Document
+    private val file: KtFile,
+    document: Document
 ) : TextEditorHighlightingPass(file.project, document), DumbAware {
 
     @Volatile private var annotationHolder: AnnotationHolderImpl? = null
@@ -45,7 +45,7 @@ class KotlinBeforeResolveHighlightingPass(
     override fun doCollectInformation(progress: ProgressIndicator) {
         val annotationHolder = AnnotationHolderImpl(AnnotationSession(file))
         val visitor = BeforeResolveHighlightingVisitor(annotationHolder)
-        file.accept(object : PsiRecursiveElementVisitor(){
+        file.accept(object : PsiRecursiveElementVisitor() {
             override fun visitElement(element: PsiElement) {
                 super.visitElement(element)
                 element.accept(visitor)

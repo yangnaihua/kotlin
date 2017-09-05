@@ -27,27 +27,30 @@ import org.jetbrains.kotlin.psi.KtFile
 
 
 object PackageIndexUtil {
-    @JvmStatic fun getSubPackageFqNames(
-            packageFqName: FqName,
-            scope: GlobalSearchScope,
-            project: Project,
-            nameFilter: (Name) -> Boolean
+    @JvmStatic
+    fun getSubPackageFqNames(
+        packageFqName: FqName,
+        scope: GlobalSearchScope,
+        project: Project,
+        nameFilter: (Name) -> Boolean
     ): Collection<FqName> {
         return SubpackagesIndexService.getInstance(project).getSubpackages(packageFqName, scope, nameFilter)
     }
 
-    @JvmStatic fun findFilesWithExactPackage(
-            packageFqName: FqName,
-            searchScope: GlobalSearchScope,
-            project: Project
+    @JvmStatic
+    fun findFilesWithExactPackage(
+        packageFqName: FqName,
+        searchScope: GlobalSearchScope,
+        project: Project
     ): Collection<KtFile> {
         return KotlinExactPackagesIndex.getInstance().get(packageFqName.asString(), project, searchScope)
     }
 
-    @JvmStatic fun packageExists(
-            packageFqName: FqName,
-            searchScope: GlobalSearchScope,
-            project: Project
+    @JvmStatic
+    fun packageExists(
+        packageFqName: FqName,
+        searchScope: GlobalSearchScope,
+        project: Project
     ): Boolean {
 
         val subpackagesIndex = SubpackagesIndexService.getInstance(project)
@@ -59,10 +62,11 @@ object PackageIndexUtil {
                subpackagesIndex.hasSubpackages(packageFqName, searchScope)
     }
 
-    @JvmStatic fun containsFilesWithExactPackage(
-            packageFqName: FqName,
-            searchScope: GlobalSearchScope,
-            project: Project
+    @JvmStatic
+    fun containsFilesWithExactPackage(
+        packageFqName: FqName,
+        searchScope: GlobalSearchScope,
+        project: Project
     ): Boolean {
         val ids = StubIndex.getInstance().getContainingIds(KotlinExactPackagesIndex.getInstance().key,
                                                            packageFqName.asString(),

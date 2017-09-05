@@ -25,8 +25,8 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.utils.concurrent.block.LockedClearableLazyValue
 
 open class KtDecompiledFile(
-        private val provider: KotlinDecompiledFileViewProvider,
-        buildDecompiledText: (VirtualFile) -> DecompiledText
+    private val provider: KotlinDecompiledFileViewProvider,
+    buildDecompiledText: (VirtualFile) -> DecompiledText
 ) : KtFile(provider, true) {
 
     private val decompiledText = LockedClearableLazyValue(Any()) {

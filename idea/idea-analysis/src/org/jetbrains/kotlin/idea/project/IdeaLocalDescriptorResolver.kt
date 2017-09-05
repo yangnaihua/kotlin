@@ -27,9 +27,10 @@ import org.jetbrains.kotlin.resolve.lazy.NoDescriptorForDeclarationException
 import org.jetbrains.kotlin.resolve.lazy.declarations.DeclarationProviderFactory
 
 class IdeaLocalDescriptorResolver(
-        private val resolveElementCache: ResolveElementCache,
-        private val absentDescriptorHandler: AbsentDescriptorHandler
+    private val resolveElementCache: ResolveElementCache,
+    private val absentDescriptorHandler: AbsentDescriptorHandler
 ) : LocalDescriptorResolver {
+
     override fun resolveLocalDeclaration(declaration: KtDeclaration): DeclarationDescriptor {
         val context = resolveElementCache.resolveToElements(listOf(declaration), BodyResolveMode.FULL)
         return context.get(BindingContext.DECLARATION_TO_DESCRIPTOR, declaration)
@@ -38,8 +39,9 @@ class IdeaLocalDescriptorResolver(
 }
 
 class IdeaAbsentDescriptorHandler(
-        private val declarationProviderFactory: DeclarationProviderFactory
+    private val declarationProviderFactory: DeclarationProviderFactory
 ) : AbsentDescriptorHandler {
+
     override fun diagnoseDescriptorNotFound(declaration: KtDeclaration): DeclarationDescriptor {
         throw NoDescriptorForDeclarationException(
                 declaration,

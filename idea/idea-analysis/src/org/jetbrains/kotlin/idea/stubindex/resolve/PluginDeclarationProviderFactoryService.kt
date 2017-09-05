@@ -28,11 +28,11 @@ import org.jetbrains.kotlin.storage.StorageManager
 class PluginDeclarationProviderFactoryService : DeclarationProviderFactoryService() {
 
     override fun create(
-            project: Project,
-            storageManager: StorageManager,
-            syntheticFiles: Collection<KtFile>,
-            filesScope: GlobalSearchScope,
-            moduleInfo: ModuleInfo
+        project: Project,
+        storageManager: StorageManager,
+        syntheticFiles: Collection<KtFile>,
+        filesScope: GlobalSearchScope,
+        moduleInfo: ModuleInfo
     ): DeclarationProviderFactory =
-        PluginDeclarationProviderFactory(project, KotlinSourceFilterScope.sources(filesScope, project), storageManager, syntheticFiles, moduleInfo)
+            PluginDeclarationProviderFactory(project, KotlinSourceFilterScope.sources(filesScope, project), storageManager, syntheticFiles, moduleInfo)
 }

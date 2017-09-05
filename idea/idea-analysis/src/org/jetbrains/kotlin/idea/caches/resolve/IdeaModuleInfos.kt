@@ -67,17 +67,21 @@ private fun orderEntryToModuleInfo(project: Project, orderEntry: OrderEntry, pro
         is ModuleSourceOrderEntry -> {
             orderEntry.getOwnerModule().toInfos()
         }
+
         is ModuleOrderEntry -> {
             orderEntry.module?.toInfos().orEmpty()
         }
+
         is LibraryOrderEntry -> {
             val library = orderEntry.library ?: return listOf()
             listOfNotNull(LibraryInfo(project, library))
         }
+
         is JdkOrderEntry -> {
             val sdk = orderEntry.jdk ?: return listOf()
             listOfNotNull(SdkInfo(project, sdk))
         }
+
         else -> {
             throw IllegalStateException("Unexpected order entry $orderEntry")
         }
@@ -95,8 +99,7 @@ private fun ideaModelDependencies(module: Module, productionOnly: Boolean): List
     if (productionOnly) {
         dependencyEnumerator.productionOnly()
     }
-    dependencyEnumerator.forEach {
-        orderEntry ->
+    dependencyEnumerator.forEach { orderEntry ->
         result.addAll(orderEntryToModuleInfo(module.project, orderEntry!!, productionOnly))
         true
     }
@@ -132,6 +135,7 @@ data class ModuleProductionSourceInfo internal constructor(override val module: 
 
 //TODO: (module refactoring) do not create ModuleTestSourceInfo when there are no test roots for module
 data class ModuleTestSourceInfo internal constructor(override val module: Module) : ModuleSourceInfo {
+
     override val name = Name.special("<test sources for module ${module.name}>")
 
     override val displayedName get() = module.name + " (test)"
@@ -183,6 +187,7 @@ private class ModuleProductionSourceScope(module: Module) : ModuleSourceScope(mo
         if (this === other) return true
         return (other is ModuleProductionSourceScope && module == other.module)
     }
+
     // KT-6206
     override fun hashCode(): Int = 31 * module.hashCode()
 
@@ -198,6 +203,7 @@ private class ModuleTestSourceScope(module: Module) : ModuleSourceScope(module) 
         if (this === other) return true
         return (other is ModuleTestSourceScope && module == other.module)
     }
+
     // KT-6206
     override fun hashCode(): Int = 37 * module.hashCode()
 
@@ -269,6 +275,7 @@ data class LibrarySourceInfo(val project: Project, val library: Library) : IdeaM
 
 //TODO: (module refactoring) there should be separate SdkSourceInfo but there are no kotlin source in existing sdks for now :)
 data class SdkInfo(val project: Project, val sdk: Sdk) : IdeaModuleInfo {
+
     override val moduleOrigin: ModuleOrigin
         get() = ModuleOrigin.LIBRARY
 

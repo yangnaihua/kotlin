@@ -29,6 +29,7 @@ object PsiPrecedences {
     private val LOG = Logger.getInstance(PsiPrecedences::class.java)
 
     private val precedence: Map<IElementType, Int>
+
     init {
         val builder = HashMap<IElementType, Int>()
         for ((i, record) in KotlinExpressionParsing.Precedence.values().withIndex()) {
@@ -49,6 +50,7 @@ object PsiPrecedences {
             is KtLabeledExpression,
             is KtPrefixExpression -> PRECEDENCE_OF_PREFIX_EXPRESSION
             is KtPostfixExpression -> PRECEDENCE_OF_POSTFIX_EXPRESSION
+
             is KtOperationExpression -> {
                 val operation = expression.operationReference.getReferencedNameElementType()
                 val precedenceNumber = precedence[operation]
@@ -58,6 +60,7 @@ object PsiPrecedences {
                 }
                 else precedenceNumber
             }
+
             else -> PRECEDENCE_OF_ATOMIC_EXPRESSION
         }
     }

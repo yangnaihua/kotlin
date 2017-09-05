@@ -61,22 +61,22 @@ val KtParameter.propertyDescriptor: PropertyDescriptor?
     get() = this.analyze().get(BindingContext.PRIMARY_CONSTRUCTOR_PARAMETER, this)
 
 fun PsiReference.checkUsageVsOriginalDescriptor(
-        targetDescriptor: DeclarationDescriptor,
-        declarationToDescriptor: (KtDeclaration) -> DeclarationDescriptor? = {it.descriptor},
-        checker: (usageDescriptor: DeclarationDescriptor, targetDescriptor: DeclarationDescriptor) -> Boolean
+    targetDescriptor: DeclarationDescriptor,
+    declarationToDescriptor: (KtDeclaration) -> DeclarationDescriptor? = { it.descriptor },
+    checker: (usageDescriptor: DeclarationDescriptor, targetDescriptor: DeclarationDescriptor) -> Boolean
 ): Boolean {
     return unwrappedTargets
-            .filterIsInstance<KtDeclaration>()
-            .any {
-                val usageDescriptor = declarationToDescriptor(it)
-                usageDescriptor != null && checker(usageDescriptor, targetDescriptor)
-            }
+        .filterIsInstance<KtDeclaration>()
+        .any {
+            val usageDescriptor = declarationToDescriptor(it)
+            usageDescriptor != null && checker(usageDescriptor, targetDescriptor)
+        }
 }
 
 fun PsiReference.isImportUsage(): Boolean =
         element!!.getNonStrictParentOfType<KtImportDirective>() != null
 
-fun PsiReference.isConstructorUsage(ktClassOrObject: KtClassOrObject): Boolean = with (element!!) {
+fun PsiReference.isConstructorUsage(ktClassOrObject: KtClassOrObject): Boolean = with(element!!) {
     fun checkJavaUsage(): Boolean {
         val call = getNonStrictParentOfType<PsiConstructorCall>()
         return call == parent && call?.resolveConstructor()?.containingClass?.navigationElement == ktClassOrObject
@@ -157,10 +157,10 @@ private fun PsiElement.buildProcessDelegationCallJavaConstructorUsagesTask(scope
 
 
 private fun processInheritorsDelegatingCallToSpecifiedConstructor(
-        klass: PsiElement,
-        scope: SearchScope,
-        descriptor: ConstructorDescriptor,
-        process: (KtCallElement) -> Boolean
+    klass: PsiElement,
+    scope: SearchScope,
+    descriptor: ConstructorDescriptor,
+    process: (KtCallElement) -> Boolean
 ): Boolean {
     return HierarchySearchRequest(klass, scope, false).searchInheritors().all {
         runReadAction {
@@ -174,7 +174,7 @@ private fun processInheritorsDelegatingCallToSpecifiedConstructor(
 }
 
 private fun processClassDelegationCallsToSpecifiedConstructor(
-        klass: KtClass, constructor: DeclarationDescriptor, process: (KtCallElement) -> Boolean
+    klass: KtClass, constructor: DeclarationDescriptor, process: (KtCallElement) -> Boolean
 ): Boolean {
     for (secondaryConstructor in klass.secondaryConstructors) {
         val delegationCallDescriptor = secondaryConstructor.getDelegationCall().getConstructorCallDescriptor()
@@ -202,6 +202,7 @@ fun PsiReference.isExtensionOfDeclarationClassUsage(declaration: KtNamedDeclarat
         when {
             usageDescriptor == targetDescriptor -> false
             usageDescriptor !is FunctionDescriptor -> false
+
             else -> {
                 val receiverDescriptor =
                         usageDescriptor.extensionReceiverParameter?.type?.constructor?.declarationDescriptor
@@ -245,9 +246,11 @@ fun PsiReference.isCallableOverrideUsage(declaration: KtNamedDeclaration): Boole
                 val usageDescriptor = toDescriptor(it)
                 usageDescriptor != null && OverridingUtil.overrides(usageDescriptor, targetDescriptor)
             }
+
             is PsiMethod -> {
                 declaration.toLightMethods().any { superMethod -> MethodSignatureUtil.isSuperMethod(superMethod, it) }
             }
+
             else -> false
         }
     }

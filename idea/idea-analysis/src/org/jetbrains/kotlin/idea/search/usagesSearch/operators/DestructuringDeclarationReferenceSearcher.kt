@@ -30,12 +30,12 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
 
 class DestructuringDeclarationReferenceSearcher(
-        targetDeclaration: PsiElement,
-        private val componentIndex: Int,
-        searchScope: SearchScope,
-        consumer: Processor<PsiReference>,
-        optimizer: SearchRequestCollector,
-        options: KotlinReferencesSearchOptions
+    targetDeclaration: PsiElement,
+    private val componentIndex: Int,
+    searchScope: SearchScope,
+    consumer: Processor<PsiReference>,
+    optimizer: SearchRequestCollector,
+    options: KotlinReferencesSearchOptions
 ) : OperatorReferenceSearcher<KtDestructuringDeclaration>(targetDeclaration, searchScope, consumer, optimizer, options, wordsToSearch = listOf("(")) {
 
     override fun resolveTargetToDescriptor(): FunctionDescriptor? {

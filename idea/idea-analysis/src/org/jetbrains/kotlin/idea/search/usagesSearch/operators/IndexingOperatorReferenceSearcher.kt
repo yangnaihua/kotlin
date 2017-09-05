@@ -30,12 +30,12 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
 
 class IndexingOperatorReferenceSearcher(
-        targetFunction: PsiElement,
-        searchScope: SearchScope,
-        consumer: Processor<PsiReference>,
-        optimizer: SearchRequestCollector,
-        options: KotlinReferencesSearchOptions,
-        private val isSet: Boolean
+    targetFunction: PsiElement,
+    searchScope: SearchScope,
+    consumer: Processor<PsiReference>,
+    optimizer: SearchRequestCollector,
+    options: KotlinReferencesSearchOptions,
+    private val isSet: Boolean
 ) : OperatorReferenceSearcher<KtArrayAccessExpression>(targetFunction, searchScope, consumer, optimizer, options, wordsToSearch = listOf("[")) {
 
     override fun processPossibleReceiverExpression(expression: KtExpression) {

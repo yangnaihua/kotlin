@@ -24,6 +24,6 @@ public class KotlinSyntaxHighlighterFactory extends SingleLazyInstanceSyntaxHigh
     @Override
     @NotNull
     protected SyntaxHighlighter createHighlighter() {
-      return new KotlinHighlighter();
+        return new KotlinHighlighter();
     }
 }

@@ -28,11 +28,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import java.util.*
 
 class KotlinSuppressableWarningProblemGroup(
-        private val diagnosticFactory: DiagnosticFactory<*>
+    private val diagnosticFactory: DiagnosticFactory<*>
 ) : SuppressableProblemGroup {
 
     init {
-        assert (diagnosticFactory.severity == Severity.WARNING)
+        assert(diagnosticFactory.severity == Severity.WARNING)
     }
 
     override fun getProblemName() = diagnosticFactory.name
@@ -119,5 +119,5 @@ private object DeclarationKindDetector : KtVisitor<AnnotationHostKind?, Unit?>()
     }
 
     private fun detect(declaration: KtDeclaration, kind: String, name: String = declaration.name ?: "<anonymous>", newLineNeeded: Boolean = true)
-        = AnnotationHostKind(kind, name, newLineNeeded)
+            = AnnotationHostKind(kind, name, newLineNeeded)
 }

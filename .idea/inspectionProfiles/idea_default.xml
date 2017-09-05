@@ -56,7 +56,7 @@
       <option name="ignoreOnVolatileVariables" value="true" />
     </inspection_tool>
     <inspection_tool class="DuplicateCondition" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ignoreMethodCalls" value="false" />
+      <option name="ignoreSideEffectConditions" value="true" />
     </inspection_tool>
     <inspection_tool class="EmptyStatementBody" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_reportEmptyBlocks" value="false" />
@@ -235,6 +235,8 @@
       <scope name="idea openapi" level="WARNING" enabled="true" />
       <scope name="runtime.classes" level="ERROR" enabled="true" />
     </inspection_tool>
+    <inspection_tool class="LoopToCallChain" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="MemberVisibilityCanPrivate" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="MethodMayBeStatic" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_onlyPrivateOrFinal" value="false" />
       <option name="m_ignoreEmptyMethods" value="true" />
@@ -402,13 +404,16 @@
     <inspection_tool class="UnnecessaryFullyQualifiedName" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="IDEA Test Sources" level="WARNING" enabled="false">
         <option name="m_ignoreJavadoc" value="true" />
+        <option name="ignoreInModuleStatements" value="true" />
       </scope>
       <option name="m_ignoreJavadoc" value="true" />
+      <option name="ignoreInModuleStatements" value="true" />
     </inspection_tool>
     <inspection_tool class="UnnecessaryLabelOnBreakStatement" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnnecessaryLabelOnContinueStatement" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnnecessaryQualifierForThis" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryUnboxing" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UseExpressionBody" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="UseOfPropertiesAsHashtable" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UtilityClassWithPublicConstructor" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="VolatileLongOrDoubleField" enabled="true" level="WARNING" enabled_by_default="true" />

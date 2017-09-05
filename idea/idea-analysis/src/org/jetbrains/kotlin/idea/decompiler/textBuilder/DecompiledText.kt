@@ -22,13 +22,14 @@ import org.jetbrains.kotlin.utils.keysToMap
 
 data class DecompiledText(val text: String, val index: DecompiledTextIndex)
 
-interface DecompiledTextIndexer<out T: Any> {
+interface DecompiledTextIndexer<out T : Any> {
     fun indexDescriptor(descriptor: DeclarationDescriptor): Collection<T>
 }
 
 // In-memory HashMap-based index of decompiled text
 // allows navigation features
 class DecompiledTextIndex(private val indexers: Collection<DecompiledTextIndexer<*>>) {
+
     private val indexerToMap: Map<DecompiledTextIndexer<*>, MutableMap<Any, TextRange>> = indexers.keysToMap { hashMapOf<Any, TextRange>() }
 
     fun addToIndex(descriptor: DeclarationDescriptor, textRange: TextRange) {
@@ -40,7 +41,7 @@ class DecompiledTextIndex(private val indexers: Collection<DecompiledTextIndexer
         }
     }
 
-    fun <T: Any> getRange(mapper: DecompiledTextIndexer<T>, key: T): TextRange? {
+    fun <T : Any> getRange(mapper: DecompiledTextIndexer<T>, key: T): TextRange? {
         return indexerToMap[mapper]?.get(key)
     }
 

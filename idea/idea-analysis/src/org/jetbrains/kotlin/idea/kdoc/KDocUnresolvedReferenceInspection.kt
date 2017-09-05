@@ -23,11 +23,11 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocName
 
-class KDocUnresolvedReferenceInspection(): AbstractKotlinInspection() {
+class KDocUnresolvedReferenceInspection() : AbstractKotlinInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor =
-        KDocUnresolvedReferenceVisitor(holder)
+            KDocUnresolvedReferenceVisitor(holder)
 
-    private class KDocUnresolvedReferenceVisitor(private val holder: ProblemsHolder): PsiElementVisitor() {
+    private class KDocUnresolvedReferenceVisitor(private val holder: ProblemsHolder) : PsiElementVisitor() {
         override fun visitElement(element: PsiElement) {
             if (element is KDocName) {
                 val ref = element.mainReference

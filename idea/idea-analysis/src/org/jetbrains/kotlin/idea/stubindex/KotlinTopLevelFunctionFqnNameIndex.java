@@ -30,7 +30,8 @@ import java.util.Collection;
  * Stores package top level function (both extension and non-extension) full qualified names.
  */
 public class KotlinTopLevelFunctionFqnNameIndex extends StringStubIndexExtension<KtNamedFunction> {
-    private static final StubIndexKey<String, KtNamedFunction> KEY = KotlinIndexUtil.createIndexKey(KotlinTopLevelFunctionFqnNameIndex.class);
+    private static final StubIndexKey<String, KtNamedFunction> KEY =
+            KotlinIndexUtil.createIndexKey(KotlinTopLevelFunctionFqnNameIndex.class);
 
     private static final KotlinTopLevelFunctionFqnNameIndex INSTANCE = new KotlinTopLevelFunctionFqnNameIndex();
 
@@ -39,7 +40,8 @@ public class KotlinTopLevelFunctionFqnNameIndex extends StringStubIndexExtension
         return INSTANCE;
     }
 
-    private KotlinTopLevelFunctionFqnNameIndex() {}
+    private KotlinTopLevelFunctionFqnNameIndex() {
+    }
 
     @NotNull
     @Override

@@ -180,9 +180,12 @@ private object NoDeclarationDescriptorsChecker {
     }
 }
 
-private class ElementAnnotator(private val element: PsiElement,
-                               private val holder: AnnotationHolder,
-                               private val shouldSuppressUnusedParameter: (KtParameter) -> Boolean) {
+private class ElementAnnotator(
+    private val element: PsiElement,
+    private val holder: AnnotationHolder,
+    private val shouldSuppressUnusedParameter: (KtParameter) -> Boolean
+) {
+
     fun registerDiagnosticsAnnotations(diagnostics: Collection<Diagnostic>) {
         diagnostics.groupBy { it.factory }.forEach { group -> registerDiagnosticAnnotations(group.value) }
     }
@@ -231,6 +234,7 @@ private class ElementAnnotator(private val element: PsiElement,
                     }
                 }
             }
+
             Severity.WARNING -> {
                 if (factory == Errors.UNUSED_PARAMETER && shouldSuppressUnusedParameter(element as KtParameter)) {
                     return
@@ -250,6 +254,7 @@ private class ElementAnnotator(private val element: PsiElement,
                         }
                 )
             }
+
             Severity.INFO -> AnnotationPresentationInfo(ranges, highlightType = ProblemHighlightType.INFORMATION)
         }
 
@@ -293,10 +298,10 @@ private class ElementAnnotator(private val element: PsiElement,
 }
 
 private class AnnotationPresentationInfo(
-        val ranges: List<TextRange>,
-        val nonDefaultMessage: String? = null,
-        val highlightType: ProblemHighlightType? = null,
-        val textAttributes: TextAttributesKey? = null
+    val ranges: List<TextRange>,
+    val nonDefaultMessage: String? = null,
+    val highlightType: ProblemHighlightType? = null,
+    val textAttributes: TextAttributesKey? = null
 ) {
 
     fun create(diagnostic: Diagnostic, range: TextRange, holder: AnnotationHolder): Annotation {
@@ -304,6 +309,7 @@ private class AnnotationPresentationInfo(
 
         val annotation = when (diagnostic.severity) {
             Severity.ERROR -> holder.createErrorAnnotation(range, defaultMessage)
+
             Severity.WARNING -> {
                 if (highlightType == ProblemHighlightType.WEAK_WARNING) {
                     holder.createWeakWarningAnnotation(range, defaultMessage)
@@ -312,6 +318,7 @@ private class AnnotationPresentationInfo(
                     holder.createWarningAnnotation(range, defaultMessage)
                 }
             }
+
             Severity.INFO -> holder.createInfoAnnotation(range, defaultMessage)
         }
 

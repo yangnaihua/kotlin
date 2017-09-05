@@ -20,5 +20,5 @@ import com.intellij.lang.annotation.AnnotationHolder
 import org.jetbrains.kotlin.resolve.BindingContext
 
 internal abstract class AfterAnalysisHighlightingVisitor protected constructor(
-        holder: AnnotationHolder, protected var bindingContext: BindingContext
+    holder: AnnotationHolder, protected var bindingContext: BindingContext
 ) : HighlightingVisitor(holder)

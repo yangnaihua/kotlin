@@ -30,12 +30,12 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
 
 class UnaryOperatorReferenceSearcher(
-        targetFunction: PsiElement,
-        private val operationToken: KtSingleValueToken,
-        searchScope: SearchScope,
-        consumer: Processor<PsiReference>,
-        optimizer: SearchRequestCollector,
-        options: KotlinReferencesSearchOptions
+    targetFunction: PsiElement,
+    private val operationToken: KtSingleValueToken,
+    searchScope: SearchScope,
+    consumer: Processor<PsiReference>,
+    optimizer: SearchRequestCollector,
+    options: KotlinReferencesSearchOptions
 ) : OperatorReferenceSearcher<KtUnaryExpression>(targetFunction, searchScope, consumer, optimizer, options, wordsToSearch = listOf(operationToken.value)) {
 
     override fun processPossibleReceiverExpression(expression: KtExpression) {

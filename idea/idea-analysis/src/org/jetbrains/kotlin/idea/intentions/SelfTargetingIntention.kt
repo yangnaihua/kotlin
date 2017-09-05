@@ -34,9 +34,9 @@ import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 
 @Suppress("EqualsOrHashCode")
 abstract class SelfTargetingIntention<TElement : PsiElement>(
-        val elementType: Class<TElement>,
-        private var text: String,
-        private val familyName: String = text
+    val elementType: Class<TElement>,
+    private var text: String,
+    private val familyName: String = text
 ) : IntentionAction {
 
     protected val defaultText: String = text
@@ -109,9 +109,9 @@ abstract class SelfTargetingIntention<TElement : PsiElement>(
 }
 
 abstract class SelfTargetingRangeIntention<TElement : PsiElement>(
-        elementType: Class<TElement>,
-        text: String,
-        familyName: String = text
+    elementType: Class<TElement>,
+    text: String,
+    familyName: String = text
 ) : SelfTargetingIntention<TElement>(elementType, text, familyName) {
 
     abstract fun applicabilityRange(element: TElement): TextRange?
@@ -123,9 +123,9 @@ abstract class SelfTargetingRangeIntention<TElement : PsiElement>(
 }
 
 abstract class SelfTargetingOffsetIndependentIntention<TElement : KtElement>(
-        elementType: Class<TElement>,
-        text: String,
-        familyName: String = text
+    elementType: Class<TElement>,
+    text: String,
+    familyName: String = text
 ) : SelfTargetingRangeIntention<TElement>(elementType, text, familyName) {
 
     abstract fun isApplicableTo(element: TElement): Boolean

@@ -31,12 +31,13 @@ import org.jetbrains.kotlin.resolve.lazy.declarations.*
 import org.jetbrains.kotlin.storage.StorageManager
 
 class PluginDeclarationProviderFactory(
-        private val project: Project,
-        private val indexedFilesScope: GlobalSearchScope,
-        private val storageManager: StorageManager,
-        private val nonIndexedFiles: Collection<KtFile>,
-        private val moduleInfo: ModuleInfo
+    private val project: Project,
+    private val indexedFilesScope: GlobalSearchScope,
+    private val storageManager: StorageManager,
+    private val nonIndexedFiles: Collection<KtFile>,
+    private val moduleInfo: ModuleInfo
 ) : AbstractDeclarationProviderFactory(storageManager) {
+
     private val fileBasedDeclarationProviderFactory = FileBasedDeclarationProviderFactory(storageManager, nonIndexedFiles)
 
     override fun getClassMemberDeclarationProvider(classLikeInfo: KtClassLikeInfo): ClassMemberDeclarationProvider {

@@ -25,12 +25,12 @@ import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.kotlin.idea.util.ProjectRootsUtil
 
 class KotlinSourceFilterScope private constructor(
-        delegate: GlobalSearchScope,
-        private val includeProjectSourceFiles: Boolean,
-        private val includeLibrarySourceFiles: Boolean,
-        private val includeClassFiles: Boolean,
-        private val includeScriptDependencies: Boolean,
-        private val project: Project
+    delegate: GlobalSearchScope,
+    private val includeProjectSourceFiles: Boolean,
+    private val includeLibrarySourceFiles: Boolean,
+    private val includeClassFiles: Boolean,
+    private val includeScriptDependencies: Boolean,
+    private val project: Project
 ) : DelegatingGlobalSearchScope(delegate) {
 
     private val index = ProjectRootManager.getInstance(project).fileIndex
@@ -105,12 +105,12 @@ class KotlinSourceFilterScope private constructor(
         fun projectAndLibrariesSources(delegate: GlobalSearchScope, project: Project) = create(delegate, true, true, false, false, project)
 
         private fun create(
-                delegate: GlobalSearchScope,
-                includeProjectSourceFiles: Boolean,
-                includeLibrarySourceFiles: Boolean,
-                includeClassFiles: Boolean,
-                includeScriptDependencies: Boolean,
-                project: Project
+            delegate: GlobalSearchScope,
+            includeProjectSourceFiles: Boolean,
+            includeLibrarySourceFiles: Boolean,
+            includeClassFiles: Boolean,
+            includeScriptDependencies: Boolean,
+            project: Project
         ): GlobalSearchScope {
             if (delegate === GlobalSearchScope.EMPTY_SCOPE) return delegate
 

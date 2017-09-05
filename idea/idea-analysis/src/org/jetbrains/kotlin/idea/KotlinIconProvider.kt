@@ -82,14 +82,16 @@ class KotlinIconProvider : IconProvider(), DumbAware {
             return PlatformIcons.PUBLIC_ICON
         }
 
-        fun PsiElement.getBaseIcon(): Icon? = when(this) {
+        fun PsiElement.getBaseIcon(): Icon? = when (this) {
             is KtPackageDirective -> PlatformIcons.PACKAGE_ICON
             is KtLightClassForFacade -> KotlinIcons.FILE
+
             is KtLightClassForDecompiledDeclaration -> {
                 val origin = kotlinOrigin
                 //TODO (light classes for decompiled files): correct presentation
                 if (origin != null) origin.getBaseIcon() else KotlinIcons.CLASS
             }
+
             is KtLightClassForSourceDeclaration -> navigationElement.getBaseIcon()
             is KtNamedFunction -> when {
                 receiverTypeReference != null ->
@@ -108,6 +110,7 @@ class KotlinIconProvider : IconProvider(), DumbAware {
                 else -> if (isAbstract()) KotlinIcons.ABSTRACT_CLASS else KotlinIcons.CLASS
             }
             is KtObjectDeclaration -> KotlinIcons.OBJECT
+
             is KtParameter -> {
                 if (KtPsiUtil.getClassIfParameterIsProperty(this) != null) {
                     if (isMutable) KotlinIcons.FIELD_VAR else KotlinIcons.FIELD_VAL
@@ -115,6 +118,7 @@ class KotlinIconProvider : IconProvider(), DumbAware {
                 else
                     KotlinIcons.PARAMETER
             }
+
             is KtProperty -> if (isVar) KotlinIcons.FIELD_VAR else KotlinIcons.FIELD_VAL
             is KtClassInitializer -> KotlinIcons.CLASS_INITIALIZER
             is KtTypeAlias -> KotlinIcons.TYPE_ALIAS

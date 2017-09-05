@@ -148,6 +148,7 @@ class OperatorToFunctionIntention : SelfTargetingIntention<KtExpression>(KtExpre
                 KtTokens.MINUSEQ -> if (functionName == "minusAssign") "$0.minusAssign($1)" else "$0 = $0.minus($1)"
                 KtTokens.MULTEQ -> if (functionName == "multAssign") "$0.multAssign($1)" else "$0 = $0.mult($1)"
                 KtTokens.DIVEQ -> if (functionName == "divAssign") "$0.divAssign($1)" else "$0 = $0.div($1)"
+
                 KtTokens.PERCEQ -> {
                     val remSupported = element.languageVersionSettings.supportsFeature(LanguageFeature.OperatorRem)
                     if (remSupported && functionName == "remAssign") "$0.remAssign($1)"
@@ -155,6 +156,7 @@ class OperatorToFunctionIntention : SelfTargetingIntention<KtExpression>(KtExpre
                     else if (remSupported) "$0 = $0.rem($1)"
                     else "$0 = $0.mod($1)"
                 }
+
                 KtTokens.EQEQ -> if (elemType?.isMarkedNullable ?: true) "$0?.equals($1) ?: ($1 == null)" else "$0.equals($1)"
                 KtTokens.EXCLEQ -> if (elemType?.isMarkedNullable ?: true) "!($0?.equals($1) ?: ($1 == null))" else "!$0.equals($1)"
                 KtTokens.GT -> "$0.compareTo($1) > 0"

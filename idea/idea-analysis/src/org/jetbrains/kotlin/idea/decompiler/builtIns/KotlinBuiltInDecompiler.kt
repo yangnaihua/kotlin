@@ -36,16 +36,18 @@ class KotlinBuiltInDecompiler : KotlinMetadataDecompiler<BuiltInsBinaryVersion>(
         FlexibleTypeDeserializer.ThrowException, BuiltInsBinaryVersion.INSTANCE, BuiltInsBinaryVersion.INVALID_VERSION,
         KotlinStubVersions.BUILTIN_STUB_VERSION
 ) {
+
     override fun readFile(bytes: ByteArray, file: VirtualFile): FileWithMetadata? {
         return BuiltInDefinitionFile.read(bytes, file)
     }
 }
 
 class BuiltInDefinitionFile(
-        proto: ProtoBuf.PackageFragment,
-        val packageDirectory: VirtualFile,
-        val isMetadata: Boolean
+    proto: ProtoBuf.PackageFragment,
+    val packageDirectory: VirtualFile,
+    val isMetadata: Boolean
 ) : FileWithMetadata.Compatible(proto, BuiltInSerializerProtocol) {
+
     override val classesToDecompile: List<ProtoBuf.Class>
         get() = super.classesToDecompile.let { classes ->
             if (isMetadata || !FILTER_OUT_CLASSES_EXISTING_AS_JVM_CLASS_FILES) classes

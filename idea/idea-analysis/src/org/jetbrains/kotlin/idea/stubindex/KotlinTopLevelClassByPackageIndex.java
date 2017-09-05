@@ -27,7 +27,8 @@ import org.jetbrains.kotlin.psi.KtClassOrObject;
 import java.util.Collection;
 
 public class KotlinTopLevelClassByPackageIndex extends StringStubIndexExtension<KtClassOrObject> {
-    private static final StubIndexKey<String, KtClassOrObject> KEY = KotlinIndexUtil.createIndexKey(KotlinTopLevelClassByPackageIndex.class);
+    private static final StubIndexKey<String, KtClassOrObject> KEY =
+            KotlinIndexUtil.createIndexKey(KotlinTopLevelClassByPackageIndex.class);
 
     private static final KotlinTopLevelClassByPackageIndex ourInstance = new KotlinTopLevelClassByPackageIndex();
 
@@ -35,7 +36,8 @@ public class KotlinTopLevelClassByPackageIndex extends StringStubIndexExtension<
         return ourInstance;
     }
 
-    private KotlinTopLevelClassByPackageIndex() {}
+    private KotlinTopLevelClassByPackageIndex() {
+    }
 
     @NotNull
     @Override

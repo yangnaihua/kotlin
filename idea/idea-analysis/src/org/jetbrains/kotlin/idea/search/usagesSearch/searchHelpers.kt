@@ -61,7 +61,8 @@ fun PsiNamedElement.getAccessorNames(readable: Boolean = true, writable: Boolean
 fun PsiNamedElement.getClassNameForCompanionObject(): String? {
     return if (this is KtObjectDeclaration && this.isCompanion()) {
         getNonStrictParentOfType<KtClass>()?.name
-    } else {
+    }
+    else {
         null
     }
 }

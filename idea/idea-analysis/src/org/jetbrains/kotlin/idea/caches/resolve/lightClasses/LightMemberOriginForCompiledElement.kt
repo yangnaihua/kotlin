@@ -144,6 +144,7 @@ private object ByJvmSignatureIndexer : DecompiledTextIndexer<ClassNameAndSignatu
                     val signature = MemberSignature.fromFieldNameAndDesc(descriptor.name.asString(), enumClass.desc())
                     save(enumClass.relativeClassName(), signature)
                 }
+
                 ClassKind.OBJECT -> {
                     val instanceFieldSignature = MemberSignature.fromFieldNameAndDesc(JvmAbi.INSTANCE_FIELD, descriptor.desc())
                     save(descriptor.relativeClassName(), instanceFieldSignature)

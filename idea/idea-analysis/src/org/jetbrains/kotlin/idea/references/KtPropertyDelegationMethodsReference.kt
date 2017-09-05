@@ -37,8 +37,7 @@ class KtPropertyDelegationMethodsReference(element: KtPropertyDelegate) : KtMult
     override fun getTargetDescriptors(context: BindingContext): Collection<DeclarationDescriptor> {
         val property = expression.getStrictParentOfType<KtProperty>() ?: return emptyList()
         val descriptor = context[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? PropertyDescriptor ?: return emptyList()
-        return (descriptor.accessors.mapNotNull {
-            accessor ->
+        return (descriptor.accessors.mapNotNull { accessor ->
             context.get(BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, accessor)?.candidateDescriptor
         } + listOfNotNull(context.get(BindingContext.PROVIDE_DELEGATE_RESOLVED_CALL, descriptor)?.candidateDescriptor))
     }

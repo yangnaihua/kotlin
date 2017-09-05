@@ -24,10 +24,11 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 
 fun KtModifierListOwner.addAnnotation(
-        annotationFqName: FqName,
-        annotationInnerText: String? = null,
-        whiteSpaceText: String = "\n",
-        addToExistingAnnotation: ((KtAnnotationEntry) -> Boolean)? = null): Boolean {
+    annotationFqName: FqName,
+    annotationInnerText: String? = null,
+    whiteSpaceText: String = "\n",
+    addToExistingAnnotation: ((KtAnnotationEntry) -> Boolean)? = null
+): Boolean {
     val annotationText = when (annotationInnerText) {
         null -> "@${annotationFqName.asString()}"
         else -> "@${annotationFqName.asString()}($annotationInnerText)"

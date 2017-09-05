@@ -37,10 +37,11 @@ import org.jetbrains.kotlin.resolve.OverridingUtil.filterOutOverridden
 import javax.swing.Icon
 
 internal class KotlinStructureElementPresentation(
-        private val isInherited: Boolean,
-        navigatablePsiElement: NavigatablePsiElement,
-        descriptor: DeclarationDescriptor?
+    private val isInherited: Boolean,
+    navigatablePsiElement: NavigatablePsiElement,
+    descriptor: DeclarationDescriptor?
 ) : ColoredItemPresentation, LocationPresentation {
+
     private val attributesKey = getElementAttributesKey(isInherited, navigatablePsiElement)
     private val elementText = getElementText(navigatablePsiElement, descriptor)
     private val locationString = getElementLocationString(isInherited, descriptor)

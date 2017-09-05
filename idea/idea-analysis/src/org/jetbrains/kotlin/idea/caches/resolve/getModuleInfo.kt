@@ -70,7 +70,7 @@ private fun PsiElement.getModuleInfo(onFailure: (String) -> IdeaModuleInfo?): Id
     val containingFile = containingFile ?: return onFailure("Analyzing element of type ${this::class.java} with no containing file\nText:\n$text")
 
     val virtualFile = containingFile.originalFile.virtualFile
-            ?: return onFailure("Analyzing element of type ${this::class.java} in non-physical file $containingFile of type ${containingFile::class.java}\nText:\n$text")
+                      ?: return onFailure("Analyzing element of type ${this::class.java} in non-physical file $containingFile of type ${containingFile::class.java}\nText:\n$text")
 
     return getModuleInfoByVirtualFile(
             project,
@@ -80,7 +80,7 @@ private fun PsiElement.getModuleInfo(onFailure: (String) -> IdeaModuleInfo?): Id
 }
 
 fun getModuleInfoByVirtualFile(
-        project: Project, virtualFile: VirtualFile
+    project: Project, virtualFile: VirtualFile
 ): IdeaModuleInfo? = getModuleInfoByVirtualFile(project, virtualFile, treatAsLibrarySource = false)
 
 private fun getModuleInfoByVirtualFile(project: Project, virtualFile: VirtualFile, treatAsLibrarySource: Boolean): IdeaModuleInfo? {
@@ -108,9 +108,9 @@ private fun getModuleInfoByVirtualFile(project: Project, virtualFile: VirtualFil
     }
 
     projectFileIndex.getOrderEntriesForFile(virtualFile)
-            .process(project, virtualFile, treatAsLibrarySource) { correspondingModuleInfo ->
-                return correspondingModuleInfo
-            }
+        .process(project, virtualFile, treatAsLibrarySource) { correspondingModuleInfo ->
+            return correspondingModuleInfo
+        }
 
     val scriptDefinition = getScriptDefinition(virtualFile, project)
     if (scriptDefinition != null) {
@@ -169,10 +169,10 @@ private inline fun <reified T : IdeaModuleInfo> collectModuleInfosByType(project
 }
 
 private inline fun List<OrderEntry>.process(
-        project: Project,
-        virtualFile: VirtualFile,
-        treatAsLibrarySource: Boolean = false,
-        body: (IdeaModuleInfo) -> Unit
+    project: Project,
+    virtualFile: VirtualFile,
+    treatAsLibrarySource: Boolean = false,
+    body: (IdeaModuleInfo) -> Unit
 ) {
     entries@ for (orderEntry in this) {
         if (!orderEntry.isValid) continue
@@ -187,6 +187,7 @@ private inline fun List<OrderEntry>.process(
                     body(LibrarySourceInfo(project, library))
                 }
             }
+
             is JdkOrderEntry -> {
                 val sdk = orderEntry.jdk ?: continue@entries
                 body(SdkInfo(project, sdk))

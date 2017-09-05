@@ -30,12 +30,12 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
 
 class BinaryOperatorReferenceSearcher(
-        targetFunction: PsiElement,
-        private val operationTokens: List<KtSingleValueToken>,
-        searchScope: SearchScope,
-        consumer: Processor<PsiReference>,
-        optimizer: SearchRequestCollector,
-        options: KotlinReferencesSearchOptions
+    targetFunction: PsiElement,
+    private val operationTokens: List<KtSingleValueToken>,
+    searchScope: SearchScope,
+    consumer: Processor<PsiReference>,
+    optimizer: SearchRequestCollector,
+    options: KotlinReferencesSearchOptions
 ) : OperatorReferenceSearcher<KtBinaryExpression>(targetFunction, searchScope, consumer, optimizer, options, wordsToSearch = operationTokens.map { it.value }) {
 
     override fun processPossibleReceiverExpression(expression: KtExpression) {

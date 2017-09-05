@@ -55,6 +55,7 @@ fun GlobalSearchScope.restrictToKotlinSources() = GlobalSearchScope.getScopeRest
 fun SearchScope.restrictToKotlinSources(): SearchScope {
     return when (this) {
         is GlobalSearchScope -> restrictToKotlinSources()
+
         is LocalSearchScope -> {
             val ktElements = scope.filter { it.containingFile is KtFile }
             when (ktElements.size) {
@@ -63,6 +64,7 @@ fun SearchScope.restrictToKotlinSources(): SearchScope {
                 else -> LocalSearchScope(ktElements.toTypedArray())
             }
         }
+
         else -> this
     }
 }

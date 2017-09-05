@@ -26,5 +26,6 @@ public abstract class KotlinModuleTypeManager {
     }
 
     public abstract boolean isAndroidGradleModule(@NotNull Module module);
+
     public abstract boolean isGradleModule(@NotNull Module module);
 }

@@ -84,7 +84,7 @@ object KotlinModuleMappingIndex : FileBasedIndexExtension<String, PackageParts>(
                 }
                 return@DataIndexer moduleMapping.packageFqName2Parts
             }
-            catch(e: Exception) {
+            catch (e: Exception) {
                 throw RuntimeException("Error on indexing $file", e)
             }
         }

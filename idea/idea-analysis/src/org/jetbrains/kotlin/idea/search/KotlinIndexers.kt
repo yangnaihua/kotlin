@@ -37,18 +37,18 @@ import java.util.*
 val KOTLIN_NAMED_ARGUMENT_SEARCH_CONTEXT: Short = 0x20
 
 private val ALL_SEARCHABLE_OPERATIONS: ImmutableSet<KtToken> = ImmutableSet
-        .builder<KtToken>()
-        .addAll(OperatorConventions.UNARY_OPERATION_NAMES.keys)
-        .addAll(OperatorConventions.BINARY_OPERATION_NAMES.keys)
-        .addAll(OperatorConventions.ASSIGNMENT_OPERATIONS.keys)
-        .addAll(OperatorConventions.COMPARISON_OPERATIONS)
-        .addAll(OperatorConventions.EQUALS_OPERATIONS)
-        .addAll(OperatorConventions.IN_OPERATIONS)
-        .add(KtTokens.LBRACKET)
-        .add(KtTokens.BY_KEYWORD)
-        .build()
+    .builder<KtToken>()
+    .addAll(OperatorConventions.UNARY_OPERATION_NAMES.keys)
+    .addAll(OperatorConventions.BINARY_OPERATION_NAMES.keys)
+    .addAll(OperatorConventions.ASSIGNMENT_OPERATIONS.keys)
+    .addAll(OperatorConventions.COMPARISON_OPERATIONS)
+    .addAll(OperatorConventions.EQUALS_OPERATIONS)
+    .addAll(OperatorConventions.IN_OPERATIONS)
+    .add(KtTokens.LBRACKET)
+    .add(KtTokens.BY_KEYWORD)
+    .build()
 
-class KotlinFilterLexer(private val occurrenceConsumer: OccurrenceConsumer): BaseFilterLexer(KotlinLexer(), occurrenceConsumer) {
+class KotlinFilterLexer(private val occurrenceConsumer: OccurrenceConsumer) : BaseFilterLexer(KotlinLexer(), occurrenceConsumer) {
     private val codeTokens = TokenSet.orSet(
             TokenSet.create(*ALL_SEARCHABLE_OPERATIONS.toTypedArray()),
             TokenSet.create(KtTokens.IDENTIFIER)
@@ -81,22 +81,22 @@ class KotlinFilterLexer(private val occurrenceConsumer: OccurrenceConsumer): Bas
             }
 
             KtTokens.IDENTIFIER -> {
-                 if (myDelegate.tokenText.startsWith("`")) {
-                     scanWordsInToken(UsageSearchContext.IN_CODE.toInt(), false, false)
-                 }
-                 else {
-                     addOccurrenceInToken(UsageSearchContext.IN_CODE.toInt())
-                     if (myDelegate.tokenText == "TODO" ) {
-                         // Heuristics to reduce mismatches between indexer and searcher. The searcher returns only occurrences of TO_DO
-                         // as the callee of a call expression, but we can't tell calls and other usages apart based on limited lexer context,
-                         // so we just exclude occurrences in declaration names (and even that doesn't work precisely because it doesn't handle
-                         // declarations with type parameters)
-                         val prevToken = prevTokens.peekFirst()
-                         if (prevToken != KtTokens.FUN_KEYWORD && prevToken != KtTokens.VAR_KEYWORD && prevToken != KtTokens.VAL_KEYWORD && prevToken != KtTokens.CLASS_KEYWORD) {
-                             advanceTodoItemCountsInToken()
-                         }
-                     }
-                 }
+                if (myDelegate.tokenText.startsWith("`")) {
+                    scanWordsInToken(UsageSearchContext.IN_CODE.toInt(), false, false)
+                }
+                else {
+                    addOccurrenceInToken(UsageSearchContext.IN_CODE.toInt())
+                    if (myDelegate.tokenText == "TODO") {
+                        // Heuristics to reduce mismatches between indexer and searcher. The searcher returns only occurrences of TO_DO
+                        // as the callee of a call expression, but we can't tell calls and other usages apart based on limited lexer context,
+                        // so we just exclude occurrences in declaration names (and even that doesn't work precisely because it doesn't handle
+                        // declarations with type parameters)
+                        val prevToken = prevTokens.peekFirst()
+                        if (prevToken != KtTokens.FUN_KEYWORD && prevToken != KtTokens.VAR_KEYWORD && prevToken != KtTokens.VAL_KEYWORD && prevToken != KtTokens.CLASS_KEYWORD) {
+                            advanceTodoItemCountsInToken()
+                        }
+                    }
+                }
             }
 
             in codeTokens -> addOccurrenceInToken(UsageSearchContext.IN_CODE.toInt())
@@ -128,13 +128,13 @@ class KotlinFilterLexer(private val occurrenceConsumer: OccurrenceConsumer): Bas
     }
 }
 
-class KotlinIdIndexer: LexerBasedIdIndexer() {
+class KotlinIdIndexer : LexerBasedIdIndexer() {
     override fun createLexer(consumer: OccurrenceConsumer): Lexer = KotlinFilterLexer(consumer)
 
     override fun getVersion() = 3
 }
 
-class KotlinTodoIndexer: LexerBasedTodoIndexer(), IdAndToDoScannerBasedOnFilterLexer {
+class KotlinTodoIndexer : LexerBasedTodoIndexer(), IdAndToDoScannerBasedOnFilterLexer {
     override fun getVersion() = 2
 
     override fun createLexer(consumer: OccurrenceConsumer) = KotlinFilterLexer(consumer)

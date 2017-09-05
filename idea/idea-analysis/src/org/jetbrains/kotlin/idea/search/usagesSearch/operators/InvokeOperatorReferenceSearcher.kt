@@ -34,12 +34,13 @@ import org.jetbrains.uast.UastContext
 import org.jetbrains.uast.convertOpt
 
 class InvokeOperatorReferenceSearcher(
-        targetFunction: PsiElement,
-        searchScope: SearchScope,
-        consumer: Processor<PsiReference>,
-        optimizer: SearchRequestCollector,
-        options: KotlinReferencesSearchOptions
+    targetFunction: PsiElement,
+    searchScope: SearchScope,
+    consumer: Processor<PsiReference>,
+    optimizer: SearchRequestCollector,
+    options: KotlinReferencesSearchOptions
 ) : OperatorReferenceSearcher<KtCallExpression>(targetFunction, searchScope, consumer, optimizer, options, wordsToSearch = emptyList()) {
+
     private val callArgumentsSize: Int?
 
     init {

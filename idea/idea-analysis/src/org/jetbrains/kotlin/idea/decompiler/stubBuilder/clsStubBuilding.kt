@@ -43,11 +43,11 @@ import org.jetbrains.kotlin.serialization.deserialization.TypeTable
 import org.jetbrains.kotlin.serialization.jvm.JvmProtoBufUtil
 
 fun createTopLevelClassStub(
-        classId: ClassId,
-        classProto: ProtoBuf.Class,
-        source: SourceElement?,
-        context: ClsStubBuilderContext,
-        isScript: Boolean
+    classId: ClassId,
+    classProto: ProtoBuf.Class,
+    source: SourceElement?,
+    context: ClsStubBuilderContext,
+    isScript: Boolean
 ): KotlinFileStubImpl {
     val fileStub = createFileStub(classId.packageFqName, isScript)
     createClassStub(fileStub, classProto, context.nameResolver, classId, source, context)
@@ -55,9 +55,9 @@ fun createTopLevelClassStub(
 }
 
 fun createPackageFacadeStub(
-        packageProto: ProtoBuf.Package,
-        packageFqName: FqName,
-        c: ClsStubBuilderContext
+    packageProto: ProtoBuf.Package,
+    packageFqName: FqName,
+    c: ClsStubBuilderContext
 ): KotlinFileStubImpl {
     val fileStub = KotlinFileStubForIde.forFile(packageFqName, isScript = false)
     setupFileStub(fileStub, packageFqName)
@@ -67,9 +67,9 @@ fun createPackageFacadeStub(
 }
 
 fun createFileFacadeStub(
-        packageProto: ProtoBuf.Package,
-        facadeFqName: FqName,
-        c: ClsStubBuilderContext
+    packageProto: ProtoBuf.Package,
+    facadeFqName: FqName,
+    c: ClsStubBuilderContext
 ): KotlinFileStubImpl {
     val packageFqName = facadeFqName.parent()
     val fileStub = KotlinFileStubForIde.forFileFacadeStub(facadeFqName)
@@ -82,10 +82,10 @@ fun createFileFacadeStub(
 }
 
 fun createMultifileClassStub(
-        header: KotlinClassHeader,
-        partFiles: List<KotlinJvmBinaryClass>,
-        facadeFqName: FqName,
-        components: ClsStubBuilderComponents
+    header: KotlinClassHeader,
+    partFiles: List<KotlinJvmBinaryClass>,
+    facadeFqName: FqName,
+    components: ClsStubBuilderComponents
 ): KotlinFileStubImpl {
     val packageFqName = facadeFqName.parent()
     val partNames = header.data?.asList()?.map { it.substringAfterLast('/') }
@@ -123,10 +123,12 @@ fun createStubForPackageName(packageDirectiveStub: KotlinPlaceHolderStubImpl<KtP
     fun recCreateStubForPackageName(current: StubElement<out PsiElement>) {
         when (iterator.previousIndex()) {
             -1 -> return
+
             0 -> {
                 KotlinNameReferenceExpressionStubImpl(current, iterator.previous().ref())
                 return
             }
+
             else -> {
                 val lastSegment = iterator.previous()
                 val receiver = KotlinPlaceHolderStubImpl<KtDotQualifiedExpression>(current, KtStubElementTypes.DOT_QUALIFIED_EXPRESSION)
@@ -140,9 +142,9 @@ fun createStubForPackageName(packageDirectiveStub: KotlinPlaceHolderStubImpl<KtP
 }
 
 fun createStubForTypeName(
-        typeClassId: ClassId,
-        parent: StubElement<out PsiElement>,
-        bindTypeArguments: (KotlinUserTypeStub, Int) -> Unit = { _, _ -> }
+    typeClassId: ClassId,
+    parent: StubElement<out PsiElement>,
+    bindTypeArguments: (KotlinUserTypeStub, Int) -> Unit = { _, _ -> }
 ): KotlinUserTypeStub {
     val substituteWithAny = typeClassId.isLocal
 
@@ -169,10 +171,10 @@ fun createStubForTypeName(
 }
 
 fun createModifierListStubForDeclaration(
-        parent: StubElement<out PsiElement>,
-        flags: Int,
-        flagsToTranslate: List<FlagsToModifiers> = listOf(),
-        additionalModifiers: List<KtModifierKeywordToken> = listOf()
+    parent: StubElement<out PsiElement>,
+    flags: Int,
+    flagsToTranslate: List<FlagsToModifiers> = listOf(),
+    additionalModifiers: List<KtModifierKeywordToken> = listOf()
 ): KotlinModifierListStubImpl {
     assert(flagsToTranslate.isNotEmpty())
 
@@ -181,8 +183,8 @@ fun createModifierListStubForDeclaration(
 }
 
 fun createModifierListStub(
-        parent: StubElement<out PsiElement>,
-        modifiers: Collection<KtModifierKeywordToken>
+    parent: StubElement<out PsiElement>,
+    modifiers: Collection<KtModifierKeywordToken>
 ): KotlinModifierListStubImpl? {
     if (modifiers.isEmpty()) {
         return null
@@ -207,8 +209,8 @@ fun createAnnotationStubs(annotationIds: List<ClassId>, parent: KotlinStubBaseIm
 }
 
 fun createTargetedAnnotationStubs(
-        annotationIds: List<ClassIdWithTarget>,
-        parent: KotlinStubBaseImpl<*>
+    annotationIds: List<ClassIdWithTarget>,
+    parent: KotlinStubBaseImpl<*>
 ) {
     if (annotationIds.isEmpty()) return
 
@@ -229,7 +231,7 @@ fun createTargetedAnnotationStubs(
 }
 
 val MessageLite.annotatedCallableKind: AnnotatedCallableKind
-    get()  {
+    get() {
         return when (this) {
             is ProtoBuf.Property -> AnnotatedCallableKind.PROPERTY
             is ProtoBuf.Function, is ProtoBuf.Constructor -> AnnotatedCallableKind.FUNCTION

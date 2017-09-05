@@ -36,9 +36,9 @@ typealias ExactLightClassContextProvider = () -> LightClassConstructionContext
 typealias DummyLightClassContextProvider = (() -> LightClassConstructionContext?)?
 
 sealed class LazyLightClassDataHolder(
-        builder: LightClassBuilder,
-        exactContextProvider: ExactLightClassContextProvider,
-        dummyContextProvider: DummyLightClassContextProvider
+    builder: LightClassBuilder,
+    exactContextProvider: ExactLightClassContextProvider,
+    dummyContextProvider: DummyLightClassContextProvider
 ) : LightClassDataHolder {
 
     private val exactResultLazyValue = lazyPub { builder(exactContextProvider()) }
@@ -62,8 +62,9 @@ sealed class LazyLightClassDataHolder(
             }
 
     class ForClass(
-            builder: LightClassBuilder, exactContextProvider: ExactLightClassContextProvider, dummyContextProvider: DummyLightClassContextProvider
+        builder: LightClassBuilder, exactContextProvider: ExactLightClassContextProvider, dummyContextProvider: DummyLightClassContextProvider
     ) : LazyLightClassDataHolder(builder, exactContextProvider, dummyContextProvider), LightClassDataHolder.ForClass {
+
         override fun findDataForClassOrObject(classOrObject: KtClassOrObject): LightClassData =
                 LazyLightClassData { lightClassBuilderResult ->
                     lightClassBuilderResult.stub.findDelegate(classOrObject)
@@ -71,12 +72,13 @@ sealed class LazyLightClassDataHolder(
     }
 
     class ForFacade(
-            builder: LightClassBuilder, exactContextProvider: ExactLightClassContextProvider, dummyContextProvider: DummyLightClassContextProvider
+        builder: LightClassBuilder, exactContextProvider: ExactLightClassContextProvider, dummyContextProvider: DummyLightClassContextProvider
     ) : LazyLightClassDataHolder(builder, exactContextProvider, dummyContextProvider), LightClassDataHolder.ForFacade
 
     private inner class LazyLightClassData(
-            findDelegate: (LightClassBuilderResult) -> PsiClass
+        findDelegate: (LightClassBuilderResult) -> PsiClass
     ) : LightClassData {
+
         override val clsDelegate: PsiClass by lazyPub { findDelegate(exactResult) }
 
         private val dummyDelegate: PsiClass? by lazyPub { inexactResult?.let(findDelegate) }
@@ -131,8 +133,7 @@ sealed class LazyLightClassDataHolder(
     }
 }
 
-private sealed class LazyLightClassMemberMatchingError(message: String, containingClass: KtLightClass)
-    : AssertionError(message) {
+private sealed class LazyLightClassMemberMatchingError(message: String, containingClass: KtLightClass) : AssertionError(message) {
 
     init {
         containingClass.kotlinOrigin?.hasLightClassMatchingErrors = true

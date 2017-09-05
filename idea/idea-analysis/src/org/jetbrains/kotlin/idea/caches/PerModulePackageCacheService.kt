@@ -44,8 +44,9 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import java.util.concurrent.ConcurrentMap
 
 class KotlinPackageContentModificationListener(
-        private val project: Project
+    private val project: Project
 ) {
+
     init {
         val connection = project.messageBus.connect()
 
@@ -61,11 +62,11 @@ class KotlinPackageContentModificationListener(
                 }
                 else {
                     events
-                            .asSequence()
-                            .filter(eventPredicate)
-                            .mapNotNull { it.file }
-                            .filter { FileTypeRegistry.getInstance().getFileTypeByFileName(it.name) == KotlinFileType.INSTANCE }
-                            .forEach { file -> service.notifyPackageChange(file) }
+                        .asSequence()
+                        .filter(eventPredicate)
+                        .mapNotNull { it.file }
+                        .filter { FileTypeRegistry.getInstance().getFileTypeByFileName(it.name) == KotlinFileType.INSTANCE }
+                        .forEach { file -> service.notifyPackageChange(file) }
                 }
             }
         })
@@ -85,11 +86,13 @@ class KotlinPackageStatementPsiTreeChangePreprocessor(private val project: Proje
                 if (child.getParentOfType<KtPackageDirective>(false) != null)
                     project.service<PerModulePackageCacheService>().notifyPackageChange(file)
             }
+
             PsiTreeChangeEventImpl.PsiEventType.CHILDREN_CHANGED -> {
                 val parent = event.parent ?: return
                 if (parent.getChildrenOfType<KtPackageDirective>().any())
                     project.service<PerModulePackageCacheService>().notifyPackageChange(file)
             }
+
             else -> {
             }
         }
@@ -157,11 +160,11 @@ class PerModulePackageCacheService(private val project: Project) {
         // disposing global cache entry
         val moduleOwnCache = module.getUserData(PerModulePackageCacheService.PER_MODULE_PACKAGE_CACHE) ?: run {
             ContainerUtil.createConcurrentSoftMap<ModuleInfo, Ref<ConcurrentMap<FqName, Boolean>>>()
-                    .apply { module.putUserData(PerModulePackageCacheService.PER_MODULE_PACKAGE_CACHE, this) }
+                .apply { module.putUserData(PerModulePackageCacheService.PER_MODULE_PACKAGE_CACHE, this) }
         }
         val cached = moduleOwnCache.getOrPut(moduleInfo) { cache.getOrPut(moduleInfo) { Ref() } }
-                .apply { if (isNull) set(ContainerUtil.createConcurrentSoftMap<FqName, Boolean>()) }
-                .get()
+            .apply { if (isNull) set(ContainerUtil.createConcurrentSoftMap<FqName, Boolean>()) }
+            .get()
 
 
         return cached.getOrPut(packageFqName) {

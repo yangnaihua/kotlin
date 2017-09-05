@@ -26,10 +26,10 @@ import org.jetbrains.kotlin.serialization.ProtoBuf
 import org.jetbrains.kotlin.serialization.deserialization.ProtoContainer
 
 fun createTypeAliasStub(
-        parent: StubElement<out PsiElement>,
-        typeAliasProto: ProtoBuf.TypeAlias,
-        protoContainer: ProtoContainer,
-        context: ClsStubBuilderContext
+    parent: StubElement<out PsiElement>,
+    typeAliasProto: ProtoBuf.TypeAlias,
+    protoContainer: ProtoContainer,
+    context: ClsStubBuilderContext
 ) {
     val shortName = context.nameResolver.getName(typeAliasProto.name)
 
@@ -39,9 +39,9 @@ fun createTypeAliasStub(
     }
 
     val typeAlias =
-        KotlinTypeAliasStubImpl(
-                parent, classId.shortClassName.ref(), classId.asSingleFqName().ref(),
-                isTopLevel = !classId.isNestedClass)
+            KotlinTypeAliasStubImpl(
+                    parent, classId.shortClassName.ref(), classId.asSingleFqName().ref(),
+                    isTopLevel = !classId.isNestedClass)
 
     val modifierList = createModifierListStubForDeclaration(typeAlias, typeAliasProto.flags, arrayListOf(VISIBILITY), listOf())
 

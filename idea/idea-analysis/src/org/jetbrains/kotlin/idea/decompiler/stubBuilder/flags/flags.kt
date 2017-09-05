@@ -65,12 +65,13 @@ val TAILREC = createBooleanFlagToModifier(Flags.IS_TAILREC, KtTokens.TAILREC_KEY
 val SUSPEND = createBooleanFlagToModifier(Flags.IS_SUSPEND, KtTokens.SUSPEND_KEYWORD)
 
 private fun createBooleanFlagToModifier(
-        flagField: Flags.BooleanFlagField, ktModifierKeywordToken: KtModifierKeywordToken
+    flagField: Flags.BooleanFlagField, ktModifierKeywordToken: KtModifierKeywordToken
 ): FlagsToModifiers = BooleanFlagToModifier(flagField, ktModifierKeywordToken)
 
 private class BooleanFlagToModifier(
-        private val flagField: Flags.BooleanFlagField,
-        private val ktModifierKeywordToken: KtModifierKeywordToken
+    private val flagField: Flags.BooleanFlagField,
+    private val ktModifierKeywordToken: KtModifierKeywordToken
 ) : FlagsToModifiers() {
+
     override fun getModifiers(flags: Int): KtModifierKeywordToken? = if (flagField.get(flags)) ktModifierKeywordToken else null
 }

@@ -27,10 +27,8 @@ public class KotlinHighlightingLexer extends LayeredLexer {
     public KotlinHighlightingLexer() {
         super(new KotlinLexer());
 
-        registerSelfStoppingLayer(new KDocLexer(), new IElementType[]{KtTokens.DOC_COMMENT}, IElementType.EMPTY_ARRAY);
+        registerSelfStoppingLayer(new KDocLexer(), new IElementType[] {KtTokens.DOC_COMMENT}, IElementType.EMPTY_ARRAY);
         registerSelfStoppingLayer(new StringLiteralLexer('\'', KtTokens.CHARACTER_LITERAL),
-                                  new IElementType[]{KtTokens.CHARACTER_LITERAL}, IElementType.EMPTY_ARRAY);
-
-
+                                  new IElementType[] {KtTokens.CHARACTER_LITERAL}, IElementType.EMPTY_ARRAY);
     }
 }

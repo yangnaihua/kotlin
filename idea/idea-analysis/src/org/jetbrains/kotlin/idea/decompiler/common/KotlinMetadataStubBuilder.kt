@@ -29,11 +29,12 @@ import org.jetbrains.kotlin.serialization.deserialization.ProtoContainer
 import org.jetbrains.kotlin.serialization.deserialization.TypeTable
 
 open class KotlinMetadataStubBuilder(
-        private val version: Int,
-        private val fileType: FileType,
-        private val serializerProtocol: SerializerExtensionProtocol,
-        private val readFile: (ByteArray, VirtualFile) -> FileWithMetadata?
+    private val version: Int,
+    private val fileType: FileType,
+    private val serializerProtocol: SerializerExtensionProtocol,
+    private val readFile: (ByteArray, VirtualFile) -> FileWithMetadata?
 ) : ClsStubBuilder() {
+
     override fun getStubVersion() = ClassFileStubBuilder.STUB_VERSION + version
 
     override fun buildFileStub(content: FileContent): PsiFileStub<*>? {
@@ -45,6 +46,7 @@ open class KotlinMetadataStubBuilder(
             is FileWithMetadata.Incompatible -> {
                 return createIncompatibleAbiVersionFileStub()
             }
+
             is FileWithMetadata.Compatible -> {
                 val packageProto = file.proto.`package`
                 val packageFqName = file.packageFqName

@@ -70,5 +70,4 @@ public class TargetPlatformDetector {
     public static TargetPlatform getPlatform(@NotNull Module module) {
         return ProjectStructureUtil.getCachedPlatformForModule(module);
     }
-
 }

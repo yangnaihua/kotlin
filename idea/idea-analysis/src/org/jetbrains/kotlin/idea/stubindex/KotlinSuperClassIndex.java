@@ -36,7 +36,8 @@ public class KotlinSuperClassIndex extends StringStubIndexExtension<KtClassOrObj
         return ourInstance;
     }
 
-    private KotlinSuperClassIndex() {}
+    private KotlinSuperClassIndex() {
+    }
 
     @NotNull
     @Override

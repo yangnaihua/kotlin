@@ -60,7 +60,7 @@ public class KtInvokeFunctionReference extends KtSimpleReference<KtCallExpressio
         }
         if (call != null && resolvedCall != null && call.getCallType() == Call.CallType.INVOKE) {
             return Collections.<DeclarationDescriptor>singleton(resolvedCall.getCandidateDescriptor());
-        }        
+        }
         return Collections.emptyList();
     }
 

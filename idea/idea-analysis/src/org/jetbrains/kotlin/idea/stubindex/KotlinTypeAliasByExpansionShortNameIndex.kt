@@ -33,6 +33,7 @@ class KotlinTypeAliasByExpansionShortNameIndex : StringStubIndexExtension<KtType
         val KEY = KotlinIndexUtil.createIndexKey(KotlinTypeAliasByExpansionShortNameIndex::class.java)
         val INSTANCE = KotlinTypeAliasByExpansionShortNameIndex()
 
-        @JvmStatic fun getInstance() = INSTANCE
+        @JvmStatic
+        fun getInstance() = INSTANCE
     }
 }

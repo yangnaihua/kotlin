@@ -27,7 +27,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction;
 import java.util.Collection;
 
 public class KotlinTopLevelFunctionByPackageIndex extends StringStubIndexExtension<KtNamedFunction> {
-    private static final StubIndexKey<String, KtNamedFunction> KEY = KotlinIndexUtil.createIndexKey(KotlinTopLevelFunctionByPackageIndex.class);
+    private static final StubIndexKey<String, KtNamedFunction> KEY =
+            KotlinIndexUtil.createIndexKey(KotlinTopLevelFunctionByPackageIndex.class);
 
     private static final KotlinTopLevelFunctionByPackageIndex ourInstance = new KotlinTopLevelFunctionByPackageIndex();
 
@@ -35,7 +36,8 @@ public class KotlinTopLevelFunctionByPackageIndex extends StringStubIndexExtensi
         return ourInstance;
     }
 
-    private KotlinTopLevelFunctionByPackageIndex() {}
+    private KotlinTopLevelFunctionByPackageIndex() {
+    }
 
     @NotNull
     @Override

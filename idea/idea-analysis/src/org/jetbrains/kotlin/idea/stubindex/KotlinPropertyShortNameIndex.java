@@ -35,7 +35,8 @@ public class KotlinPropertyShortNameIndex extends StringStubIndexExtension<KtNam
         return ourInstance;
     }
 
-    private KotlinPropertyShortNameIndex() {}
+    private KotlinPropertyShortNameIndex() {
+    }
 
     @NotNull
     @Override

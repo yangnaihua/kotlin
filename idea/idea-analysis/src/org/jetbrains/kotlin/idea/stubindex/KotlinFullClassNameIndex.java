@@ -37,7 +37,8 @@ public class KotlinFullClassNameIndex extends StringStubIndexExtension<KtClassOr
         return ourInstance;
     }
 
-    private KotlinFullClassNameIndex() {}
+    private KotlinFullClassNameIndex() {
+    }
 
     @NotNull
     @Override

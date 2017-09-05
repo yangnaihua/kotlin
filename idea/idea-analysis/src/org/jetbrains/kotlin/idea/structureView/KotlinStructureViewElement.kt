@@ -31,11 +31,14 @@ import org.jetbrains.kotlin.idea.caches.resolve.resolveToDescriptor
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.psi.*
 
-class KotlinStructureViewElement(val element: NavigatablePsiElement,
-                                 val isInherited: Boolean = false) : StructureViewTreeElement, Queryable {
+class KotlinStructureViewElement(
+    val element: NavigatablePsiElement,
+    val isInherited: Boolean = false
+) : StructureViewTreeElement, Queryable {
+
     private var presentation: KotlinStructureElementPresentation? = null
 
-    constructor(element: NavigatablePsiElement, descriptor: DeclarationDescriptor, isInherited: Boolean) : this(element, isInherited){
+    constructor(element: NavigatablePsiElement, descriptor: DeclarationDescriptor, isInherited: Boolean) : this(element, isInherited) {
         if (element !is KtElement) {
             // Avoid storing descriptor in fields
             presentation = KotlinStructureElementPresentation(isInherited, element, descriptor)
@@ -61,7 +64,7 @@ class KotlinStructureViewElement(val element: NavigatablePsiElement,
     }
 
     override fun getChildren(): Array<TreeElement> =
-        childrenDeclarations.map { KotlinStructureViewElement(it, false) }.toTypedArray()
+            childrenDeclarations.map { KotlinStructureViewElement(it, false) }.toTypedArray()
 
     @TestOnly
     override fun putInfo(info: MutableMap<String, String?>) {

@@ -35,7 +35,8 @@ public class KotlinTopLevelPropertyByPackageIndex extends StringStubIndexExtensi
         return ourInstance;
     }
 
-    private KotlinTopLevelPropertyByPackageIndex() {}
+    private KotlinTopLevelPropertyByPackageIndex() {
+    }
 
     @NotNull
     @Override

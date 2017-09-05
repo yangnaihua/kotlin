@@ -123,10 +123,11 @@ class CommentSaver(originalElements: PsiChildRange, private val saveLineBreaks: 
     private class LineBreakTreeElement() : TreeElement()
 
     private class CommentTreeElement(
-            val commentText: String,
-            val spaceBefore: String,
-            val spaceAfter: String
+        val commentText: String,
+        val spaceBefore: String,
+        val spaceAfter: String
     ) : TreeElement() {
+
         companion object {
             fun create(comment: PsiComment): CommentTreeElement {
                 val spaceBefore = (comment.prevLeaf(skipEmptyElements = true) as? PsiWhiteSpace)?.text ?: ""
@@ -352,9 +353,9 @@ class CommentSaver(originalElements: PsiChildRange, private val saveLineBreaks: 
             fun findRestored(leaf: TreeElement): PsiElement? {
                 if (leaf is LineBreakTreeElement) return null
                 return leaf.parentsWithSelf
-                        .takeWhile { it != lineBreakParent }
-                        .mapNotNull { toNewPsiElementMap[it]?.first() } //TODO: what about multiple?
-                        .firstOrNull()
+                    .takeWhile { it != lineBreakParent }
+                    .mapNotNull { toNewPsiElementMap[it]?.first() } //TODO: what about multiple?
+                    .firstOrNull()
             }
 
 
@@ -419,8 +420,8 @@ class CommentSaver(originalElements: PsiChildRange, private val saveLineBreaks: 
 
     private fun PsiElement.anchorToAddCommentOrSpace(before: Boolean): PsiElement {
         return parentsWithSelf
-                .dropWhile { it.parent !is PsiFile && (if (before) it.prevSibling else it.nextSibling) == null }
-                .first()
+            .dropWhile { it.parent !is PsiFile && (if (before) it.prevSibling else it.nextSibling) == null }
+            .first()
     }
 
     private fun chooseAnchor(anchorBefore: Anchor?, anchorAfter: Anchor?): Anchor? {

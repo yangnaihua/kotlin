@@ -36,6 +36,7 @@ class KotlinTopLevelTypeAliasByPackageIndex : StringStubIndexExtension<KtTypeAli
         val KEY = KotlinIndexUtil.createIndexKey(KotlinTopLevelTypeAliasByPackageIndex::class.java)
         val INSTANCE = KotlinTopLevelTypeAliasByPackageIndex()
 
-        @JvmStatic fun getInstance() = INSTANCE
+        @JvmStatic
+        fun getInstance() = INSTANCE
     }
 }

@@ -43,24 +43,25 @@ import org.jetbrains.kotlin.serialization.deserialization.TypeTable
 import org.jetbrains.kotlin.serialization.deserialization.supertypes
 
 fun createClassStub(
-        parent: StubElement<out PsiElement>,
-        classProto: ProtoBuf.Class,
-        nameResolver: NameResolver,
-        classId: ClassId,
-        source: SourceElement?,
-        context: ClsStubBuilderContext
+    parent: StubElement<out PsiElement>,
+    classProto: ProtoBuf.Class,
+    nameResolver: NameResolver,
+    classId: ClassId,
+    source: SourceElement?,
+    context: ClsStubBuilderContext
 ) {
     ClassClsStubBuilder(parent, classProto, nameResolver, classId, source, context).build()
 }
 
 private class ClassClsStubBuilder(
-        private val parentStub: StubElement<out PsiElement>,
-        private val classProto: ProtoBuf.Class,
-        nameResolver: NameResolver,
-        private val classId: ClassId,
-        source: SourceElement?,
-        outerContext: ClsStubBuilderContext
+    private val parentStub: StubElement<out PsiElement>,
+    private val classProto: ProtoBuf.Class,
+    nameResolver: NameResolver,
+    private val classId: ClassId,
+    source: SourceElement?,
+    outerContext: ClsStubBuilderContext
 ) {
+
     private val thisAsProtoContainer = ProtoContainer.Class(
             classProto, nameResolver, TypeTable(classProto.typeTable), source, outerContext.protoContainer
     )
@@ -138,6 +139,7 @@ private class ClassClsStubBuilder(
                         isObjectLiteral = false
                 )
             }
+
             else -> {
                 KotlinClassStubImpl(
                         KtClassElementType.getStubType(classKind == ProtoBuf.Class.Kind.ENUM_ENTRY),

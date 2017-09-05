@@ -40,7 +40,7 @@ import java.util.*
 abstract class KotlinFileIndexBase<T>(classOfIndex: Class<T>) : ScalarIndexExtension<FqName>() {
     val KEY: ID<FqName, Void> = ID.create(classOfIndex.canonicalName)
 
-    private val KEY_DESCRIPTOR : KeyDescriptor<FqName> = object : KeyDescriptor<FqName> {
+    private val KEY_DESCRIPTOR: KeyDescriptor<FqName> = object : KeyDescriptor<FqName> {
         override fun save(output: DataOutput, value: FqName) = IOUtil.writeUTF(output, value.asString())
 
         override fun read(input: DataInput) = FqName(IOUtil.readUTF(input))
@@ -134,7 +134,8 @@ open class KotlinMetadataFileIndexBase<T>(classOfIndex: Class<T>, indexFunction:
                 } ?: indexFunction(ClassId(builtinDefFile.packageFqName,
                                            Name.identifier(fileContent.fileName.substringBeforeLast(MetadataPackageFragment.DOT_METADATA_FILE_EXTENSION))))
             }
-        } else null
+        }
+        else null
     }
 }
 

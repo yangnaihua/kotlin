@@ -43,13 +43,11 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.platform.JavaToKotlinClassMap
 import org.jetbrains.kotlin.psi.UserDataProperty
 
-private val readOnlyQualifiedNamesToJavaClass = JavaToKotlinClassMap.mutabilityMappings.associateBy {
-    (_, readOnly, _) ->
+private val readOnlyQualifiedNamesToJavaClass = JavaToKotlinClassMap.mutabilityMappings.associateBy { (_, readOnly, _) ->
     readOnly.asSingleFqName()
 }
 
-private val mutableQualifiedNamesToJavaClass = JavaToKotlinClassMap.mutabilityMappings.associateBy {
-    (_, _, mutable) ->
+private val mutableQualifiedNamesToJavaClass = JavaToKotlinClassMap.mutabilityMappings.associateBy { (_, _, mutable) ->
     mutable.asSingleFqName()
 }
 
@@ -59,19 +57,16 @@ private val membersWithSpecializedSignature: Set<String> =
             FqName(fqNameString).shortName().asString()
         }
 
-private val javaGetterNameToKotlinGetterName: Map<String, String> = BuiltinSpecialProperties.PROPERTY_FQ_NAME_TO_JVM_GETTER_NAME_MAP.map {
-    (propertyFqName, javaGetterShortName) ->
+private val javaGetterNameToKotlinGetterName: Map<String, String> = BuiltinSpecialProperties.PROPERTY_FQ_NAME_TO_JVM_GETTER_NAME_MAP.map { (propertyFqName, javaGetterShortName) ->
     Pair(javaGetterShortName.asString(), JvmAbi.getterName(propertyFqName.shortName().asString()))
 }.toMap()
 
 fun platformMutabilityWrapper(fqName: FqName, findJavaClass: (String) -> PsiClass?): PsiClass? {
-    readOnlyQualifiedNamesToJavaClass[fqName]?.let {
-        (javaClass, kotlinReadOnly) ->
+    readOnlyQualifiedNamesToJavaClass[fqName]?.let { (javaClass, kotlinReadOnly) ->
         val javaBaseClass = findJavaClass(javaClass.asSingleFqName().asString()) ?: return null
         return getOrCreateWrapper(javaBaseClass, kotlinReadOnly.asSingleFqName(), isMutable = false)
     }
-    mutableQualifiedNamesToJavaClass[fqName]?.let {
-        (javaClass, _, kotlinMutable) ->
+    mutableQualifiedNamesToJavaClass[fqName]?.let { (javaClass, _, kotlinMutable) ->
         val javaBaseClass = findJavaClass(javaClass.asSingleFqName().asString()) ?: return null
         return getOrCreateWrapper(javaBaseClass, kotlinMutable.asSingleFqName(), isMutable = true)
     }
@@ -87,10 +82,11 @@ private var PsiClass.readOnlyWrapper: KtLightMutabilityPlatformWrapper? by UserD
 private var PsiClass.mutableWrapper: KtLightMutabilityPlatformWrapper? by UserDataProperty(Key.create("MUTABLE_WRAPPER"))
 
 class KtLightMutabilityPlatformWrapper(
-        private val javaBaseClass: PsiClass,
-        private val kotlinInterfaceFqName: FqName,
-        private val isMutable: Boolean
+    private val javaBaseClass: PsiClass,
+    private val kotlinInterfaceFqName: FqName,
+    private val isMutable: Boolean
 ) : KtAbstractContainerWrapper(kotlinInterfaceFqName, javaBaseClass), PsiClass {
+
     private val _methods by lazyPub { calcMethods() }
 
     private fun calcMethods() = javaBaseClass.methods.flatMap { methodWrappers(it) }
@@ -156,11 +152,11 @@ class KtLightMutabilityPlatformWrapper(
     private fun PsiMethod.openBridge() = wrap(makeFinal = false, hasImplementation = true)
 
     private fun PsiMethod.wrap(
-            makeFinal: Boolean = false,
-            hasImplementation: Boolean = false,
-            name: String = this.name,
-            substituteObjectWith: PsiType? = null,
-            signature: MethodSignature? = null
+        makeFinal: Boolean = false,
+        hasImplementation: Boolean = false,
+        name: String = this.name,
+        substituteObjectWith: PsiType? = null,
+        signature: MethodSignature? = null
     ) = KtLightMethodWrapper(
             this@KtLightMutabilityPlatformWrapper, this@wrap,
             isFinal = makeFinal,
@@ -175,36 +171,36 @@ class KtLightMutabilityPlatformWrapper(
         val v = typeParameters[1].asType()
 
         val signature = when (method.name) {
-            "get" -> MethodSignature(
-                    parameterTypes = listOf(k),
-                    returnType = v
-            )
-            "getOrDefault" -> MethodSignature(
-                    parameterTypes = listOf(k, v),
-                    returnType = v
-            )
-            "containsKey" -> MethodSignature(
-                    parameterTypes = listOf(k),
-                    returnType = PsiType.BOOLEAN
-            )
-            "containsValue" -> MethodSignature(
-                    parameterTypes = listOf(v),
-                    returnType = PsiType.BOOLEAN
-            )
-            "remove" ->
-                when (method.parameterList.parametersCount) {
-                    1 -> MethodSignature(
-                            parameterTypes = listOf(k),
-                            returnType = v
-                    )
-                    2 -> MethodSignature(
-                            parameterTypes = listOf(k, v),
-                            returnType = PsiType.BOOLEAN
-                    )
-                    else -> null
-                }
-            else -> null
-        } ?: return null
+                            "get" -> MethodSignature(
+                                    parameterTypes = listOf(k),
+                                    returnType = v
+                            )
+                            "getOrDefault" -> MethodSignature(
+                                    parameterTypes = listOf(k, v),
+                                    returnType = v
+                            )
+                            "containsKey" -> MethodSignature(
+                                    parameterTypes = listOf(k),
+                                    returnType = PsiType.BOOLEAN
+                            )
+                            "containsValue" -> MethodSignature(
+                                    parameterTypes = listOf(v),
+                                    returnType = PsiType.BOOLEAN
+                            )
+                            "remove" ->
+                                when (method.parameterList.parametersCount) {
+                                    1 -> MethodSignature(
+                                            parameterTypes = listOf(k),
+                                            returnType = v
+                                    )
+                                    2 -> MethodSignature(
+                                            parameterTypes = listOf(k, v),
+                                            returnType = PsiType.BOOLEAN
+                                    )
+                                    else -> null
+                                }
+                            else -> null
+                        } ?: return null
 
         return method.wrap(signature = signature)
     }
@@ -230,13 +226,13 @@ class KtLightMutabilityPlatformWrapper(
 private data class MethodSignature(val parameterTypes: List<PsiType>, val returnType: PsiType)
 
 private class KtLightMethodWrapper(
-        private val containingClass: KtAbstractContainerWrapper,
-        private val baseMethod: PsiMethod,
-        private val name: String,
-        private val isFinal: Boolean,
-        private val hasImplementation: Boolean,
-        private val substituteObjectWith: PsiType?,
-        private val providedSignature: MethodSignature?
+    private val containingClass: KtAbstractContainerWrapper,
+    private val baseMethod: PsiMethod,
+    private val name: String,
+    private val isFinal: Boolean,
+    private val hasImplementation: Boolean,
+    private val substituteObjectWith: PsiType?,
+    private val providedSignature: MethodSignature?
 ) : PsiMethod, KtLightElementBase(containingClass) {
 
     init {
@@ -313,17 +309,16 @@ private class KtLightMethodWrapper(
 }
 
 
-abstract class KtAbstractContainerWrapper(internal val fqName: FqName, private val superInterface: PsiClass)
-    : LightElement(superInterface.manager, KotlinLanguage.INSTANCE), PsiExtensibleClass {
+abstract class KtAbstractContainerWrapper(internal val fqName: FqName, private val superInterface: PsiClass) : LightElement(superInterface.manager, KotlinLanguage.INSTANCE), PsiExtensibleClass {
 
     private val memberCache = ClassInnerStuffCache(this)
 
     private val superClassTypeParametersToMyTypeParameters: Map<PsiTypeParameter, PsiTypeParameter>
             = superInterface.typeParameters
-            .mapIndexed { index, supersParameter ->
-                supersParameter to LightTypeParameterBuilder(supersParameter.name ?: "T$index", this, index)
-            }
-            .toMap()
+        .mapIndexed { index, supersParameter ->
+            supersParameter to LightTypeParameterBuilder(supersParameter.name ?: "T$index", this, index)
+        }
+        .toMap()
 
     internal val substitutor = createSubstitutor(superClassTypeParametersToMyTypeParameters.mapValues {
         it.value.asType()

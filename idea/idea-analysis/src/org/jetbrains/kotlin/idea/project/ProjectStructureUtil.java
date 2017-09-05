@@ -33,7 +33,7 @@ public class ProjectStructureUtil {
     }
 
     @NotNull
-    /* package */ static TargetPlatform getCachedPlatformForModule(@NotNull final Module module) {
+            /* package */ static TargetPlatform getCachedPlatformForModule(@NotNull final Module module) {
         CachedValue<TargetPlatform> result = module.getUserData(PLATFORM_FOR_MODULE);
         if (result == null) {
             result = CachedValuesManager.getManager(module.getProject()).createCachedValue(new CachedValueProvider<TargetPlatform>() {

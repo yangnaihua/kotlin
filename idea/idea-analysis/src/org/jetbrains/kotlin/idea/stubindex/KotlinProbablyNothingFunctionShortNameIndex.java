@@ -27,7 +27,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction;
 import java.util.Collection;
 
 public class KotlinProbablyNothingFunctionShortNameIndex extends StringStubIndexExtension<KtNamedFunction> {
-    private static final StubIndexKey<String, KtNamedFunction> KEY = KotlinIndexUtil.createIndexKey(KotlinProbablyNothingFunctionShortNameIndex.class);
+    private static final StubIndexKey<String, KtNamedFunction> KEY =
+            KotlinIndexUtil.createIndexKey(KotlinProbablyNothingFunctionShortNameIndex.class);
 
     private static final KotlinProbablyNothingFunctionShortNameIndex ourInstance = new KotlinProbablyNothingFunctionShortNameIndex();
 
@@ -35,7 +36,8 @@ public class KotlinProbablyNothingFunctionShortNameIndex extends StringStubIndex
         return ourInstance;
     }
 
-    private KotlinProbablyNothingFunctionShortNameIndex() {}
+    private KotlinProbablyNothingFunctionShortNameIndex() {
+    }
 
     @NotNull
     @Override

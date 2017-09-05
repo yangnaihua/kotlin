@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.config.getOption
                           Storage(file = BaseKotlinCompilerSettings.KOTLIN_COMPILER_SETTINGS_PATH,
                                   scheme = StorageScheme.DIRECTORY_BASED)))
 class KotlinCommonCompilerArgumentsHolder : BaseKotlinCompilerSettings<CommonCompilerArguments>() {
+
     private fun Element.dropElementIfDefault() {
         if (DEFAULT_LANGUAGE_VERSION == getAttribute("value")?.value) {
             detach()

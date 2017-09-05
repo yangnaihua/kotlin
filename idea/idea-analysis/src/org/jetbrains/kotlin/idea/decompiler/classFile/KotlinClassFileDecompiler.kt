@@ -48,7 +48,7 @@ class KotlinClassFileDecompiler : ClassFileDecompilers.Full() {
 
     override fun createFileViewProvider(file: VirtualFile, manager: PsiManager, physical: Boolean): KotlinDecompiledFileViewProvider {
         val project = manager.project
-        return KotlinDecompiledFileViewProvider(manager, file, physical) factory@{ provider ->
+        return KotlinDecompiledFileViewProvider(manager, file, physical) factory@ { provider ->
             val virtualFile = provider.virtualFile
             val fileIndex = ServiceManager.getService(project, FileIndexFacade::class.java)
             if (!fileIndex.isInLibraryClasses(virtualFile) && fileIndex.isInSource(virtualFile)) return@factory null
@@ -69,8 +69,8 @@ private val decompilerRendererForClassFiles = DescriptorRenderer.withOptions {
 }
 
 fun buildDecompiledTextForClassFile(
-        classFile: VirtualFile,
-        resolver: ResolverForDecompiler = DeserializerForClassfileDecompiler(classFile)
+    classFile: VirtualFile,
+    resolver: ResolverForDecompiler = DeserializerForClassfileDecompiler(classFile)
 ): DecompiledText {
     val (classHeader, classId) = IDEKotlinBinaryClassCache.getKotlinBinaryClassHeaderData(classFile)
                                  ?: error("Decompiled data factory shouldn't be called on an unsupported file: " + classFile)
@@ -85,9 +85,11 @@ fun buildDecompiledTextForClassFile(
     return when (classHeader.kind) {
         KotlinClassHeader.Kind.FILE_FACADE ->
             buildText(resolver.resolveDeclarationsInFacade(classId.asSingleFqName()))
+
         KotlinClassHeader.Kind.CLASS -> {
             buildText(listOfNotNull(resolver.resolveTopLevelClass(classId)))
         }
+
         KotlinClassHeader.Kind.MULTIFILE_CLASS -> {
             val partClasses = findMultifileClassParts(classFile, classId, classHeader)
             val partMembers = partClasses.flatMap { partClass ->
@@ -95,6 +97,7 @@ fun buildDecompiledTextForClassFile(
             }
             buildText(partMembers)
         }
+
         else ->
             throw UnsupportedOperationException("Unknown header kind: $classHeader, class $classId")
     }

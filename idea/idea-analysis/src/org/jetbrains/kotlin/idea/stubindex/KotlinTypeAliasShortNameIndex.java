@@ -36,7 +36,8 @@ public class KotlinTypeAliasShortNameIndex extends StringStubIndexExtension<KtTy
         return ourInstance;
     }
 
-    private KotlinTypeAliasShortNameIndex() {}
+    private KotlinTypeAliasShortNameIndex() {
+    }
 
     @NotNull
     @Override

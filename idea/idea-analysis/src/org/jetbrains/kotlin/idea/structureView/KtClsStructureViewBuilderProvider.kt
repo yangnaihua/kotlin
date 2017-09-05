@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.idea.decompiler.classFile.KtClsFile
 
 //TODO: workaround for bug in JavaClsStructureViewBuilderProvider, remove when IDEA api is updated
 class KtClsStructureViewBuilderProvider : StructureViewBuilderProvider {
+
     override fun getStructureViewBuilder(fileType: FileType, file: VirtualFile, project: Project): StructureViewBuilder? {
         val psiFile = PsiManager.getInstance(project).findFile(file) as? KtClsFile ?: return null
         return KotlinStructureViewFactory().getStructureViewBuilder(psiFile)

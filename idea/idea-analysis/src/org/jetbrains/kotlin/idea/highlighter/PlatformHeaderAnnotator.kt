@@ -44,7 +44,7 @@ val ModuleDescriptor.sourceKind: SourceKind
         else -> SourceKind.OTHER
     }
 
-enum class SourceKind { OTHER, PRODUCTION, TEST }
+enum class SourceKind {OTHER, PRODUCTION, TEST }
 
 val ModuleDescriptor.allImplementingCompatibleModules
     get() = allImplementingModules.filter { other ->

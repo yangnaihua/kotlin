@@ -60,8 +60,8 @@ fun HierarchySearchRequest<*>.searchOverriders(): Query<PsiMethod> {
     if (psiMethods.isEmpty()) return EmptyQuery.getEmptyQuery()
 
     return psiMethods
-            .map { psiMethod -> KotlinPsiMethodOverridersSearch.search(copy(psiMethod)) }
-            .reduce { query1, query2 -> MergeQuery(query1, query2)}
+        .map { psiMethod -> KotlinPsiMethodOverridersSearch.search(copy(psiMethod)) }
+        .reduce { query1, query2 -> MergeQuery(query1, query2) }
 }
 
 object KotlinPsiMethodOverridersSearch : HierarchySearch<PsiMethod>(PsiMethodOverridingHierarchyTraverser) {
@@ -111,16 +111,16 @@ object KotlinPsiMethodOverridersSearch : HierarchySearch<PsiMethod>(PsiMethodOve
     }
 }
 
-object PsiMethodOverridingHierarchyTraverser: HierarchyTraverser<PsiMethod> {
+object PsiMethodOverridingHierarchyTraverser : HierarchyTraverser<PsiMethod> {
     override fun nextElements(current: PsiMethod): Iterable<PsiMethod> = KotlinPsiMethodOverridersSearch.searchDirectOverriders(current)
     override fun shouldDescend(element: PsiMethod): Boolean = PsiUtil.canBeOverriden(element)
 }
 
 private fun forEachKotlinOverride(
-        ktClass: KtClass,
-        members: List<KtNamedDeclaration>,
-        scope: SearchScope,
-        processor: (superMember: PsiElement, overridingMember: PsiElement) -> Boolean
+    ktClass: KtClass,
+    members: List<KtNamedDeclaration>,
+    scope: SearchScope,
+    processor: (superMember: PsiElement, overridingMember: PsiElement) -> Boolean
 ) {
     val baseClassDescriptor = runReadAction { ktClass.resolveToDescriptor() as ClassDescriptor }
     val baseDescriptors = runReadAction { members.mapNotNull { it.resolveToDescriptor() as? CallableMemberDescriptor }.filter { it.isOverridable } }

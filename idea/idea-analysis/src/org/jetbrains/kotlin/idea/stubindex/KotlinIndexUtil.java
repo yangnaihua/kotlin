@@ -27,5 +27,6 @@ public class KotlinIndexUtil {
         return StubIndexKey.createIndexKey(indexClass.getCanonicalName());
     }
 
-    private KotlinIndexUtil() {}
+    private KotlinIndexUtil() {
+    }
 }

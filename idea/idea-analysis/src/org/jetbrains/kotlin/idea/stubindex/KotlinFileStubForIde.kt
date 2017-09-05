@@ -25,12 +25,12 @@ import org.jetbrains.kotlin.psi.stubs.KotlinFileStub
 import org.jetbrains.kotlin.psi.stubs.impl.KotlinFileStubImpl
 
 class KotlinFileStubForIde(
-        jetFile: KtFile?,
-        packageName: StringRef,
-        isScript: Boolean,
-        val facadeSimpleName: StringRef?,
-        val partSimpleName: StringRef?,
-        val facadePartSimpleNames: List<StringRef?>?
+    jetFile: KtFile?,
+    packageName: StringRef,
+    isScript: Boolean,
+    val facadeSimpleName: StringRef?,
+    val partSimpleName: StringRef?,
+    val facadePartSimpleNames: List<StringRef?>?
 ) : KotlinFileStubImpl(jetFile, packageName, isScript), KotlinFileStub, PsiClassHolderFileStub<KtFile> {
 
     private fun StringRef.relativeToPackage() = getPackageFqName().child(Name.identifier(this.string))
@@ -42,7 +42,7 @@ class KotlinFileStubForIde(
         get() = partSimpleName?.relativeToPackage()
 
     constructor(jetFile: KtFile?, packageName: String, isScript: Boolean)
-    : this(jetFile, StringRef.fromString(packageName)!!, isScript, null, null, null)
+            : this(jetFile, StringRef.fromString(packageName)!!, isScript, null, null, null)
 
     companion object {
         fun forFile(packageFqName: FqName, isScript: Boolean): KotlinFileStubImpl =

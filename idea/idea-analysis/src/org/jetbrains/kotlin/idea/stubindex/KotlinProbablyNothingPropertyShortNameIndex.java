@@ -27,7 +27,8 @@ import org.jetbrains.kotlin.psi.KtProperty;
 import java.util.Collection;
 
 public class KotlinProbablyNothingPropertyShortNameIndex extends StringStubIndexExtension<KtProperty> {
-    private static final StubIndexKey<String, KtProperty> KEY = KotlinIndexUtil.createIndexKey(KotlinProbablyNothingPropertyShortNameIndex.class);
+    private static final StubIndexKey<String, KtProperty> KEY =
+            KotlinIndexUtil.createIndexKey(KotlinProbablyNothingPropertyShortNameIndex.class);
 
     private static final KotlinProbablyNothingPropertyShortNameIndex ourInstance = new KotlinProbablyNothingPropertyShortNameIndex();
 
@@ -35,7 +36,8 @@ public class KotlinProbablyNothingPropertyShortNameIndex extends StringStubIndex
         return ourInstance;
     }
 
-    private KotlinProbablyNothingPropertyShortNameIndex() {}
+    private KotlinProbablyNothingPropertyShortNameIndex() {
+    }
 
     @NotNull
     @Override

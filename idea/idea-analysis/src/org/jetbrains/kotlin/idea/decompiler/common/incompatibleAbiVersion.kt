@@ -33,8 +33,8 @@ private val INCOMPATIBLE_ABI_VERSION_COMMENT: String =
 fun <V : BinaryVersion> createIncompatibleAbiVersionDecompiledText(expectedVersion: V, actualVersion: V): DecompiledText {
     return DecompiledText(
             INCOMPATIBLE_ABI_VERSION_COMMENT
-                    .replace(CURRENT_ABI_VERSION_MARKER, expectedVersion.toString())
-                    .replace(FILE_ABI_VERSION_MARKER, actualVersion.toString()),
+                .replace(CURRENT_ABI_VERSION_MARKER, expectedVersion.toString())
+                .replace(FILE_ABI_VERSION_MARKER, actualVersion.toString()),
             DecompiledTextIndex.Empty
     )
 }

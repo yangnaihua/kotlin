@@ -97,7 +97,7 @@ class KtSimpleNameReference(expression: KtSimpleNameExpression) : KtSimpleRefere
     }
 
     override fun canRename(): Boolean {
-        if (expression.getParentOfTypeAndBranch<KtWhenConditionInRange>(strict = true){ operationReference } != null) return false
+        if (expression.getParentOfTypeAndBranch<KtWhenConditionInRange>(strict = true) { operationReference } != null) return false
 
         val elementType = expression.getReferencedNameElementType()
         if (elementType == KtTokens.PLUSPLUS || elementType == KtTokens.MINUSMINUS) return false
@@ -119,9 +119,9 @@ class KtSimpleNameReference(expression: KtSimpleNameExpression) : KtSimpleRefere
 
         val psiFactory = KtPsiFactory(expression)
         val element = Extensions.getArea(expression.project).getExtensionPoint(SimpleNameReferenceExtension.EP_NAME).extensions
-                        .asSequence()
-                        .map { it.handleElementRename(this, psiFactory, newElementName) }
-                        .firstOrNull { it != null } ?: psiFactory.createNameIdentifier(newElementName.quoteIfNeeded())
+                          .asSequence()
+                          .map { it.handleElementRename(this, psiFactory, newElementName) }
+                          .firstOrNull { it != null } ?: psiFactory.createNameIdentifier(newElementName.quoteIfNeeded())
 
         val nameElement = expression.getReferencedNameElement()
 
@@ -194,11 +194,13 @@ class KtSimpleNameReference(expression: KtSimpleNameExpression) : KtSimpleRefere
                 val callCopy = parent.copied()
                 callCopy.calleeExpression!!.replace(psiFactory.createSimpleName(shortName)).parent!!.text
             }
+
             parent is KtCallableReferenceExpression && parent.callableReference == this -> {
                 parentDelimiter = ""
                 val callableRefCopy = parent.copied()
                 callableRefCopy.callableReference.replace(psiFactory.createSimpleName(shortName)).parent!!.text
             }
+
             else -> shortName
         }
 
@@ -211,6 +213,7 @@ class KtSimpleNameReference(expression: KtSimpleNameExpression) : KtSimpleRefere
                 val typeText = "$text${elementToReplace.typeArgumentList?.text ?: ""}"
                 elementToReplace.replace(psiFactory.createType(typeText).typeElement!!)
             }
+
             else -> KtPsiUtil.safeDeparenthesize(elementToReplace.replaced(psiFactory.createExpression(text)))
         } as KtElement
 

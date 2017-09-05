@@ -35,11 +35,11 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.resolve.source.getPsi
 
-class KDocMissingDocumentationInspection(): AbstractKotlinInspection() {
+class KDocMissingDocumentationInspection() : AbstractKotlinInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor =
             KDocMissingDocumentationInspection(holder)
 
-    private class KDocMissingDocumentationInspection(private val holder: ProblemsHolder): PsiElementVisitor() {
+    private class KDocMissingDocumentationInspection(private val holder: ProblemsHolder) : PsiElementVisitor() {
         override fun visitElement(element: PsiElement) {
 
             if (element is KtNamedDeclaration) {
@@ -48,7 +48,7 @@ class KDocMissingDocumentationInspection(): AbstractKotlinInspection() {
                 if (nameIdentifier != null && descriptor?.visibility == Visibilities.PUBLIC) {
                     val hasDocumentation = element.docComment != null ||
                                            (descriptor as? CallableMemberDescriptor)?.overriddenDescriptors
-                                                   ?.any { (it.source.getPsi() as? KtNamedDeclaration)?.docComment != null } ?: false
+                                               ?.any { (it.source.getPsi() as? KtNamedDeclaration)?.docComment != null } ?: false
                     if (!hasDocumentation) {
                         holder.registerProblem(nameIdentifier, "Missing documentation", AddDocumentationFix())
                     }

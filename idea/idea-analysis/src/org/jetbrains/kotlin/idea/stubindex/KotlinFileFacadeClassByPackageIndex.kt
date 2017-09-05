@@ -32,8 +32,10 @@ class KotlinFileFacadeClassByPackageIndex private constructor() : StringStubInde
     companion object {
         private val KEY = KotlinIndexUtil.createIndexKey(KotlinFileFacadeClassByPackageIndex::class.java)
 
-        @JvmField val INSTANCE: KotlinFileFacadeClassByPackageIndex = KotlinFileFacadeClassByPackageIndex()
+        @JvmField
+        val INSTANCE: KotlinFileFacadeClassByPackageIndex = KotlinFileFacadeClassByPackageIndex()
 
-        @JvmStatic fun getInstance(): KotlinFileFacadeClassByPackageIndex = INSTANCE
+        @JvmStatic
+        fun getInstance(): KotlinFileFacadeClassByPackageIndex = INSTANCE
     }
 }

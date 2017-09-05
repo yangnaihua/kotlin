@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.js.resolve.JsPlatform
 
 //TODO: this should go away to support cross-platform projects
 object JsProjectDetector {
+
     @JvmStatic
     fun isJsProject(project: Project): Boolean {
         return CachedValuesManager.getManager(project).getCachedValue(project) {

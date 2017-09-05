@@ -33,9 +33,9 @@ import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
 import java.util.*
 
 class StubBasedPackageMemberDeclarationProvider(
-        private val fqName: FqName,
-        private val project: Project,
-        private val searchScope: GlobalSearchScope
+    private val fqName: FqName,
+    private val project: Project,
+    private val searchScope: GlobalSearchScope
 ) : PackageMemberDeclarationProvider {
 
     override fun getDeclarations(kindFilter: DescriptorKindFilter, nameFilter: (Name) -> Boolean): List<KtDeclaration> {
@@ -65,10 +65,10 @@ class StubBasedPackageMemberDeclarationProvider(
         val result = ArrayList<KtClassLikeInfo>()
         runReadAction {
             KotlinFullClassNameIndex.getInstance().get(childName(name), project, searchScope)
-                    .mapTo(result) { KtClassInfoUtil.createClassLikeInfo(it) }
+                .mapTo(result) { KtClassInfoUtil.createClassLikeInfo(it) }
 
             KotlinScriptFqnIndex.instance.get(childName(name), project, searchScope)
-                    .mapTo(result, ::KtScriptInfo)
+                .mapTo(result, ::KtScriptInfo)
         }
         return result
     }

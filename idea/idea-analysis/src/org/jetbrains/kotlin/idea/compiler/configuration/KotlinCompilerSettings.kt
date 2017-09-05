@@ -25,8 +25,8 @@ import org.jetbrains.kotlin.config.SettingConstants.KOTLIN_COMPILER_SETTINGS_SEC
        storages = arrayOf(Storage(file = StoragePathMacros.PROJECT_FILE),
                           Storage(file = BaseKotlinCompilerSettings.KOTLIN_COMPILER_SETTINGS_PATH, scheme = StorageScheme.DIRECTORY_BASED)))
 class KotlinCompilerSettings : BaseKotlinCompilerSettings<CompilerSettings>() {
-    override fun createSettings() = CompilerSettings()
 
+    override fun createSettings() = CompilerSettings()
 
 
     companion object {

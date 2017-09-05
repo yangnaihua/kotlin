@@ -33,8 +33,10 @@ class KotlinMultifileClassPartIndex private constructor() : StringStubIndexExten
     companion object {
         private val KEY = KotlinIndexUtil.createIndexKey(KotlinMultifileClassPartIndex::class.java)
 
-        @JvmField val INSTANCE: KotlinMultifileClassPartIndex = KotlinMultifileClassPartIndex()
+        @JvmField
+        val INSTANCE: KotlinMultifileClassPartIndex = KotlinMultifileClassPartIndex()
 
-        @JvmStatic fun getInstance(): KotlinMultifileClassPartIndex = INSTANCE
+        @JvmStatic
+        fun getInstance(): KotlinMultifileClassPartIndex = INSTANCE
     }
 }

@@ -37,9 +37,10 @@ import org.jetbrains.kotlin.psi.KtFile
 import kotlin.script.experimental.dependencies.ScriptReport
 
 class ScriptExternalHighlightingPass(
-        private val file: KtFile,
-        document: Document
+    private val file: KtFile,
+    document: Document
 ) : TextEditorHighlightingPass(file.project, document), DumbAware {
+
     override fun doCollectInformation(progress: ProgressIndicator) = Unit
 
     override fun doApplyInformationToEditor() {
@@ -86,7 +87,7 @@ class ScriptExternalHighlightingPass(
 
     private fun Document.offsetBy(line: Int, col: Int): Int {
         return (getLineStartOffset(line) + col).
-                coerceIn(getLineStartOffset(line), getLineEndOffset(line))
+            coerceIn(getLineStartOffset(line), getLineEndOffset(line))
     }
 
     private fun ScriptReport.Severity.convertSeverity(): HighlightSeverity? {
@@ -98,8 +99,7 @@ class ScriptExternalHighlightingPass(
         }
     }
 
-    class Factory(project: Project, registrar: TextEditorHighlightingPassRegistrar)
-        : AbstractProjectComponent(project), TextEditorHighlightingPassFactory {
+    class Factory(project: Project, registrar: TextEditorHighlightingPassRegistrar) : AbstractProjectComponent(project), TextEditorHighlightingPassFactory {
         init {
             registrar.registerTextEditorHighlightingPass(this, TextEditorHighlightingPassRegistrar.Anchor.BEFORE, Pass.UPDATE_FOLDING, false, false)
         }

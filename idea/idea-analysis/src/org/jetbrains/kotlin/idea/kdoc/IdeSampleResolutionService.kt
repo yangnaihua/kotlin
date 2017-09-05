@@ -49,9 +49,9 @@ class IdeSampleResolutionService(val project: Project) : SampleResolutionService
         val classes = KotlinClassShortNameIndex.getInstance().get(shortName, project, scope).asSequence()
 
         val descriptors = (functions + classes)
-                .filter { it.fqName == targetFqName }
-                .map { it.resolveToDescriptor(BodyResolveMode.PARTIAL) } // TODO Filter out not visible due dependencies config descriptors
-                .toList()
+            .filter { it.fqName == targetFqName }
+            .map { it.resolveToDescriptor(BodyResolveMode.PARTIAL) } // TODO Filter out not visible due dependencies config descriptors
+            .toList()
         if (descriptors.isNotEmpty())
             return descriptors
 
@@ -87,28 +87,28 @@ private class GlobalSyntheticPackageViewDescriptor(override val fqName: FqName, 
 
 
         fun getClassesByNameFilter(nameFilter: (Name) -> Boolean) = KotlinFullClassNameIndex.getInstance()
-                .getAllKeys(project)
-                .asSequence()
-                .filter { it.startsWith(fqName.asString()) }
-                .map(::FqName)
-                .filter { it.isChildOf(fqName) }
-                .filter { nameFilter(it.shortName()) }
-                .flatMap { KotlinFullClassNameIndex.getInstance()[it.asString(), project, scope].asSequence() }
-                .map { it.resolveToDescriptorIfAny() }
+            .getAllKeys(project)
+            .asSequence()
+            .filter { it.startsWith(fqName.asString()) }
+            .map(::FqName)
+            .filter { it.isChildOf(fqName) }
+            .filter { nameFilter(it.shortName()) }
+            .flatMap { KotlinFullClassNameIndex.getInstance()[it.asString(), project, scope].asSequence() }
+            .map { it.resolveToDescriptorIfAny() }
 
         fun getFunctionsByNameFilter(nameFilter: (Name) -> Boolean) = KotlinTopLevelFunctionFqnNameIndex.getInstance()
-                .getAllKeys(project)
-                .asSequence()
-                .filter { it.startsWith(fqName.asString()) }
-                .map(::FqName)
-                .filter { it.isChildOf(fqName) }
-                .filter { nameFilter(it.shortName()) }
-                .flatMap { KotlinTopLevelFunctionFqnNameIndex.getInstance()[it.asString(), project, scope].asSequence() }
-                .map { it.resolveToDescriptorIfAny() }
+            .getAllKeys(project)
+            .asSequence()
+            .filter { it.startsWith(fqName.asString()) }
+            .map(::FqName)
+            .filter { it.isChildOf(fqName) }
+            .filter { nameFilter(it.shortName()) }
+            .flatMap { KotlinTopLevelFunctionFqnNameIndex.getInstance()[it.asString(), project, scope].asSequence() }
+            .map { it.resolveToDescriptorIfAny() }
 
         fun getSubpackages(nameFilter: (Name) -> Boolean) =
                 PackageIndexUtil.getSubPackageFqNames(fqName, scope, project, nameFilter)
-                        .map { GlobalSyntheticPackageViewDescriptor(it, project, scope) }
+                    .map { GlobalSyntheticPackageViewDescriptor(it, project, scope) }
 
         override fun getContributedDescriptors(kindFilter: DescriptorKindFilter, nameFilter: (Name) -> Boolean): Collection<DeclarationDescriptor>
                 = (getClassesByNameFilter(nameFilter)

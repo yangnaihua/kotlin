@@ -29,10 +29,11 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 class KtLightClassForDecompiledDeclaration(
-        override val clsDelegate: ClsClassImpl,
-        override val kotlinOrigin: KtClassOrObject?,
-        private val file: KtClsFile
+    override val clsDelegate: ClsClassImpl,
+    override val kotlinOrigin: KtClassOrObject?,
+    private val file: KtClsFile
 ) : KtLightClassBase(clsDelegate.manager) {
+
     val fqName = kotlinOrigin?.fqName ?: FqName(clsDelegate.qualifiedName)
 
     override fun copy() = this

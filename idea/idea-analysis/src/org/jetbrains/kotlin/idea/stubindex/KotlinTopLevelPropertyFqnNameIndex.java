@@ -36,7 +36,8 @@ public class KotlinTopLevelPropertyFqnNameIndex extends StringStubIndexExtension
         return INSTANCE;
     }
 
-    private KotlinTopLevelPropertyFqnNameIndex() {}
+    private KotlinTopLevelPropertyFqnNameIndex() {
+    }
 
     @NotNull
     @Override

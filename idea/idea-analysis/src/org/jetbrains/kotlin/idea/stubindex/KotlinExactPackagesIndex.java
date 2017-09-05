@@ -36,7 +36,8 @@ public class KotlinExactPackagesIndex extends StringStubIndexExtension<KtFile> {
         return ourInstance;
     }
 
-    private KotlinExactPackagesIndex() {}
+    private KotlinExactPackagesIndex() {
+    }
 
     @NotNull
     @Override

@@ -73,8 +73,7 @@ import org.jetbrains.kotlin.types.WrappedTypeFactory
 import org.jetbrains.kotlin.utils.sure
 
 
-class IDELightClassConstructionContext(bindingContext: BindingContext, module: ModuleDescriptor, val mode: Mode)
-    : LightClassConstructionContext(bindingContext, module) {
+class IDELightClassConstructionContext(bindingContext: BindingContext, module: ModuleDescriptor, val mode: Mode) : LightClassConstructionContext(bindingContext, module) {
     enum class Mode {
         LIGHT,
         EXACT
@@ -93,7 +92,7 @@ object IDELightClassContexts {
             // need to make sure default values for parameters are resolved
             // because java resolve depends on whether there is a default value for an annotation attribute
             resolutionFacade.getFrontendService(ResolveElementCache::class.java)
-                    .resolvePrimaryConstructorParametersDefaultValues(classOrObject)
+                .resolvePrimaryConstructorParametersDefaultValues(classOrObject)
         }
         else {
             resolutionFacade.analyze(classOrObject)
@@ -225,6 +224,7 @@ object IDELightClassContexts {
                             ForceResolveUtil.forceResolveAllContents(descriptor)
                         }
                     }
+
                     is KtProperty -> {
                         val name = declaration.nameAsSafeName
                         val properties = packageDescriptor.memberScope.getContributedVariables(name, NoLookupLocation.FROM_IDE)
@@ -232,10 +232,12 @@ object IDELightClassContexts {
                             ForceResolveUtil.forceResolveAllContents(descriptor)
                         }
                     }
+
                     is KtClassOrObject, is KtTypeAlias, is KtDestructuringDeclaration -> {
                         // Do nothing: we are not interested in classes or type aliases,
                         // and all destructuring declarations are erroneous at top level
                     }
+
                     else -> LOG.error("Unsupported declaration kind: " + declaration + " in file " + file.name + "\n" + file.text)
                 }
             }
@@ -289,7 +291,7 @@ object IDELightClassContexts {
 
     private fun setupDependencies(moduleDescriptor: ModuleDescriptorImpl, realWorldModule: ModuleDescriptor) {
         val jvmFieldClass = realWorldModule.getPackage(FqName("kotlin.jvm")).memberScope
-                .getContributedClassifier(Name.identifier("JvmField"), NoLookupLocation.FROM_IDE)
+            .getContributedClassifier(Name.identifier("JvmField"), NoLookupLocation.FROM_IDE)
 
         if (jvmFieldClass != null) {
             moduleDescriptor.setDependencies(moduleDescriptor, jvmFieldClass.module as ModuleDescriptorImpl, moduleDescriptor.builtIns.builtInsModule)
@@ -306,10 +308,10 @@ object IDELightClassContexts {
     ).map { FqName("kotlin.jvm").child(Name.identifier(it)) } + FqName("kotlin.PublishedApi") + FqName("kotlin.Deprecated")
 
     class AdHocAnnotationResolver(
-            private val moduleDescriptor: ModuleDescriptor,
-            private val callResolver: CallResolver,
-            constantExpressionEvaluator: ConstantExpressionEvaluator,
-            storageManager: StorageManager
+        private val moduleDescriptor: ModuleDescriptor,
+        private val callResolver: CallResolver,
+        constantExpressionEvaluator: ConstantExpressionEvaluator,
+        storageManager: StorageManager
     ) : AnnotationResolverImpl(callResolver, constantExpressionEvaluator, storageManager) {
 
         override fun resolveAnnotationType(scope: LexicalScope, entryElement: KtAnnotationEntry, trace: BindingTrace): KotlinType {
@@ -322,9 +324,9 @@ object IDELightClassContexts {
             for (annotationFqName in annotationsThatAffectCodegen) {
                 if (referencedName == annotationFqName.shortName().asString()) {
                     moduleDescriptor.getPackage(annotationFqName.parent()).memberScope
-                            .getContributedClassifier(annotationFqName.shortName(), NoLookupLocation.FROM_IDE)?.let { return it as? ClassDescriptor }
+                        .getContributedClassifier(annotationFqName.shortName(), NoLookupLocation.FROM_IDE)?.let { return it as? ClassDescriptor }
 
-               }
+                }
             }
             return null
         }

@@ -26,7 +26,8 @@ abstract class KotlinIntentionActionsFactory {
     protected abstract fun doCreateActions(diagnostic: Diagnostic): List<IntentionAction>
 
     protected open fun doCreateActionsForAllProblems(
-            sameTypeDiagnostics: Collection<Diagnostic>): List<IntentionAction> = emptyList()
+        sameTypeDiagnostics: Collection<Diagnostic>
+    ): List<IntentionAction> = emptyList()
 
     fun createActions(diagnostic: Diagnostic): List<IntentionAction> =
             createActions(listOfNotNull(diagnostic), false)

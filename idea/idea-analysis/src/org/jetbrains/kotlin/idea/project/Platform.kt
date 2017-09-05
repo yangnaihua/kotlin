@@ -75,8 +75,10 @@ fun Module.getAndCacheLanguageLevelByDependencies(): LanguageVersion {
 }
 
 @JvmOverloads
-fun Project.getLanguageVersionSettings(contextModule: Module? = null,
-                                       extraAnalysisFlags: Map<AnalysisFlag<*>, Any?> = emptyMap()): LanguageVersionSettings {
+fun Project.getLanguageVersionSettings(
+    contextModule: Module? = null,
+    extraAnalysisFlags: Map<AnalysisFlag<*>, Any?> = emptyMap()
+): LanguageVersionSettings {
     val arguments = KotlinCommonCompilerArgumentsHolder.getInstance(this).settings
     val languageVersion =
             LanguageVersion.fromVersionString(arguments.languageVersion)
@@ -141,10 +143,10 @@ private val Module.implementsCommonModule: Boolean
             && ModuleRootManager.getInstance(this).dependencies.any { it.targetPlatform == TargetPlatformKind.Common }
 
 private fun getExtraLanguageFeatures(
-        targetPlatformKind: TargetPlatformKind<*>,
-        coroutineSupport: LanguageFeature.State,
-        compilerSettings: CompilerSettings?,
-        module: Module?
+    targetPlatformKind: TargetPlatformKind<*>,
+    coroutineSupport: LanguageFeature.State,
+    compilerSettings: CompilerSettings?,
+    module: Module?
 ): Map<LanguageFeature, LanguageFeature.State> {
     return mutableMapOf<LanguageFeature, LanguageFeature.State>().apply {
         put(LanguageFeature.Coroutines, coroutineSupport)

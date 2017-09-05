@@ -24,23 +24,23 @@ import org.jetbrains.kotlin.psi.KtElement
 
 abstract class AbstractKotlinReferenceContributor : PsiReferenceContributor() {
     protected inline fun <reified E : KtElement> PsiReferenceRegistrar.registerProvider(
-            priority: Double = PsiReferenceRegistrar.DEFAULT_PRIORITY,
-            crossinline factory: (E) -> PsiReference?
+        priority: Double = PsiReferenceRegistrar.DEFAULT_PRIORITY,
+        crossinline factory: (E) -> PsiReference?
     ) {
         registerMultiProvider<E>(priority) { factory(it)?.let { arrayOf(it) } ?: PsiReference.EMPTY_ARRAY }
     }
 
     protected inline fun <reified E : KtElement> PsiReferenceRegistrar.registerMultiProvider(
-            priority: Double = PsiReferenceRegistrar.DEFAULT_PRIORITY,
-            crossinline factory: (E) -> Array<PsiReference>
+        priority: Double = PsiReferenceRegistrar.DEFAULT_PRIORITY,
+        crossinline factory: (E) -> Array<PsiReference>
     ) {
         registerMultiProvider(PlatformPatterns.psiElement(E::class.java), priority, factory)
     }
 
     protected inline fun <E : KtElement> PsiReferenceRegistrar.registerMultiProvider(
-            pattern: ElementPattern<E>,
-            priority: Double = PsiReferenceRegistrar.DEFAULT_PRIORITY,
-            crossinline factory: (E) -> Array<PsiReference>
+        pattern: ElementPattern<E>,
+        priority: Double = PsiReferenceRegistrar.DEFAULT_PRIORITY,
+        crossinline factory: (E) -> Array<PsiReference>
     ) {
         registerReferenceProvider(
                 pattern,

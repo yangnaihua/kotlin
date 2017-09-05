@@ -216,16 +216,17 @@ public class MemberMatching {
 
             Set<String> descriptorUpperBounds = Sets.newHashSet(ContainerUtil.map(
                     descriptor.getUpperBounds(), new Function<KotlinType, String>() {
-                @Override
-                public String fun(KotlinType type) {
-                    return DescriptorRenderer.FQ_NAMES_IN_TYPES.renderType(type);
-                }
-            }));
+                        @Override
+                        public String fun(KotlinType type) {
+                            return DescriptorRenderer.FQ_NAMES_IN_TYPES.renderType(type);
+                        }
+                    }));
 
             KotlinBuiltIns builtIns = DescriptorUtilsKt.getBuiltIns(descriptor);
             Set<String> decompiledUpperBounds = decompiledParameterToBounds.get(descriptor.getName()).isEmpty()
-                    ? Sets.newHashSet(DescriptorRenderer.FQ_NAMES_IN_TYPES.renderType(builtIns.getDefaultBound()))
-                    : Sets.newHashSet(decompiledParameterToBounds.get(descriptor.getName()));
+                                                ? Sets.newHashSet(
+                    DescriptorRenderer.FQ_NAMES_IN_TYPES.renderType(builtIns.getDefaultBound()))
+                                                : Sets.newHashSet(decompiledParameterToBounds.get(descriptor.getName()));
             if (!descriptorUpperBounds.equals(decompiledUpperBounds)) {
                 return false;
             }

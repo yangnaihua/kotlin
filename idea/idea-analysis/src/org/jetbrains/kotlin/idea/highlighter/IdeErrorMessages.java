@@ -60,7 +60,8 @@ public class IdeErrorMessages {
     }
 
     static {
-        MAP.put(TYPE_MISMATCH, "<html>Type mismatch.<table><tr><td>Required:</td><td>{0}</td></tr><tr><td>Found:</td><td>{1}</td></tr></table></html>",
+        MAP.put(TYPE_MISMATCH,
+                "<html>Type mismatch.<table><tr><td>Required:</td><td>{0}</td></tr><tr><td>Found:</td><td>{1}</td></tr></table></html>",
                 HTML_RENDER_TYPE, HTML_RENDER_TYPE);
 
         MAP.put(TYPE_MISMATCH_DUE_TO_TYPE_PROJECTIONS,
@@ -71,7 +72,8 @@ public class IdeErrorMessages {
                     @Override
                     public String[] render(@NotNull TypeMismatchDueToTypeProjectionsData object) {
                         RenderingContext context = RenderingContext
-                                .of(object.getExpectedType(), object.getExpressionType(), object.getReceiverType(), object.getCallableDescriptor());
+                                .of(object.getExpectedType(), object.getExpressionType(), object.getReceiverType(),
+                                    object.getCallableDescriptor());
                         return new String[] {
                                 HTML_RENDER_TYPE.render(object.getExpectedType(), context),
                                 HTML_RENDER_TYPE.render(object.getExpressionType(), context),
@@ -84,9 +86,12 @@ public class IdeErrorMessages {
         MAP.put(ASSIGN_OPERATOR_AMBIGUITY, "<html>Assignment operators ambiguity. All these functions match.<ul>{0}</ul></table></html>",
                 HTML_AMBIGUOUS_CALLS);
 
-        MAP.put(TYPE_INFERENCE_CONFLICTING_SUBSTITUTIONS, "<html>Type inference failed: {0}</html>", HTML_TYPE_INFERENCE_CONFLICTING_SUBSTITUTIONS_RENDERER);
-        MAP.put(TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER, "<html>Type inference failed: {0}</html>", HTML_TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER_RENDERER);
-        MAP.put(TYPE_INFERENCE_PARAMETER_CONSTRAINT_ERROR, "<html>Type inference failed: {0}</html>", HTML_TYPE_INFERENCE_PARAMETER_CONSTRAINT_ERROR_RENDERER);
+        MAP.put(TYPE_INFERENCE_CONFLICTING_SUBSTITUTIONS, "<html>Type inference failed: {0}</html>",
+                HTML_TYPE_INFERENCE_CONFLICTING_SUBSTITUTIONS_RENDERER);
+        MAP.put(TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER, "<html>Type inference failed: {0}</html>",
+                HTML_TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER_RENDERER);
+        MAP.put(TYPE_INFERENCE_PARAMETER_CONSTRAINT_ERROR, "<html>Type inference failed: {0}</html>",
+                HTML_TYPE_INFERENCE_PARAMETER_CONSTRAINT_ERROR_RENDERER);
         MAP.put(TYPE_INFERENCE_EXPECTED_TYPE_MISMATCH, tableForTypes("Type inference failed. Expected type mismatch: ",
                                                                      "required: ", TextElementType.STRONG,
                                                                      "found: ", TextElementType.ERROR), HTML_RENDER_TYPE, HTML_RENDER_TYPE);
@@ -99,7 +104,8 @@ public class IdeErrorMessages {
                                           "<table><tr><td>Expected:</td><td>{0}</td></tr>" +
                                           "<tr><td>Found:</td><td>{1}</td></tr></table></html>", HTML_RENDER_TYPE, HTML_RENDER_TYPE);
 
-        MAP.put(ITERATOR_AMBIGUITY, "<html>Method ''iterator()'' is ambiguous for this expression.<ul>{0}</ul></html>", HTML_AMBIGUOUS_CALLS);
+        MAP.put(ITERATOR_AMBIGUITY, "<html>Method ''iterator()'' is ambiguous for this expression.<ul>{0}</ul></html>",
+                HTML_AMBIGUOUS_CALLS);
 
         MAP.put(UPPER_BOUND_VIOLATED, "<html>Type argument is not within its bounds." +
                                       "<table><tr><td>Expected:</td><td>{0}</td></tr>" +
@@ -115,9 +121,9 @@ public class IdeErrorMessages {
                 HTML, HTML);
 
         MAP.put(PROPERTY_TYPE_MISMATCH_ON_OVERRIDE, "<html>Property type is ''{0}'', which is not a subtype type of overridden<br/>" +
-                                                  "{1}</html>", HTML_RENDER_RETURN_TYPE, HTML);
-        MAP.put(VAR_TYPE_MISMATCH_ON_OVERRIDE, "<html>Var-property type is ''{0}'', which is not a type of overridden<br/>" +
                                                     "{1}</html>", HTML_RENDER_RETURN_TYPE, HTML);
+        MAP.put(VAR_TYPE_MISMATCH_ON_OVERRIDE, "<html>Var-property type is ''{0}'', which is not a type of overridden<br/>" +
+                                               "{1}</html>", HTML_RENDER_RETURN_TYPE, HTML);
         MAP.put(PROPERTY_TYPE_MISMATCH_ON_INHERITANCE, "<html>Types of inherited properties are incompatible:<br/>{0},<br/>{1}</html>",
                 HTML, HTML);
         MAP.put(VAR_TYPE_MISMATCH_ON_INHERITANCE, "<html>Types of inherited var-properties do not match:<br/>{0},<br/>{1}</html>",
@@ -126,7 +132,7 @@ public class IdeErrorMessages {
         MAP.put(VAR_OVERRIDDEN_BY_VAL, "<html>Val-property cannot override var-property<br />" +
                                        "{1}</html>", HTML, HTML);
         MAP.put(VAR_OVERRIDDEN_BY_VAL_BY_DELEGATION, "<html>Val-property cannot override var-property<br />" +
-                                       "{1}</html>", HTML, HTML);
+                                                     "{1}</html>", HTML, HTML);
 
         MAP.put(ABSTRACT_MEMBER_NOT_IMPLEMENTED, "<html>{0} is not abstract and does not implement abstract member<br/>" +
                                                  "{1}</html>", RENDER_CLASS_OR_OBJECT, HTML);
@@ -140,16 +146,25 @@ public class IdeErrorMessages {
                                       "<table><tr><td>Expected:</td><td>{1}</td></tr>" +
                                       "<tr><td>Found:</td><td>{2}</td></tr></table></html>", STRING, HTML_RENDER_TYPE, HTML_RENDER_TYPE);
 
-        MAP.put(OVERLOAD_RESOLUTION_AMBIGUITY, "<html>Overload resolution ambiguity. All these functions match. <ul>{0}</ul></html>", HTML_AMBIGUOUS_CALLS);
+        MAP.put(OVERLOAD_RESOLUTION_AMBIGUITY, "<html>Overload resolution ambiguity. All these functions match. <ul>{0}</ul></html>",
+                HTML_AMBIGUOUS_CALLS);
         MAP.put(NONE_APPLICABLE, "<html>None of the following functions can be called with the arguments supplied. <ul>{0}</ul></html>",
                 HTML_NONE_APPLICABLE_CALLS);
-        MAP.put(CANNOT_COMPLETE_RESOLVE, "<html>Cannot choose among the following candidates without completing type inference: <ul>{0}</ul></html>", HTML_AMBIGUOUS_CALLS);
-        MAP.put(UNRESOLVED_REFERENCE_WRONG_RECEIVER, "<html>Unresolved reference. <br/> None of the following candidates is applicable because of receiver type mismatch: <ul>{0}</ul></html>", HTML_AMBIGUOUS_CALLS);
+        MAP.put(CANNOT_COMPLETE_RESOLVE,
+                "<html>Cannot choose among the following candidates without completing type inference: <ul>{0}</ul></html>",
+                HTML_AMBIGUOUS_CALLS);
+        MAP.put(UNRESOLVED_REFERENCE_WRONG_RECEIVER,
+                "<html>Unresolved reference. <br/> None of the following candidates is applicable because of receiver type mismatch: <ul>{0}</ul></html>",
+                HTML_AMBIGUOUS_CALLS);
 
-        MAP.put(DELEGATE_SPECIAL_FUNCTION_AMBIGUITY, "<html>Overload resolution ambiguity on method ''{0}''. All these functions match. <ul>{1}</ul></html>", STRING, HTML_AMBIGUOUS_CALLS);
-        MAP.put(DELEGATE_SPECIAL_FUNCTION_NONE_APPLICABLE, "<html>Property delegate must have a ''{0}'' method. None of the following functions is suitable. <ul>{1}</ul></html>",
+        MAP.put(DELEGATE_SPECIAL_FUNCTION_AMBIGUITY,
+                "<html>Overload resolution ambiguity on method ''{0}''. All these functions match. <ul>{1}</ul></html>", STRING,
+                HTML_AMBIGUOUS_CALLS);
+        MAP.put(DELEGATE_SPECIAL_FUNCTION_NONE_APPLICABLE,
+                "<html>Property delegate must have a ''{0}'' method. None of the following functions is suitable. <ul>{1}</ul></html>",
                 STRING, HTML_NONE_APPLICABLE_CALLS);
-        MAP.put(DELEGATE_PD_METHOD_NONE_APPLICABLE, "<html>''{0}'' method may be missing. None of the following functions will be called: <ul>{1}</ul></html>",
+        MAP.put(DELEGATE_PD_METHOD_NONE_APPLICABLE,
+                "<html>''{0}'' method may be missing. None of the following functions will be called: <ul>{1}</ul></html>",
                 STRING, HTML_NONE_APPLICABLE_CALLS);
 
         MAP.put(CONFLICTING_JVM_DECLARATIONS, "<html>Platform declaration clash: {0}</html>", HTML_CONFLICTING_JVM_DECLARATIONS_DATA);
@@ -171,16 +186,22 @@ public class IdeErrorMessages {
 
         MAP.put(ErrorsJs.JSCODE_ERROR, "<html>JavaScript: {0}</html>", JsCallDataHtmlRenderer.INSTANCE);
         MAP.put(ErrorsJs.JSCODE_WARNING, "<html>JavaScript: {0}</html>", JsCallDataHtmlRenderer.INSTANCE);
-        MAP.put(UNSUPPORTED_FEATURE, "<html>{0}</html>", new LanguageFeatureMessageRenderer(LanguageFeatureMessageRenderer.Type.UNSUPPORTED, true));
-        MAP.put(EXPERIMENTAL_FEATURE_WARNING, "<html>{0}</html>", new LanguageFeatureMessageRenderer(LanguageFeatureMessageRenderer.Type.WARNING, true));
-        MAP.put(EXPERIMENTAL_FEATURE_ERROR, "<html>{0}</html>", new LanguageFeatureMessageRenderer(LanguageFeatureMessageRenderer.Type.ERROR, true));
+        MAP.put(UNSUPPORTED_FEATURE, "<html>{0}</html>",
+                new LanguageFeatureMessageRenderer(LanguageFeatureMessageRenderer.Type.UNSUPPORTED, true));
+        MAP.put(EXPERIMENTAL_FEATURE_WARNING, "<html>{0}</html>",
+                new LanguageFeatureMessageRenderer(LanguageFeatureMessageRenderer.Type.WARNING, true));
+        MAP.put(EXPERIMENTAL_FEATURE_ERROR, "<html>{0}</html>",
+                new LanguageFeatureMessageRenderer(LanguageFeatureMessageRenderer.Type.ERROR, true));
 
-        MAP.put(HEADER_WITHOUT_IMPLEMENTATION, "<html>''header'' {0} has no implementation in module{1}{2}</html>", DECLARATION_NAME_WITH_KIND,
+        MAP.put(HEADER_WITHOUT_IMPLEMENTATION, "<html>''header'' {0} has no implementation in module{1}{2}</html>",
+                DECLARATION_NAME_WITH_KIND,
                 PLATFORM, new PlatformIncompatibilityDiagnosticRenderer(IdeMultiplatformDiagnosticRenderingMode.INSTANCE));
-        MAP.put(IMPLEMENTATION_WITHOUT_HEADER, "<html>''impl'' {0} has no corresponding ''header'' declaration{1}</html>", DECLARATION_NAME_WITH_KIND,
+        MAP.put(IMPLEMENTATION_WITHOUT_HEADER, "<html>''impl'' {0} has no corresponding ''header'' declaration{1}</html>",
+                DECLARATION_NAME_WITH_KIND,
                 new PlatformIncompatibilityDiagnosticRenderer(IdeMultiplatformDiagnosticRenderingMode.INSTANCE));
 
-        MAP.put(HEADER_CLASS_MEMBERS_ARE_NOT_IMPLEMENTED, "<html>''impl'' class ''{0}'' has no implementation of ''header'' class members:{1}</html>",
+        MAP.put(HEADER_CLASS_MEMBERS_ARE_NOT_IMPLEMENTED,
+                "<html>''impl'' class ''{0}'' has no implementation of ''header'' class members:{1}</html>",
                 NAME, new IncompatibleHeaderImplClassScopesRenderer(IdeMultiplatformDiagnosticRenderingMode.INSTANCE));
 
         MAP.setImmutable();

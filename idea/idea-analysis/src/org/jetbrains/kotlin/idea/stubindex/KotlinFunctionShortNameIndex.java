@@ -35,7 +35,8 @@ public class KotlinFunctionShortNameIndex extends StringStubIndexExtension<KtNam
         return ourInstance;
     }
 
-    private KotlinFunctionShortNameIndex() {}
+    private KotlinFunctionShortNameIndex() {
+    }
 
     @NotNull
     @Override

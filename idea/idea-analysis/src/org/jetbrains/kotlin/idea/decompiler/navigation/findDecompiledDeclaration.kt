@@ -46,10 +46,10 @@ import org.jetbrains.kotlin.types.ErrorUtils
 import java.util.*
 
 fun findDecompiledDeclaration(
-        project: Project,
-        referencedDescriptor: DeclarationDescriptor,
+    project: Project,
+    referencedDescriptor: DeclarationDescriptor,
         // TODO: should not require explicitly specified scope to search for builtIns, use SourceElement to provide such information
-        builtInsSearchScope: GlobalSearchScope?
+    builtInsSearchScope: GlobalSearchScope?
 ): KtDeclaration? {
     if (ErrorUtils.isError(referencedDescriptor)) return null
     if (isLocal(referencedDescriptor)) return null
@@ -78,8 +78,7 @@ private fun findInScope(referencedDescriptor: DeclarationDescriptor, scope: Glob
         it?.containingFile as? KtDecompiledFile
     }
 
-    return decompiledFiles.asSequence().mapNotNull {
-        file ->
+    return decompiledFiles.asSequence().mapNotNull { file ->
         ByDescriptorIndexer.getDeclarationForDescriptor(referencedDescriptor, file)
     }.firstOrNull()
 }
@@ -95,9 +94,9 @@ private fun isLocal(descriptor: DeclarationDescriptor): Boolean {
 
 
 private fun findCandidateDeclarationsInIndex(
-        referencedDescriptor: DeclarationDescriptor,
-        scope: GlobalSearchScope,
-        project: Project
+    referencedDescriptor: DeclarationDescriptor,
+    scope: GlobalSearchScope,
+    project: Project
 ): Collection<KtDeclaration?> {
     val containingClass = DescriptorUtils.getParentOfType(referencedDescriptor, ClassDescriptor::class.java, false)
     if (containingClass != null) {
@@ -144,7 +143,7 @@ object ByDescriptorIndexer : DecompiledTextIndexer<String> {
             val callableDeclaration = getDeclarationForDescriptor(callable, file) as? KtCallableDeclaration ?: return null
             if (original.index >= callableDeclaration.valueParameters.size) {
                 LOG.error("Parameter count mismatch for ${DescriptorRenderer.DEBUG_TEXT.render(callable)}[${original.index}] vs " +
-                     callableDeclaration.valueParameterList?.text)
+                          callableDeclaration.valueParameterList?.text)
                 return null
             }
             return callableDeclaration.valueParameters[original.index]

@@ -46,13 +46,16 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import java.util.*
 
-data class KotlinReferencesSearchOptions(val acceptCallableOverrides: Boolean = false,
-                                         val acceptOverloads: Boolean = false,
-                                         val acceptExtensionsOfDeclarationClass: Boolean = false,
-                                         val acceptCompanionObjectMembers: Boolean = false,
-                                         val searchForComponentConventions: Boolean = true,
-                                         val searchForOperatorConventions: Boolean = true,
-                                         val searchNamedArguments: Boolean = true) {
+data class KotlinReferencesSearchOptions(
+    val acceptCallableOverrides: Boolean = false,
+    val acceptOverloads: Boolean = false,
+    val acceptExtensionsOfDeclarationClass: Boolean = false,
+    val acceptCompanionObjectMembers: Boolean = false,
+    val searchForComponentConventions: Boolean = true,
+    val searchForOperatorConventions: Boolean = true,
+    val searchNamedArguments: Boolean = true
+) {
+
     fun anyEnabled(): Boolean = acceptCallableOverrides || acceptOverloads || acceptExtensionsOfDeclarationClass
 
     companion object {
@@ -61,12 +64,12 @@ data class KotlinReferencesSearchOptions(val acceptCallableOverrides: Boolean = 
 }
 
 class KotlinReferencesSearchParameters(
-        elementToSearch: PsiElement,
-        scope: SearchScope = runReadAction { elementToSearch.project.allScope() },
-        ignoreAccessScope: Boolean = false,
-        optimizer: SearchRequestCollector? = null,
-        val kotlinOptions: KotlinReferencesSearchOptions = KotlinReferencesSearchOptions.Empty)
-    : ReferencesSearch.SearchParameters(elementToSearch, scope, ignoreAccessScope, optimizer)
+    elementToSearch: PsiElement,
+    scope: SearchScope = runReadAction { elementToSearch.project.allScope() },
+    ignoreAccessScope: Boolean = false,
+    optimizer: SearchRequestCollector? = null,
+    val kotlinOptions: KotlinReferencesSearchOptions = KotlinReferencesSearchOptions.Empty
+) : ReferencesSearch.SearchParameters(elementToSearch, scope, ignoreAccessScope, optimizer)
 
 class KotlinReferencesSearcher : QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters>() {
     override fun processQuery(queryParameters: ReferencesSearch.SearchParameters, consumer: Processor<PsiReference>) {
@@ -258,17 +261,18 @@ class KotlinReferencesSearcher : QueryExecutorBase<PsiReference, ReferencesSearc
 
                         for (declaration in element.declarations) {
                             lightDeclarations
-                                    .firstOrNull { it?.kotlinOrigin == declaration }
-                                    ?.let { searchNamedElement(it) }
+                                .firstOrNull { it?.kotlinOrigin == declaration }
+                                ?.let { searchNamedElement(it) }
                         }
                     }
                 }
             }
         }
 
-        private fun searchDataClassComponentUsages(containingClass: PsiClass?,
-                                                   componentFunctionDescriptor: FunctionDescriptor,
-                                                   kotlinOptions: KotlinReferencesSearchOptions
+        private fun searchDataClassComponentUsages(
+            containingClass: PsiClass?,
+            componentFunctionDescriptor: FunctionDescriptor,
+            kotlinOptions: KotlinReferencesSearchOptions
         ) {
             val componentFunction = containingClass?.methods?.firstOrNull {
                 it.name == componentFunctionDescriptor.name.asString() && it.parameterList.parametersCount == 0
@@ -292,8 +296,8 @@ class KotlinReferencesSearcher : QueryExecutorBase<PsiReference, ReferencesSearc
 
         private fun findStaticMethodsFromCompanionObject(declaration: KtDeclaration): List<PsiMethod> {
             val originObject = declaration.parents
-                                       .dropWhile { it is KtClassBody }
-                                       .firstOrNull() as? KtObjectDeclaration ?: return emptyList()
+                                   .dropWhile { it is KtClassBody }
+                                   .firstOrNull() as? KtObjectDeclaration ?: return emptyList()
             if (!originObject.isCompanion()) return emptyList()
             val originClass = originObject.getStrictParentOfType<KtClass>()
             val originLightClass = originClass?.toLightClass() ?: return emptyList()

@@ -33,22 +33,22 @@ import org.jetbrains.kotlin.serialization.ProtoBuf.Modality
 import org.jetbrains.kotlin.serialization.deserialization.*
 
 fun createDeclarationsStubs(
-        parentStub: StubElement<out PsiElement>,
-        outerContext: ClsStubBuilderContext,
-        protoContainer: ProtoContainer,
-        packageProto: ProtoBuf.Package
+    parentStub: StubElement<out PsiElement>,
+    outerContext: ClsStubBuilderContext,
+    protoContainer: ProtoContainer,
+    packageProto: ProtoBuf.Package
 ) {
     createDeclarationsStubs(
             parentStub, outerContext, protoContainer, packageProto.functionList, packageProto.propertyList, packageProto.typeAliasList)
 }
 
 fun createDeclarationsStubs(
-        parentStub: StubElement<out PsiElement>,
-        outerContext: ClsStubBuilderContext,
-        protoContainer: ProtoContainer,
-        functionProtos: List<ProtoBuf.Function>,
-        propertyProtos: List<ProtoBuf.Property>,
-        typeAliasesProtos: List<ProtoBuf.TypeAlias>
+    parentStub: StubElement<out PsiElement>,
+    outerContext: ClsStubBuilderContext,
+    protoContainer: ProtoContainer,
+    functionProtos: List<ProtoBuf.Function>,
+    propertyProtos: List<ProtoBuf.Property>,
+    typeAliasesProtos: List<ProtoBuf.TypeAlias>
 ) {
     for (propertyProto in propertyProtos) {
         if (!shouldSkip(propertyProto.flags, outerContext.nameResolver.getName(propertyProto.name))) {
@@ -67,10 +67,10 @@ fun createDeclarationsStubs(
 }
 
 fun createConstructorStub(
-        parentStub: StubElement<out PsiElement>,
-        constructorProto: ProtoBuf.Constructor,
-        outerContext: ClsStubBuilderContext,
-        protoContainer: ProtoContainer
+    parentStub: StubElement<out PsiElement>,
+    constructorProto: ProtoBuf.Constructor,
+    outerContext: ClsStubBuilderContext,
+    protoContainer: ProtoContainer
 ) {
     ConstructorClsStubBuilder(parentStub, outerContext, protoContainer, constructorProto).build()
 }
@@ -78,18 +78,19 @@ fun createConstructorStub(
 private fun shouldSkip(flags: Int, name: Name): Boolean {
     return when (Flags.MEMBER_KIND.get(flags)) {
         MemberKind.FAKE_OVERRIDE, MemberKind.DELEGATION -> true
-        //TODO: fix decompiler to use sane criteria
+    //TODO: fix decompiler to use sane criteria
         MemberKind.SYNTHESIZED -> !DataClassDescriptorResolver.isComponentLike(name)
         else -> false
     }
 }
 
 abstract class CallableClsStubBuilder(
-        parent: StubElement<out PsiElement>,
-        outerContext: ClsStubBuilderContext,
-        protected val protoContainer: ProtoContainer,
-        private val typeParameters: List<ProtoBuf.TypeParameter>
+    parent: StubElement<out PsiElement>,
+    outerContext: ClsStubBuilderContext,
+    protected val protoContainer: ProtoContainer,
+    private val typeParameters: List<ProtoBuf.TypeParameter>
 ) {
+
     protected val c = outerContext.child(typeParameters)
     protected val typeStubBuilder = TypeClsStubBuilder(c)
     protected val isTopLevel: Boolean get() = protoContainer is ProtoContainer.Package
@@ -129,19 +130,20 @@ abstract class CallableClsStubBuilder(
 }
 
 private class FunctionClsStubBuilder(
-        parent: StubElement<out PsiElement>,
-        outerContext: ClsStubBuilderContext,
-        protoContainer: ProtoContainer,
-        private val functionProto: ProtoBuf.Function
+    parent: StubElement<out PsiElement>,
+    outerContext: ClsStubBuilderContext,
+    protoContainer: ProtoContainer,
+    private val functionProto: ProtoBuf.Function
 ) : CallableClsStubBuilder(parent, outerContext, protoContainer, functionProto.typeParameterList) {
+
     override val receiverType: ProtoBuf.Type?
         get() = functionProto.receiverType(c.typeTable)
 
     override val receiverAnnotations: List<ClassIdWithTarget>
         get() {
             return c.components.annotationLoader
-                    .loadExtensionReceiverParameterAnnotations(protoContainer, functionProto, AnnotatedCallableKind.FUNCTION)
-                    .map { ClassIdWithTarget(it, AnnotationUseSiteTarget.RECEIVER) }
+                .loadExtensionReceiverParameterAnnotations(protoContainer, functionProto, AnnotatedCallableKind.FUNCTION)
+                .map { ClassIdWithTarget(it, AnnotationUseSiteTarget.RECEIVER) }
         }
 
     override val returnType: ProtoBuf.Type?
@@ -181,11 +183,12 @@ private class FunctionClsStubBuilder(
 }
 
 private class PropertyClsStubBuilder(
-        parent: StubElement<out PsiElement>,
-        outerContext: ClsStubBuilderContext,
-        protoContainer: ProtoContainer,
-        private val propertyProto: ProtoBuf.Property
+    parent: StubElement<out PsiElement>,
+    outerContext: ClsStubBuilderContext,
+    protoContainer: ProtoContainer,
+    private val propertyProto: ProtoBuf.Property
 ) : CallableClsStubBuilder(parent, outerContext, protoContainer, propertyProto.typeParameterList) {
+
     private val isVar = Flags.IS_VAR.get(propertyProto.flags)
 
     override val receiverType: ProtoBuf.Type?
@@ -194,8 +197,8 @@ private class PropertyClsStubBuilder(
     override val receiverAnnotations: List<ClassIdWithTarget>
         get() {
             return c.components.annotationLoader
-                    .loadExtensionReceiverParameterAnnotations(protoContainer, propertyProto, AnnotatedCallableKind.PROPERTY_GETTER)
-                    .map { ClassIdWithTarget(it, AnnotationUseSiteTarget.RECEIVER) }
+                .loadExtensionReceiverParameterAnnotations(protoContainer, propertyProto, AnnotatedCallableKind.PROPERTY_GETTER)
+                .map { ClassIdWithTarget(it, AnnotationUseSiteTarget.RECEIVER) }
         }
 
     override val returnType: ProtoBuf.Type?
@@ -238,11 +241,12 @@ private class PropertyClsStubBuilder(
 }
 
 private class ConstructorClsStubBuilder(
-        parent: StubElement<out PsiElement>,
-        outerContext: ClsStubBuilderContext,
-        protoContainer: ProtoContainer,
-        private val constructorProto: ProtoBuf.Constructor
+    parent: StubElement<out PsiElement>,
+    outerContext: ClsStubBuilderContext,
+    protoContainer: ProtoContainer,
+    private val constructorProto: ProtoBuf.Constructor
 ) : CallableClsStubBuilder(parent, outerContext, protoContainer, emptyList()) {
+
     override val receiverType: ProtoBuf.Type?
         get() = null
 

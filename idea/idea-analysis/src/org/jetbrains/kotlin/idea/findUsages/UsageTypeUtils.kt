@@ -48,7 +48,7 @@ object UsageTypeUtils {
             return when {
                 refExpr.getNonStrictParentOfType<KtImportDirective>() != null ->
                     CLASS_IMPORT
-                refExpr.getParentOfTypeAndBranch<KtCallableReferenceExpression>(){ callableReference } != null ->
+                refExpr.getParentOfTypeAndBranch<KtCallableReferenceExpression>() { callableReference } != null ->
                     CALLABLE_REFERENCE
                 else -> null
             }
@@ -79,22 +79,22 @@ object UsageTypeUtils {
             }
 
             return when {
-                refExpr.getParentOfTypeAndBranch<KtTypeParameter>(){ extendsBound } != null
-                || refExpr.getParentOfTypeAndBranch<KtTypeConstraint>(){ boundTypeReference } != null ->
+                refExpr.getParentOfTypeAndBranch<KtTypeParameter>() { extendsBound } != null
+                || refExpr.getParentOfTypeAndBranch<KtTypeConstraint>() { boundTypeReference } != null ->
                     TYPE_CONSTRAINT
 
                 refExpr is KtSuperTypeListEntry
-                || refExpr.getParentOfTypeAndBranch<KtSuperTypeListEntry>(){ typeReference } != null ->
+                || refExpr.getParentOfTypeAndBranch<KtSuperTypeListEntry>() { typeReference } != null ->
                     SUPER_TYPE
 
-                refExpr.getParentOfTypeAndBranch<KtParameter>(){ typeReference } != null ->
+                refExpr.getParentOfTypeAndBranch<KtParameter>() { typeReference } != null ->
                     VALUE_PARAMETER_TYPE
 
-                refExpr.getParentOfTypeAndBranch<KtIsExpression>(){ typeReference } != null
-                || refExpr.getParentOfTypeAndBranch<KtWhenConditionIsPattern>(){ typeReference } != null ->
+                refExpr.getParentOfTypeAndBranch<KtIsExpression>() { typeReference } != null
+                || refExpr.getParentOfTypeAndBranch<KtWhenConditionIsPattern>() { typeReference } != null ->
                     IS
 
-                with(refExpr.getParentOfTypeAndBranch<KtBinaryExpressionWithTypeRHS>(){ right }) {
+                with(refExpr.getParentOfTypeAndBranch<KtBinaryExpressionWithTypeRHS>() { right }) {
                     val opType = this?.operationReference?.getReferencedNameElementType()
                     opType == KtTokens.AS_KEYWORD || opType == KtTokens.AS_SAFE
                 } ->
@@ -105,9 +105,11 @@ object UsageTypeUtils {
                         this == null -> {
                             false
                         }
+
                         receiverExpression == refExpr -> {
                             true
                         }
+
                         else -> {
                             selectorExpression == refExpr
                             && getParentOfTypeAndBranch<KtDotQualifiedExpression>(strict = true) { receiverExpression } != null
@@ -116,7 +118,7 @@ object UsageTypeUtils {
                 } ->
                     CLASS_OBJECT_ACCESS
 
-                refExpr.getParentOfTypeAndBranch<KtSuperExpression>(){ superTypeQualifier } != null ->
+                refExpr.getParentOfTypeAndBranch<KtSuperExpression>() { superTypeQualifier } != null ->
                     SUPER_TYPE_QUALIFIER
 
                 refExpr.getParentOfTypeAndBranch<KtTypeAlias> { getTypeReference() } != null ->
@@ -127,7 +129,7 @@ object UsageTypeUtils {
         }
 
         fun getVariableUsageType(): UsageTypeEnum? {
-            if (refExpr.getParentOfTypeAndBranch<KtDelegatedSuperTypeEntry>(){ delegateExpression } != null) {
+            if (refExpr.getParentOfTypeAndBranch<KtDelegatedSuperTypeEntry>() { delegateExpression } != null) {
                 return DELEGATE
             }
 
@@ -161,25 +163,26 @@ object UsageTypeUtils {
                         else -> null
                     }
                 }
+
                 is KtInvokeFunctionReference -> return IMPLICIT_INVOKE
             }
 
             return when {
-                refExpr.getParentOfTypeAndBranch<KtSuperTypeListEntry>(){ typeReference } != null ->
+                refExpr.getParentOfTypeAndBranch<KtSuperTypeListEntry>() { typeReference } != null ->
                     SUPER_TYPE
 
                 descriptor is ConstructorDescriptor
-                && refExpr.getParentOfTypeAndBranch<KtAnnotationEntry>(){ typeReference } != null ->
+                && refExpr.getParentOfTypeAndBranch<KtAnnotationEntry>() { typeReference } != null ->
                     ANNOTATION
 
-                with(refExpr.getParentOfTypeAndBranch<KtCallExpression>(){ calleeExpression }) {
+                with(refExpr.getParentOfTypeAndBranch<KtCallExpression>() { calleeExpression }) {
                     this?.calleeExpression is KtSimpleNameExpression
                 } ->
                     if (descriptor is ConstructorDescriptor) CLASS_NEW_OPERATOR else FUNCTION_CALL
 
-                refExpr.getParentOfTypeAndBranch<KtBinaryExpression>(){ operationReference } != null ||
-                refExpr.getParentOfTypeAndBranch<KtUnaryExpression>(){ operationReference } != null ||
-                refExpr.getParentOfTypeAndBranch<KtWhenConditionInRange>(){ operationReference } != null ->
+                refExpr.getParentOfTypeAndBranch<KtBinaryExpression>() { operationReference } != null ||
+                refExpr.getParentOfTypeAndBranch<KtUnaryExpression>() { operationReference } != null ||
+                refExpr.getParentOfTypeAndBranch<KtWhenConditionInRange>() { operationReference } != null ->
                     FUNCTION_CALL
 
                 else -> null
@@ -206,9 +209,11 @@ object UsageTypeUtils {
                 DescriptorUtils.isCompanionObject(descriptor) -> COMPANION_OBJECT_ACCESS
                 else -> getClassUsageType()
             }
+
             is PackageViewDescriptor -> {
                 if (refExpr.mainReference.resolve() is PsiPackage) getPackageUsageType() else getClassUsageType()
             }
+
             is VariableDescriptor -> getVariableUsageType()
             is FunctionDescriptor -> getFunctionUsageType(descriptor)
             else -> null

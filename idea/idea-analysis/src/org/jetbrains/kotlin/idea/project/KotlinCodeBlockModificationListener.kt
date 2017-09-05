@@ -48,10 +48,11 @@ val KOTLIN_CONSOLE_KEY = Key.create<Boolean>("kotlin.console")
  * Tested in OutOfBlockModificationTestGenerated
  */
 class KotlinCodeBlockModificationListener(
-        modificationTracker: PsiModificationTracker,
-        project: Project,
-        private val treeAspect: TreeAspect
+    modificationTracker: PsiModificationTracker,
+    project: Project,
+    private val treeAspect: TreeAspect
 ) {
+
     private val perModuleModCount = mutableMapOf<Module, Long>()
     private val modificationTrackerImpl = modificationTracker as PsiModificationTrackerImpl
 
@@ -73,7 +74,7 @@ class KotlinCodeBlockModificationListener(
     init {
         val model = PomManager.getModel(project)
         val messageBusConnection = project.messageBus.connect()
-        model.addModelListener(object: PomModelListener {
+        model.addModelListener(object : PomModelListener {
             override fun isAspectChangeInteresting(aspect: PomModelAspect): Boolean {
                 return aspect == treeAspect
             }
@@ -127,7 +128,7 @@ class KotlinCodeBlockModificationListener(
             val lambda = element.getTopmostParentOfType<KtLambdaExpression>()
             if (lambda is KtLambdaExpression) {
                 lambda.getTopmostParentOfType<KtSuperTypeCallEntry>()
-                        ?.let { return it }
+                    ?.let { return it }
             }
 
             val blockDeclaration = KtPsiUtil.getTopmostParentOfTypes(element, *BLOCK_DECLARATION_TYPES) ?: return null
@@ -147,8 +148,8 @@ class KotlinCodeBlockModificationListener(
                     if (blockDeclaration.typeReference != null) {
                         for (accessor in blockDeclaration.accessors) {
                             (accessor.initializer ?: accessor.bodyExpression)
-                                    ?.takeIf { it.isAncestor(element) }
-                                    ?.let { return it }
+                                ?.takeIf { it.isAncestor(element) }
+                                ?.let { return it }
                         }
                     }
                 }
@@ -177,7 +178,7 @@ private val FILE_OUT_OF_BLOCK_MODIFICATION_COUNT = Key<Long>("FILE_OUT_OF_BLOCK_
 val KtFile.outOfBlockModificationCount: Long
     get() = getUserData(FILE_OUT_OF_BLOCK_MODIFICATION_COUNT) ?: 0
 
-class KotlinModuleModificationTracker(val module: Module): ModificationTracker {
+class KotlinModuleModificationTracker(val module: Module) : ModificationTracker {
     private val kotlinModCountListener = KotlinCodeBlockModificationListener.getInstance(module.project)
     private val psiModificationTracker = PsiModificationTracker.SERVICE.getInstance(module.project)
     private val dependencies by lazy {

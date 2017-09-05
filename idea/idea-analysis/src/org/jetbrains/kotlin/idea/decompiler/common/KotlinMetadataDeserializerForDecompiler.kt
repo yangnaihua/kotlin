@@ -33,13 +33,14 @@ import org.jetbrains.kotlin.serialization.deserialization.*
 import org.jetbrains.kotlin.serialization.deserialization.descriptors.DeserializedPackageMemberScope
 
 class KotlinMetadataDeserializerForDecompiler(
-        packageFqName: FqName,
-        private val proto: ProtoBuf.PackageFragment,
-        private val nameResolver: NameResolver,
-        override val targetPlatform: TargetPlatform,
-        serializerProtocol: SerializerExtensionProtocol,
-        flexibleTypeDeserializer: FlexibleTypeDeserializer
+    packageFqName: FqName,
+    private val proto: ProtoBuf.PackageFragment,
+    private val nameResolver: NameResolver,
+    override val targetPlatform: TargetPlatform,
+    serializerProtocol: SerializerExtensionProtocol,
+    flexibleTypeDeserializer: FlexibleTypeDeserializer
 ) : DeserializerForDecompilerBase(packageFqName) {
+
     override val builtIns: KotlinBuiltIns get() = DefaultBuiltIns.Instance
 
     override val deserializationComponents: DeserializationComponents

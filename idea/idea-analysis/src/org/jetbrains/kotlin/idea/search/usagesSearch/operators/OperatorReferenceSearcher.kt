@@ -54,13 +54,14 @@ import org.jetbrains.kotlin.util.isValidOperator
 import java.util.*
 
 abstract class OperatorReferenceSearcher<TReferenceElement : KtElement>(
-        protected val targetDeclaration: PsiElement,
-        private val searchScope: SearchScope,
-        private val consumer: Processor<PsiReference>,
-        private val optimizer: SearchRequestCollector,
-        private val options: KotlinReferencesSearchOptions,
-        private val wordsToSearch: List<String>
+    protected val targetDeclaration: PsiElement,
+    private val searchScope: SearchScope,
+    private val consumer: Processor<PsiReference>,
+    private val optimizer: SearchRequestCollector,
+    private val options: KotlinReferencesSearchOptions,
+    private val wordsToSearch: List<String>
 ) {
+
     private val project = targetDeclaration.project
 
     /**
@@ -91,11 +92,11 @@ abstract class OperatorReferenceSearcher<TReferenceElement : KtElement>(
 
     companion object {
         fun create(
-                declaration: PsiElement,
-                searchScope: SearchScope,
-                consumer: Processor<PsiReference>,
-                optimizer: SearchRequestCollector,
-                options: KotlinReferencesSearchOptions
+            declaration: PsiElement,
+            searchScope: SearchScope,
+            consumer: Processor<PsiReference>,
+            optimizer: SearchRequestCollector,
+            options: KotlinReferencesSearchOptions
         ): OperatorReferenceSearcher<*>? {
             return runReadAction {
                 if (declaration.isValid)
@@ -106,17 +107,17 @@ abstract class OperatorReferenceSearcher<TReferenceElement : KtElement>(
         }
 
         private fun createInReadAction(
-                declaration: PsiElement,
-                searchScope: SearchScope,
-                consumer: Processor<PsiReference>,
-                optimizer: SearchRequestCollector,
-                options: KotlinReferencesSearchOptions
+            declaration: PsiElement,
+            searchScope: SearchScope,
+            consumer: Processor<PsiReference>,
+            optimizer: SearchRequestCollector,
+            options: KotlinReferencesSearchOptions
         ): OperatorReferenceSearcher<*>? {
-            val functionName =  when (declaration) {
-                is KtNamedFunction -> declaration.name
-                is PsiMethod -> declaration.name
-                else -> null
-            } ?: return null
+            val functionName = when (declaration) {
+                                   is KtNamedFunction -> declaration.name
+                                   is PsiMethod -> declaration.name
+                                   else -> null
+                               } ?: return null
 
             if (!Name.isValidIdentifier(functionName)) return null
             val name = Name.identifier(functionName)
@@ -132,12 +133,12 @@ abstract class OperatorReferenceSearcher<TReferenceElement : KtElement>(
         }
 
         private fun createInReadAction(
-                declaration: PsiElement,
-                name: Name,
-                consumer: Processor<PsiReference>,
-                optimizer: SearchRequestCollector,
-                options: KotlinReferencesSearchOptions,
-                searchScope: SearchScope
+            declaration: PsiElement,
+            name: Name,
+            consumer: Processor<PsiReference>,
+            optimizer: SearchRequestCollector,
+            options: KotlinReferencesSearchOptions,
+            searchScope: SearchScope
         ): OperatorReferenceSearcher<*>? {
             if (DataClassDescriptorResolver.isComponentLike(name)) {
                 if (!options.searchForComponentConventions) return null
@@ -281,8 +282,8 @@ abstract class OperatorReferenceSearcher<TReferenceElement : KtElement>(
                             (element.containingFile as KtFile).getResolutionFacade().analyze(elements, BodyResolveMode.PARTIAL)
 
                             refs
-                                    .filter { it.isReferenceTo(targetDeclaration) }
-                                    .forEach { consumer.process(it) }
+                                .filter { it.isReferenceTo(targetDeclaration) }
+                                .forEach { consumer.process(it) }
                         }
                     }
                 }
@@ -335,24 +336,26 @@ abstract class OperatorReferenceSearcher<TReferenceElement : KtElement>(
 
             is LocalSearchScope -> {
                 scope
-                        .map { element ->
-                            "    " + runReadAction {
-                                when (element) {
-                                    is KtFunctionLiteral -> element.text
-                                    is KtWhenEntry -> {
-                                        if (element.isElse)
-                                            "KtWhenEntry \"else\""
-                                        else
-                                            "KtWhenEntry \"" + element.conditions.joinToString(", ") { it.text } + "\""
-                                    }
-                                    is KtNamedDeclaration -> element.node.elementType.toString() + ":" + element.name
-                                    else -> element.toString()
+                    .map { element ->
+                        "    " + runReadAction {
+                            when (element) {
+                                is KtFunctionLiteral -> element.text
+
+                                is KtWhenEntry -> {
+                                    if (element.isElse)
+                                        "KtWhenEntry \"else\""
+                                    else
+                                        "KtWhenEntry \"" + element.conditions.joinToString(", ") { it.text } + "\""
                                 }
+
+                                is KtNamedDeclaration -> element.node.elementType.toString() + ":" + element.name
+                                else -> element.toString()
                             }
                         }
-                        .toList()
-                        .sorted()
-                        .joinToString("\n", "LocalSearchScope:\n")
+                    }
+                    .toList()
+                    .sorted()
+                    .joinToString("\n", "LocalSearchScope:\n")
             }
 
             else -> this.displayName

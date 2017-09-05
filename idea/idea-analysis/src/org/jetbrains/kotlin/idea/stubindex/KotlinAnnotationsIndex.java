@@ -35,7 +35,8 @@ public class KotlinAnnotationsIndex extends StringStubIndexExtension<KtAnnotatio
         return ourInstance;
     }
 
-    private KotlinAnnotationsIndex() {}
+    private KotlinAnnotationsIndex() {
+    }
 
     @NotNull
     @Override

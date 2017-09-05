@@ -27,14 +27,15 @@ import org.jetbrains.kotlin.serialization.deserialization.*
 data class ClassIdWithTarget(val classId: ClassId, val target: AnnotationUseSiteTarget?)
 
 class ClsStubBuilderComponents(
-        val classDataFinder: ClassDataFinder,
-        val annotationLoader: AnnotationAndConstantLoader<ClassId, Unit, ClassIdWithTarget>,
-        val virtualFileForDebug: VirtualFile
+    val classDataFinder: ClassDataFinder,
+    val annotationLoader: AnnotationAndConstantLoader<ClassId, Unit, ClassIdWithTarget>,
+    val virtualFileForDebug: VirtualFile
 ) {
+
     fun createContext(
-            nameResolver: NameResolver,
-            packageFqName: FqName,
-            typeTable: TypeTable
+        nameResolver: NameResolver,
+        packageFqName: FqName,
+        typeTable: TypeTable
     ): ClsStubBuilderContext {
         return ClsStubBuilderContext(this, nameResolver, packageFqName, EmptyTypeParameters, typeTable, protoContainer = null)
     }
@@ -52,30 +53,31 @@ object EmptyTypeParameters : TypeParameters {
 }
 
 class TypeParametersImpl(
-        nameResolver: NameResolver,
-        typeParameterProtos: Collection<ProtoBuf.TypeParameter>,
-        private val parent: TypeParameters
+    nameResolver: NameResolver,
+    typeParameterProtos: Collection<ProtoBuf.TypeParameter>,
+    private val parent: TypeParameters
 ) : TypeParameters {
+
     private val typeParametersById = typeParameterProtos.map { Pair(it.id, nameResolver.getName(it.name)) }.toMap()
 
     override fun get(id: Int): Name = typeParametersById[id] ?: parent[id]
 }
 
 class ClsStubBuilderContext(
-        val components: ClsStubBuilderComponents,
-        val nameResolver: NameResolver,
-        val containerFqName: FqName,
-        val typeParameters: TypeParameters,
-        val typeTable: TypeTable,
-        val protoContainer: ProtoContainer.Class?
+    val components: ClsStubBuilderComponents,
+    val nameResolver: NameResolver,
+    val containerFqName: FqName,
+    val typeParameters: TypeParameters,
+    val typeTable: TypeTable,
+    val protoContainer: ProtoContainer.Class?
 )
 
 internal fun ClsStubBuilderContext.child(
-        typeParameterList: List<ProtoBuf.TypeParameter>,
-        name: Name? = null,
-        nameResolver: NameResolver = this.nameResolver,
-        typeTable: TypeTable = this.typeTable,
-        protoContainer: ProtoContainer.Class? = this.protoContainer
+    typeParameterList: List<ProtoBuf.TypeParameter>,
+    name: Name? = null,
+    nameResolver: NameResolver = this.nameResolver,
+    typeTable: TypeTable = this.typeTable,
+    protoContainer: ProtoContainer.Class? = this.protoContainer
 ): ClsStubBuilderContext {
     return ClsStubBuilderContext(
             this.components,

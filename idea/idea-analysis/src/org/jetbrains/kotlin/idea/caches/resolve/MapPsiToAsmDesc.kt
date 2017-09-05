@@ -44,10 +44,11 @@ object MapPsiToAsmDesc {
                 is PsiTypeParameter -> resolved.superTypes.firstOrNull()?.let { typeDesc(it) } ?: "Ljava/lang/Object;"
                 is PsiClass -> classDesc(resolved)
                 null -> unknownSignature()
-                else -> error("Resolved to unexpected $resolved of class ${resolved::class.java}" )
+                else -> error("Resolved to unexpected $resolved of class ${resolved::class.java}")
             }
 
         }
+
         else -> error("Unexpected type $type of class ${type::class.java}")
     }
 
@@ -79,6 +80,7 @@ object MapPsiToAsmDesc {
         LOG.error(message)
         return unknownSignature()
     }
+
     private fun primitive(asmType: Type) = asmType.descriptor
 
     private val LOG = Logger.getInstance(this::class.java)

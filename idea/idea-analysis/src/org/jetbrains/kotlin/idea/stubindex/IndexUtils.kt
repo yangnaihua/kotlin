@@ -45,9 +45,9 @@ fun indexTypeAliasExpansion(stub: KotlinTypeAliasStub, sink: IndexSink) {
 }
 
 private fun KtTypeElement.index(
-        declaration: KtTypeParameterListOwner,
-        containingTypeReference: KtTypeReference,
-        occurrence: (String) -> Unit
+    declaration: KtTypeParameterListOwner,
+    containingTypeReference: KtTypeReference,
+    occurrence: (String) -> Unit
 ) {
     when (this) {
         is KtUserType -> {

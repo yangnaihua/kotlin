@@ -26,8 +26,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypeAndBranch
 import org.jetbrains.kotlin.resolve.BindingContext
 
-internal class TypeKindHighlightingVisitor(holder: AnnotationHolder, bindingContext: BindingContext)
-        : AfterAnalysisHighlightingVisitor(holder, bindingContext) {
+internal class TypeKindHighlightingVisitor(holder: AnnotationHolder, bindingContext: BindingContext) : AfterAnalysisHighlightingVisitor(holder, bindingContext) {
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         val parent = expression.parent
@@ -40,7 +39,7 @@ internal class TypeKindHighlightingVisitor(holder: AnnotationHolder, bindingCont
             var referenceTarget = bindingContext.get(BindingContext.REFERENCE_TARGET, expression)
             if (referenceTarget is ConstructorDescriptor) {
                 val callElement = expression.getParentOfTypeAndBranch<KtCallExpression>(true) { calleeExpression }
-                    ?: expression.getParentOfTypeAndBranch<KtSuperTypeCallEntry>(true) { calleeExpression }
+                                  ?: expression.getParentOfTypeAndBranch<KtSuperTypeCallEntry>(true) { calleeExpression }
                 if (callElement == null) {
                     referenceTarget = referenceTarget.containingDeclaration
                 }

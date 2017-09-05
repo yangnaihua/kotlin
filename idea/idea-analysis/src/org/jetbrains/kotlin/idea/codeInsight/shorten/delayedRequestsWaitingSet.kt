@@ -40,8 +40,8 @@ interface DelayedRefactoringRequest
 
 class ShorteningRequest(val pointer: SmartPsiElementPointer<KtElement>, val options: Options) : DelayedRefactoringRequest
 class ImportRequest(
-        val elementToImportPointer: SmartPsiElementPointer<PsiElement>,
-        val filePointer: SmartPsiElementPointer<KtFile>
+    val elementToImportPointer: SmartPsiElementPointer<PsiElement>,
+    val filePointer: SmartPsiElementPointer<KtFile>
 ) : DelayedRefactoringRequest
 
 private var Project.delayedRefactoringRequests: MutableSet<DelayedRefactoringRequest>?
@@ -60,7 +60,8 @@ fun Project.runRefactoringAndKeepDelayedRequests(action: () -> Unit) {
     try {
         ensureNoRefactoringRequestsBeforeRefactoring = false
         action()
-    } finally {
+    }
+    finally {
         ensureNoRefactoringRequestsBeforeRefactoring = ensureNoRefactoringRequests
     }
 }
@@ -113,10 +114,10 @@ fun performDelayedRefactoringRequests(project: Project) {
             for (requestForFile in requestsForFile) {
                 val elementToImport = requestForFile.elementToImportPointer.element?.unwrapped ?: continue
                 val descriptorToImport = when (elementToImport) {
-                    is KtDeclaration -> elementToImport.resolveToDescriptor(BodyResolveMode.PARTIAL)
-                    is PsiMember -> elementToImport.getJavaMemberDescriptor()
-                    else -> null
-                } ?: continue
+                                             is KtDeclaration -> elementToImport.resolveToDescriptor(BodyResolveMode.PARTIAL)
+                                             is PsiMember -> elementToImport.getJavaMemberDescriptor()
+                                             else -> null
+                                         } ?: continue
                 importInsertHelper.importDescriptor(file, descriptorToImport)
             }
         }

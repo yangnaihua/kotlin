@@ -35,15 +35,14 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ExtensionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitClassReceiver
 import org.jetbrains.kotlin.types.expressions.CaptureKind
 
-internal class VariablesHighlightingVisitor(holder: AnnotationHolder, bindingContext: BindingContext)
-    : AfterAnalysisHighlightingVisitor(holder, bindingContext) {
+internal class VariablesHighlightingVisitor(holder: AnnotationHolder, bindingContext: BindingContext) : AfterAnalysisHighlightingVisitor(holder, bindingContext) {
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         val target = bindingContext.get(REFERENCE_TARGET, expression) ?: return
         if (target is ValueParameterDescriptor) {
             if (bindingContext.get(AUTO_CREATED_IT, target) == true) {
                 createInfoAnnotation(expression, "Automatically declared based on the expected type")
-                        .textAttributes = FUNCTION_LITERAL_DEFAULT_PARAMETER
+                    .textAttributes = FUNCTION_LITERAL_DEFAULT_PARAMETER
             }
         }
 
@@ -91,14 +90,14 @@ internal class VariablesHighlightingVisitor(holder: AnnotationHolder, bindingCon
                 }
                 createInfoAnnotation(expression,
                                      "$receiverName smart cast to " + DescriptorRenderer.FQ_NAMES_IN_TYPES.renderType(type))
-                        .textAttributes = SMART_CAST_RECEIVER
+                    .textAttributes = SMART_CAST_RECEIVER
             }
         }
 
         val nullSmartCast = bindingContext.get(SMARTCAST_NULL, expression) == true
         if (nullSmartCast) {
             createInfoAnnotation(expression, "Always null")
-                    .textAttributes = SMART_CONSTANT
+                .textAttributes = SMART_CONSTANT
         }
 
         val smartCast = bindingContext.get(SMARTCAST, expression)
@@ -107,13 +106,13 @@ internal class VariablesHighlightingVisitor(holder: AnnotationHolder, bindingCon
             if (defaultType != null) {
                 createInfoAnnotation(getSmartCastTarget(expression),
                                      "Smart cast to " + DescriptorRenderer.FQ_NAMES_IN_TYPES.renderType(defaultType))
-                        .textAttributes = SMART_CAST_VALUE
+                    .textAttributes = SMART_CAST_VALUE
             }
             else if (smartCast is MultipleSmartCasts) {
                 for ((call, type) in smartCast.map) {
                     createInfoAnnotation(getSmartCastTarget(expression),
                                          "Smart cast to ${DescriptorRenderer.FQ_NAMES_IN_TYPES.renderType(type)} (for $call call)")
-                            .textAttributes = SMART_CAST_VALUE
+                        .textAttributes = SMART_CAST_VALUE
                 }
             }
         }

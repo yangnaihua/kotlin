@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 
-class KDocReference(element: KDocName): KtMultiReference<KDocName>(element) {
+class KDocReference(element: KDocName) : KtMultiReference<KDocName>(element) {
     override fun getTargetDescriptors(context: BindingContext): Collection<DeclarationDescriptor> {
         val declaration = element.getContainingDoc().getOwner() ?: return arrayListOf()
         val declarationDescriptor = context[BindingContext.DECLARATION_TO_DESCRIPTOR, declaration] ?: return arrayListOf()

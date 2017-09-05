@@ -37,7 +37,8 @@ public class KotlinClassShortNameIndex extends StringStubIndexExtension<KtClassO
         return ourInstance;
     }
 
-    private KotlinClassShortNameIndex() {}
+    private KotlinClassShortNameIndex() {
+    }
 
     @NotNull
     @Override

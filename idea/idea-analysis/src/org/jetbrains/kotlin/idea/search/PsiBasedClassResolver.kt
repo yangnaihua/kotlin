@@ -43,6 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * with the given qualified name.
  */
 class PsiBasedClassResolver @TestOnly constructor(private val targetClassFqName: String) {
+
     private val targetShortName = targetClassFqName.substringAfterLast('.')
     private val targetPackage = targetClassFqName.substringBeforeLast('.', "")
     /**
@@ -58,12 +59,15 @@ class PsiBasedClassResolver @TestOnly constructor(private val targetClassFqName:
     private var forceAmbiguityForNonAnnotations: Boolean = false
 
     companion object {
-        @TestOnly val attempts = AtomicInteger()
-        @TestOnly val trueHits = AtomicInteger()
-        @TestOnly val falseHits = AtomicInteger()
+        @TestOnly
+        val attempts = AtomicInteger()
+        @TestOnly
+        val trueHits = AtomicInteger()
+        @TestOnly
+        val falseHits = AtomicInteger()
     }
 
-    constructor(target: PsiClass): this(target.qualifiedName ?: "") {
+    constructor(target: PsiClass) : this(target.qualifiedName ?: "") {
         if (target.qualifiedName == null || target.containingClass != null || targetPackage.isEmpty()) {
             forceAmbiguity = true
             return
@@ -114,7 +118,8 @@ class PsiBasedClassResolver @TestOnly constructor(private val targetClassFqName:
         }
     }
 
-    @TestOnly fun addConflict(fqName: String) {
+    @TestOnly
+    fun addConflict(fqName: String) {
         conflictingPackages.add(fqName.substringBeforeLast('.'))
     }
 

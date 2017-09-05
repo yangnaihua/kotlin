@@ -49,9 +49,10 @@ fun DeserializerForClassfileDecompiler(classFile: VirtualFile): DeserializerForC
 }
 
 class DeserializerForClassfileDecompiler(
-        packageDirectory: VirtualFile,
-        directoryPackageFqName: FqName
+    packageDirectory: VirtualFile,
+    directoryPackageFqName: FqName
 ) : DeserializerForDecompilerBase(directoryPackageFqName) {
+
     override val targetPlatform: TargetPlatform get() = JvmPlatform
     override val builtIns: KotlinBuiltIns get() = DefaultBuiltIns.Instance
 
@@ -99,9 +100,10 @@ class DeserializerForClassfileDecompiler(
 }
 
 class DirectoryBasedClassFinder(
-        val packageDirectory: VirtualFile,
-        val directoryPackageFqName: FqName
+    val packageDirectory: VirtualFile,
+    val directoryPackageFqName: FqName
 ) : KotlinClassFinder {
+
     override fun findKotlinClass(javaClass: JavaClass) = findKotlinClass(javaClass.classId)
 
     override fun findKotlinClass(classId: ClassId): KotlinJvmBinaryClass? {
@@ -127,9 +129,10 @@ class DirectoryBasedClassFinder(
 }
 
 class DirectoryBasedDataFinder(
-        val classFinder: DirectoryBasedClassFinder,
-        val log: Logger
+    val classFinder: DirectoryBasedClassFinder,
+    val log: Logger
 ) : ClassDataFinder {
+
     override fun findClassData(classId: ClassId): ClassDataWithSource? {
         val binaryClass = classFinder.findKotlinClass(classId) ?: return null
         val classHeader = binaryClass.classHeader

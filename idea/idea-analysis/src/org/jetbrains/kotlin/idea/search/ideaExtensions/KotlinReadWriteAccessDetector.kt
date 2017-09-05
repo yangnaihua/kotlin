@@ -45,10 +45,10 @@ class KotlinReadWriteAccessDetector : ReadWriteAccessDetector() {
         if (refTarget is KtLightMethod) {
             val origin = refTarget.kotlinOrigin
             val declaration: KtNamedDeclaration = when (origin) {
-                is KtPropertyAccessor -> origin.getNonStrictParentOfType<KtProperty>()
-                is KtProperty, is KtParameter -> origin as KtNamedDeclaration
-                else -> null
-            } ?: return ReadWriteAccessDetector.Access.ReadWrite
+                                                      is KtPropertyAccessor -> origin.getNonStrictParentOfType<KtProperty>()
+                                                      is KtProperty, is KtParameter -> origin as KtNamedDeclaration
+                                                      else -> null
+                                                  } ?: return ReadWriteAccessDetector.Access.ReadWrite
 
             return when (refTarget.name) {
                 JvmAbi.getterName(declaration.name!!) -> return ReadWriteAccessDetector.Access.Read

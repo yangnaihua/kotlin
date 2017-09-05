@@ -107,8 +107,7 @@ class TypeClsStubBuilder(private val c: ClsStubBuilderContext) {
 
         val outerTypeChain = generateSequence(type) { it.outerType(c.typeTable) }.toList()
 
-        createStubForTypeName(classId, nullableTypeParent(parent, type)) {
-            userTypeStub, index ->
+        createStubForTypeName(classId, nullableTypeParent(parent, type)) { userTypeStub, index ->
             outerTypeChain.getOrNull(index)?.let { createTypeArgumentListStub(userTypeStub, it.argumentList) }
         }
     }
@@ -201,10 +200,10 @@ class TypeClsStubBuilder(private val c: ClsStubBuilderContext) {
     }
 
     fun createValueParameterListStub(
-            parent: StubElement<out PsiElement>,
-            callableProto: MessageLite,
-            parameters: List<ProtoBuf.ValueParameter>,
-            container: ProtoContainer
+        parent: StubElement<out PsiElement>,
+        callableProto: MessageLite,
+        parameters: List<ProtoBuf.ValueParameter>,
+        container: ProtoContainer
     ) {
         val parameterListStub = KotlinPlaceHolderStubImpl<KtParameterList>(parent, KtStubElementTypes.VALUE_PARAMETER_LIST)
         for ((index, valueParameterProto) in parameters.withIndex()) {
@@ -221,9 +220,15 @@ class TypeClsStubBuilder(private val c: ClsStubBuilderContext) {
             val typeProto = varargElementType ?: valueParameterProto.type(c.typeTable)
             val modifiers = arrayListOf<KtModifierKeywordToken>()
 
-            if (varargElementType != null) { modifiers.add(KtTokens.VARARG_KEYWORD) }
-            if (Flags.IS_CROSSINLINE.get(valueParameterProto.flags)) { modifiers.add(KtTokens.CROSSINLINE_KEYWORD) }
-            if (Flags.IS_NOINLINE.get(valueParameterProto.flags)) { modifiers.add(KtTokens.NOINLINE_KEYWORD) }
+            if (varargElementType != null) {
+                modifiers.add(KtTokens.VARARG_KEYWORD)
+            }
+            if (Flags.IS_CROSSINLINE.get(valueParameterProto.flags)) {
+                modifiers.add(KtTokens.CROSSINLINE_KEYWORD)
+            }
+            if (Flags.IS_NOINLINE.get(valueParameterProto.flags)) {
+                modifiers.add(KtTokens.NOINLINE_KEYWORD)
+            }
 
             val modifierList = createModifierListStub(parameterStub, modifiers)
             val parameterAnnotations = c.components.annotationLoader.loadValueParameterAnnotations(
@@ -238,8 +243,8 @@ class TypeClsStubBuilder(private val c: ClsStubBuilderContext) {
     }
 
     fun createTypeParameterListStub(
-            parent: StubElement<out PsiElement>,
-            typeParameterProtoList: List<ProtoBuf.TypeParameter>
+        parent: StubElement<out PsiElement>,
+        typeParameterProtoList: List<ProtoBuf.TypeParameter>
     ): List<Pair<Name, Type>> {
         if (typeParameterProtoList.isEmpty()) return listOf()
 
@@ -267,8 +272,8 @@ class TypeClsStubBuilder(private val c: ClsStubBuilderContext) {
     }
 
     fun createTypeConstraintListStub(
-            parent: StubElement<out PsiElement>,
-            protosForTypeConstraintList: List<Pair<Name, Type>>
+        parent: StubElement<out PsiElement>,
+        protosForTypeConstraintList: List<Pair<Name, Type>>
     ) {
         if (protosForTypeConstraintList.isEmpty()) {
             return
@@ -282,15 +287,19 @@ class TypeClsStubBuilder(private val c: ClsStubBuilderContext) {
     }
 
     private fun createTypeParameterModifierListStub(
-            typeParameterStub: KotlinTypeParameterStubImpl,
-            typeParameterProto: ProtoBuf.TypeParameter
+        typeParameterStub: KotlinTypeParameterStubImpl,
+        typeParameterProto: ProtoBuf.TypeParameter
     ) {
         val modifiers = ArrayList<KtModifierKeywordToken>()
         when (typeParameterProto.variance) {
             Variance.IN -> modifiers.add(KtTokens.IN_KEYWORD)
             Variance.OUT -> modifiers.add(KtTokens.OUT_KEYWORD)
-            Variance.INV -> { /* do nothing */ }
-            null ->  { /* do nothing */ }
+
+            Variance.INV -> { /* do nothing */
+            }
+
+            null -> { /* do nothing */
+            }
         }
         if (typeParameterProto.reified) {
             modifiers.add(KtTokens.REIFIED_KEYWORD)

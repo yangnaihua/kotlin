@@ -39,14 +39,15 @@ import org.jetbrains.kotlin.utils.addIfNotNull
 import java.io.IOException
 
 abstract class KotlinMetadataDecompiler<out V : BinaryVersion>(
-        private val fileType: FileType,
-        private val targetPlatform: TargetPlatform,
-        private val serializerProtocol: SerializerExtensionProtocol,
-        private val flexibleTypeDeserializer: FlexibleTypeDeserializer,
-        private val expectedBinaryVersion: V,
-        private val invalidBinaryVersion: V,
-        stubVersion: Int
+    private val fileType: FileType,
+    private val targetPlatform: TargetPlatform,
+    private val serializerProtocol: SerializerExtensionProtocol,
+    private val flexibleTypeDeserializer: FlexibleTypeDeserializer,
+    private val expectedBinaryVersion: V,
+    private val invalidBinaryVersion: V,
+    stubVersion: Int
 ) : ClassFileDecompilers.Full() {
+
     private val stubBuilder = KotlinMetadataStubBuilder(stubVersion, fileType, serializerProtocol, this::readFile)
 
     private val renderer = DescriptorRenderer.withOptions { defaultDecompilerRendererOptions() }
@@ -94,9 +95,11 @@ abstract class KotlinMetadataDecompiler<out V : BinaryVersion>(
             null -> {
                 createIncompatibleAbiVersionDecompiledText(expectedBinaryVersion, invalidBinaryVersion)
             }
+
             is FileWithMetadata.Incompatible -> {
                 createIncompatibleAbiVersionDecompiledText(expectedBinaryVersion, file.version)
             }
+
             is FileWithMetadata.Compatible -> {
                 val packageFqName = file.packageFqName
                 val resolver = KotlinMetadataDeserializerForDecompiler(
@@ -119,9 +122,10 @@ sealed class FileWithMetadata {
     class Incompatible(val version: BinaryVersion) : FileWithMetadata()
 
     open class Compatible(
-            val proto: ProtoBuf.PackageFragment,
-            serializerProtocol: SerializerExtensionProtocol
+        val proto: ProtoBuf.PackageFragment,
+        serializerProtocol: SerializerExtensionProtocol
     ) : FileWithMetadata() {
+
         val nameResolver = NameResolverImpl(proto.strings, proto.qualifiedNames)
         val packageFqName = nameResolver.getPackageFqName(proto.`package`.getExtension(serializerProtocol.packageFqName))
 

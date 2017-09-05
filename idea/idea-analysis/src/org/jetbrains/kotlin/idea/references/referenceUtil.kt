@@ -85,9 +85,11 @@ fun PsiReference.matchesTarget(candidateTarget: PsiElement): Boolean {
                 return false
             }
         }
+
         is KtDestructuringDeclarationReference -> {
             if (candidateTarget !is KtNamedFunction && candidateTarget !is KtParameter && candidateTarget !is PsiMethod) return false
         }
+
         is KtSimpleNameReference -> {
             if (unwrappedCandidate is PsiMethod && !canBePsiMethodReference()) return false
         }
@@ -178,10 +180,10 @@ fun KtSimpleNameReference.canBePsiMethodReference(): Boolean {
 }
 
 private fun PsiElement.isConstructorOf(unwrappedCandidate: PsiElement) =
-    // call to Java constructor
+        // call to Java constructor
         (this is PsiMethod && isConstructor && containingClass == unwrappedCandidate) ||
         // call to Kotlin constructor
-    (this is KtConstructor<*> && getContainingClassOrObject() == unwrappedCandidate)
+        (this is KtConstructor<*> && getContainingClassOrObject() == unwrappedCandidate)
 
 fun AbstractKtReference<out KtExpression>.renameImplicitConventionalCall(newName: String?): KtExpression {
     if (newName == null) return expression

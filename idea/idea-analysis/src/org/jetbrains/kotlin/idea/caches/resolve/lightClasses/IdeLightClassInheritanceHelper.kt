@@ -28,9 +28,9 @@ import org.jetbrains.kotlin.psi.*
 
 class IdeLightClassInheritanceHelper : LightClassInheritanceHelper {
     override fun isInheritor(
-            lightClass: KtLightClassForSourceDeclaration,
-            baseClass: PsiClass,
-            checkDeep: Boolean
+        lightClass: KtLightClassForSourceDeclaration,
+        baseClass: PsiClass,
+        checkDeep: Boolean
     ): ImpreciseResolveResult {
         val classOrObject = lightClass.kotlinOrigin
         val entries = classOrObject.superTypeListEntries

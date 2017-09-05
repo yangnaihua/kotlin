@@ -115,7 +115,8 @@ public class HtmlTabledDescriptorRenderer extends TabledDescriptorRenderer {
             }
             if (row instanceof FunctionArgumentsRow) {
                 FunctionArgumentsRow functionArgumentsRow = (FunctionArgumentsRow) row;
-                renderFunctionArguments(functionArgumentsRow.receiverType, functionArgumentsRow.argumentTypes, functionArgumentsRow.isErrorPosition, result, context);
+                renderFunctionArguments(functionArgumentsRow.receiverType, functionArgumentsRow.argumentTypes,
+                                        functionArgumentsRow.isErrorPosition, result, context);
             }
             result.append("</tr>");
         }
@@ -158,7 +159,8 @@ public class HtmlTabledDescriptorRenderer extends TabledDescriptorRenderer {
             }
             String renderedArgument = argumentType == null ? "unknown" : getTypeRenderer().render(argumentType, context);
 
-            tdRight(result, RenderersUtilKt.renderStrong(renderedArgument, error) + (iterator.hasNext() ? RenderersUtilKt.renderStrong(",") : ""));
+            tdRight(result,
+                    RenderersUtilKt.renderStrong(renderedArgument, error) + (iterator.hasNext() ? RenderersUtilKt.renderStrong(",") : ""));
             i++;
         }
         td(result, RenderersUtilKt.renderStrong(")"));
@@ -172,44 +174,45 @@ public class HtmlTabledDescriptorRenderer extends TabledDescriptorRenderer {
         super();
     }
 
-    private static final DescriptorRenderer.ValueParametersHandler VALUE_PARAMETERS_HANDLER = new DescriptorRenderer.ValueParametersHandler() {
-        @Override
-        public void appendBeforeValueParameter(
-                @NotNull ValueParameterDescriptor parameter, int parameterIndex, int parameterCount, @NotNull StringBuilder builder
-        ) {
-            builder.append("<td align=\"right\" style=\"white-space:nowrap;font-weight:bold;\">");
-        }
+    private static final DescriptorRenderer.ValueParametersHandler VALUE_PARAMETERS_HANDLER =
+            new DescriptorRenderer.ValueParametersHandler() {
+                @Override
+                public void appendBeforeValueParameter(
+                        @NotNull ValueParameterDescriptor parameter, int parameterIndex, int parameterCount, @NotNull StringBuilder builder
+                ) {
+                    builder.append("<td align=\"right\" style=\"white-space:nowrap;font-weight:bold;\">");
+                }
 
-        @Override
-        public void appendAfterValueParameter(
-                @NotNull ValueParameterDescriptor parameter, int parameterIndex, int parameterCount, @NotNull StringBuilder builder
-        ) {
-            boolean last = parameterIndex == parameterCount - 1;
-            if (!last) {
-                builder.append(",");
-            }
-            builder.append("</td>");
-        }
+                @Override
+                public void appendAfterValueParameter(
+                        @NotNull ValueParameterDescriptor parameter, int parameterIndex, int parameterCount, @NotNull StringBuilder builder
+                ) {
+                    boolean last = parameterIndex == parameterCount - 1;
+                    if (!last) {
+                        builder.append(",");
+                    }
+                    builder.append("</td>");
+                }
 
-        @Override
-        public void appendBeforeValueParameters(int parameterCount, @NotNull StringBuilder builder) {
-            builder.append("</td>");
-            if (parameterCount == 0) {
-                tdBold(builder, "( )");
-            }
-            else {
-                tdBold(builder, "(");
-            }
-        }
+                @Override
+                public void appendBeforeValueParameters(int parameterCount, @NotNull StringBuilder builder) {
+                    builder.append("</td>");
+                    if (parameterCount == 0) {
+                        tdBold(builder, "( )");
+                    }
+                    else {
+                        tdBold(builder, "(");
+                    }
+                }
 
-        @Override
-        public void appendAfterValueParameters(int parameterCount, @NotNull StringBuilder builder) {
-            if (parameterCount != 0) {
-                tdBold(builder, ")");
-            }
-            builder.append("<td style=\"white-space:nowrap;font-weight:bold;\">");
-        }
-    };
+                @Override
+                public void appendAfterValueParameters(int parameterCount, @NotNull StringBuilder builder) {
+                    if (parameterCount != 0) {
+                        tdBold(builder, ")");
+                    }
+                    builder.append("<td style=\"white-space:nowrap;font-weight:bold;\">");
+                }
+            };
 
     private static final DiagnosticParameterRenderer<DeclarationDescriptor>
             DESCRIPTOR_IN_TABLE = new SmartDescriptorRenderer(DescriptorRenderer.Companion.withOptions(
@@ -245,10 +248,17 @@ public class HtmlTabledDescriptorRenderer extends TabledDescriptorRenderer {
     }
 
     private static void tdRightBoldColspan(StringBuilder builder, int colspan, String text) {
-        builder.append("<td align=\"right\" colspan=\"").append(colspan).append("\" style=\"white-space:nowrap;font-weight:bold;\">").append(text).append("</td>");
+        builder.append("<td align=\"right\" colspan=\"").append(colspan).append("\" style=\"white-space:nowrap;font-weight:bold;\">")
+                .append(text).append("</td>");
     }
 
-    public static String tableForTypes(String message, String firstDescription, TextElementType firstType, String secondDescription, TextElementType secondType) {
+    public static String tableForTypes(
+            String message,
+            String firstDescription,
+            TextElementType firstType,
+            String secondDescription,
+            TextElementType secondType
+    ) {
         StringBuilder result = new StringBuilder();
         result.append("<html>").append(message);
         result.append("<table><tr><td>").append(firstDescription).append("</td><td>");

@@ -36,7 +36,8 @@ class KotlinTopLevelTypeAliasFqNameIndex : StringStubIndexExtension<KtTypeAlias>
         val KEY = KotlinIndexUtil.createIndexKey(KotlinTopLevelTypeAliasFqNameIndex::class.java)
         val INSTANCE = KotlinTopLevelTypeAliasFqNameIndex()
 
-        @JvmStatic fun getInstance() = INSTANCE
+        @JvmStatic
+        fun getInstance() = INSTANCE
     }
 }
 
