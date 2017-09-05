@@ -269,8 +269,7 @@ tasks {
         dependsOn("dist")
         dependsOn(
                 ":kotlin-test:kotlin-test-js:check",
-                // TODO: uncommenting this breaks build in unexpected places, find the reason and restore
-//                ":kotlin-stdlib-js:check",
+                ":kotlin-stdlib-js:check",
                 ":js:js.tests:check")
     }
     "js-check" { dependsOn("js-tests") }
