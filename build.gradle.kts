@@ -246,7 +246,7 @@ tasks {
     }
 
     "core-libs-tests" {
-        dependsOn(":kotlin-test:kotlin-test-common:check",
+        dependsOn(":kotlin-test:kotlin-test-common:test",
                   ":kotlin-test:kotlin-test-jvm:check",
                   ":kotlin-test:kotlin-test-junit:check",
                   ":kotlin-stdlib:check",

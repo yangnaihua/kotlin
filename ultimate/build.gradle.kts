@@ -26,14 +26,17 @@ dependencies {
     val testRuntime by configurations
     compile(projectDist(":kotlin-reflect"))
     compile(projectDist(":kotlin-stdlib"))
-    compile(project(":compiler:light-classes"))
-    compile(project(":compiler:frontend"))
-    compile(project(":compiler:frontend.java"))
+    compile(project(":core")) { isTransitive = false }
+    compile(project(":core:util.runtime")) { isTransitive = false }
+    compile(project(":compiler:light-classes")) { isTransitive = false }
+    compile(project(":compiler:frontend")) { isTransitive = false }
+    compile(project(":compiler:frontend.java")) { isTransitive = false }
     compile(project(":idea")) { isTransitive = false }
     compile(project(":idea:idea-core")) { isTransitive = false }
     compile(project(":idea:ide-common")) { isTransitive = false }
     compile(project(":idea:idea-gradle")) { isTransitive = false }
 
+    compile(ideaUltimateSdkCoreDeps("annotations", "trove4j", "intellij-core"))
     compile(ideaUltimateSdkDeps("openapi", "idea", "util"))
 //    compile(ideaUltimatePluginDeps("gradle-tooling-api", plugin = "gradle"))
     compile(ideaUltimatePluginDeps("*.jar", plugin = "CSS"))
@@ -56,16 +59,25 @@ dependencies {
     testCompile(project(":idea:idea-jvm")) { isTransitive = false }
     testCompile(project(":generators")) { isTransitive = false }
     testCompile(projectTests(":idea"))
-    testCompile(projectTests(":idea:idea-gradle"))
+//    testCompileOnly(projectTests(":idea:idea-gradle"))
     testCompile(commonDep("junit:junit"))
     testCompile(ideaUltimateSdkDeps("gson"))
     testCompile(preloadedDeps("kotlinx-coroutines-core"))
 
+    testRuntime(projectDist(":kotlin-compiler"))
     testRuntime(project(":plugins:android-extensions-idea")) { isTransitive = false }
+    testRuntime(project(":android-extensions-compiler")) { isTransitive = false }
+    testRuntime(project(":plugins:annotation-based-compiler-plugins-ide-support")) { isTransitive = false }
     testRuntime(project(":idea:idea-android")) { isTransitive = false }
+    testRuntime(project(":idea:idea-maven")) { isTransitive = false }
+    testRuntime(project(":idea:idea-jps-common")) { isTransitive = false }
+    testRuntime(project(":idea:formatter")) { isTransitive = false }
     testRuntime(project(":sam-with-receiver-ide-plugin")) { isTransitive = false }
+    testRuntime(project(":kotlin-sam-with-receiver-compiler-plugin")) { isTransitive = false }
     testRuntime(project(":noarg-ide-plugin")) { isTransitive = false }
+    testRuntime(project(":kotlin-noarg-compiler-plugin")) { isTransitive = false }
     testRuntime(project(":allopen-ide-plugin")) { isTransitive = false }
+    testRuntime(project(":kotlin-allopen-compiler-plugin")) { isTransitive = false }
     testRuntime(ideaUltimateSdkDeps("*.jar"))
     testRuntime(ideaUltimatePluginDeps("*.jar", plugin = "properties"))
     testRuntime(ideaUltimatePluginDeps("*.jar", plugin = "coverage"))
@@ -76,20 +88,20 @@ dependencies {
     testRuntime(ideaUltimatePluginDeps("*.jar", plugin = "testng"))
     testRuntime(ideaUltimatePluginDeps("*.jar", plugin = "copyright"))
     testRuntime(ideaUltimatePluginDeps("*.jar", plugin = "java-decompiler"))
+    testRuntime(files("${System.getProperty("java.home")}/../lib/tools.jar"))
 
     ideaCommunityPlugin(projectRuntimeJar(":prepare:kotlin-plugin"))
 }
 
+val ultimateMetaInf = File(buildDir, "gen", "META-INF")
+
 sourceSets {
     "main" { projectDefault() }
-    "test" { projectDefault() }
+    "test" {
+        projectDefault()
+        resources.srcDir(ultimateMetaInf.parentFile).apply { include("META-INF/**") }
+    }
 }
-
-projectTest {
-    workingDir = rootDir
-}
-
-val ultimateMetaInf = File(buildDir, "gen", "META-INF")
 
 val ultimatePluginXmlContent: String by lazy {
     val sectRex = Regex("""^\s*</?idea-plugin>\s*$""")
@@ -128,4 +140,9 @@ task<Copy>("idea-ultimate-plugin") {
     into(ideaUltimatePluginDir)
     from(ideaPluginDir) { exclude("lib/kotlin-plugin.jar") }
     from(jar, { into("lib") })
+}
+
+projectTest {
+    dependsOn(preparePluginXml)
+    workingDir = rootDir
 }
