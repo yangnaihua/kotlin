@@ -8,7 +8,7 @@ import java.io.File
 class CasesPublicAPITest {
 
     companion object {
-        val visibilities by lazy { readKotlinVisibilities(File("build/cases-declarations.json")) }
+        val visibilities by lazy { readKotlinVisibilities(File(System.getenv("PROJECT_BUILD_DIR") ?: "build", "cases-declarations.json")) }
         val baseClassPaths: List<File> =
                 (System.getenv("PROJECT_CLASSES_DIRS")?.let { it.split(File.pathSeparator) }
                 ?: listOf("build/classes/kotlin/test/cases", "build/classes/java/test/cases"))
