@@ -284,16 +284,16 @@ tasks {
 
     "idea-plugin-main-tests" {
         dependsOn("dist")
-        dependsOn(":idea:check")
+        dependsOn(":idea:test")
     }
     "idea-plugin-main-check" { dependsOn("idea-plugin-main-tests") }
 
     "idea-plugin-additional-tests" {
         dependsOn("dist")
-        dependsOn(":idea:idea-gradle:check",
-                  ":idea:idea-maven:check",
-                  ":j2k:check",
-                  ":eval4j:check")
+        dependsOn(":idea:idea-gradle:test",
+                  ":idea:idea-maven:test",
+                  ":j2k:test",
+                  ":eval4j:test")
     }
     "idea-plugin-additional-check" { dependsOn("idea-plugin-additional-tests") }
 
@@ -306,35 +306,35 @@ tasks {
 
     "android-tests" {
         dependsOn("dist")
-        dependsOn(":plugins:android-extensions-idea:check",
-                  ":idea:idea-android:check",
-                  ":kotlin-annotation-processing:check",
-                  ":compiler:android-tests:check")
+        dependsOn(":plugins:android-extensions-idea:test",
+                  ":idea:idea-android:test",
+                  ":kotlin-annotation-processing:test",
+                  ":compiler:android-tests:test")
     }
     "android-check" { dependsOn("android-tests") }
 
     "plugins-tests" {
         dependsOn("dist")
-        dependsOn(":plugins:plugins-tests:check",
-                  ":kotlin-annotation-processing:check",
-                  ":kotlin-source-sections-compiler-plugin:check",
-                  ":plugins:uast-kotlin:check",
-                  ":kotlin-annotation-processing-gradle:check")
+        dependsOn(":plugins:plugins-tests:test",
+                  ":kotlin-annotation-processing:test",
+                  ":kotlin-source-sections-compiler-plugin:test",
+                  ":plugins:uast-kotlin:test",
+                  ":kotlin-annotation-processing-gradle:test")
     }
     "plugins-check" { dependsOn("plugins-tests") }
 
     "scripting-tests" {
         dependsOn("dist")
-        dependsOn(":kotlin-script-util:check",
-                  ":examples:kotlin-jsr223-local-example:check",
-                  ":examples:kotlin-jsr223-daemon-local-eval-example:check")
+        dependsOn(":kotlin-script-util:test",
+                  ":examples:kotlin-jsr223-local-example:test",
+                  ":examples:kotlin-jsr223-daemon-local-eval-example:test")
     }
     "scripting-check" { dependsOn("scripting-tests") }
 
     "other-tests" {
         dependsOn("dist")
-        dependsOn(":kotlin-build-common:check",
-                  ":generators:check")
+        dependsOn(":kotlin-build-common:test",
+                  ":generators:test")
     }
     "other-check" { dependsOn("other-tests") }
 
