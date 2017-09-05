@@ -7,7 +7,7 @@ configurePublishing(project)
 
 dependencies {
     compileOnly project(':kotlin-stdlib-common')
-    testCompileOnly project(':kotlin-stdlib-common')
+    testCompile project(':kotlin-stdlib-common')
 }
 
 jar {
