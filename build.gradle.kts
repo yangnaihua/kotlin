@@ -247,13 +247,13 @@ tasks {
 
     "core-libs-tests" {
         dependsOn(":kotlin-test:kotlin-test-common:test",
-                  ":kotlin-test:kotlin-test-jvm:check",
-                  ":kotlin-test:kotlin-test-junit:check",
-                  ":kotlin-stdlib:check",
-                  ":kotlin-stdlib-jre7:check",
-                  ":kotlin-stdlib-jre8:check",
-                  ":tools:binary-compatibility-validator:check",
-                  ":kotlin-reflect:check")
+                  ":kotlin-test:kotlin-test-jvm:test",
+                  ":kotlin-test:kotlin-test-junit:test",
+                  ":kotlin-stdlib:test",
+                  ":kotlin-stdlib-jre7:test",
+                  ":kotlin-stdlib-jre8:test",
+                  ":tools:binary-compatibility-validator:test",
+                  ":kotlin-reflect:test")
     }
     "core-libs-check" { dependsOn("core-libs-tests") }
 
@@ -261,24 +261,24 @@ tasks {
         afterEvaluate {
             dependsOn("dist")
         }
-        dependsOn(":compiler:check",
-                  ":compiler:container:check",
-                  ":compiler:tests-java8:check")
+        dependsOn(":compiler:test",
+                  ":compiler:container:test",
+                  ":compiler:tests-java8:test")
     }
     "compiler-check" { dependsOn("compiler-tests") }
 
     "js-tests" {
         dependsOn("dist")
         dependsOn(
-                ":kotlin-test:kotlin-test-js:check",
-                ":kotlin-stdlib-js:check",
-                ":js:js.tests:check")
+                ":kotlin-test:kotlin-test-js:test",
+                ":kotlin-stdlib-js:test",
+                ":js:js.tests:test")
     }
     "js-check" { dependsOn("js-tests") }
 
     "jps-tests" {
         dependsOn("dist")
-        dependsOn(":jps-plugin:check")
+        dependsOn(":jps-plugin:test")
     }
     "check" { dependsOn("test") }
 
