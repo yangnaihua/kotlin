@@ -41,6 +41,14 @@ public inline fun <T : Closeable?, R> T.use(block: (T) -> R): R {
         }
         throw e
     } finally {
+        when {
+            apiVersionIsAtLeast(1, 1, 0) ->
+                this.closeFinally(null)
+
+            else ->
+                this?.close()
+        }
+
         if (!closed) {
             this?.close()
         }

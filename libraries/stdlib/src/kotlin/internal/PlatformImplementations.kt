@@ -51,3 +51,9 @@ private fun getJavaVersion(): Int {
     }
 }
 
+/**
+ * The function usages are validated to have literal argument values
+ */
+@PublishedApi
+internal fun apiVersionIsAtLeast(major: Int, minor: Int, patch: Int) =
+        KotlinVersion.CURRENT.isAtLeast(major, minor, patch)
