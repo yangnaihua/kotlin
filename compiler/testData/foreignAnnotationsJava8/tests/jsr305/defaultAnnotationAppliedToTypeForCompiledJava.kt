@@ -1,6 +1,5 @@
 // !DIAGNOSTICS: -UNUSED_VARIABLE -UNUSED_PARAMETER
 // SKIP_JAVAC
-// SKIP_COMPILED_JAVA
 
 // FILE: spr/NonNullApi.java
 
@@ -53,8 +52,6 @@ public class A {
     public String foo(String x) { return ""; }
     public @NullableApi String bar(@NullableApi String y) { return ""; }
     public @NullableApi List<String> baz1() { return null; }
-    public List<@NullableApi String> baz2() { return null; }
-    public @NullableApi List<@NonNullApi String> baz3() { return null; }
 }
 
 // FILE: main.kt
@@ -69,12 +66,4 @@ fun main(a: A) {
     a.baz1()<!UNSAFE_CALL!>.<!>get(0)<!UNSAFE_CALL!>.<!>length
     a.baz1()!!.get(0)<!UNSAFE_CALL!>.<!>length
     a.baz1()!!.get(0)?.length
-
-    a.baz2().get(0)<!UNSAFE_CALL!>.<!>length
-    a.baz2()<!UNNECESSARY_NOT_NULL_ASSERTION!>!!<!>.get(0)<!UNSAFE_CALL!>.<!>length
-    a.baz2()<!UNNECESSARY_NOT_NULL_ASSERTION!>!!<!>.get(0)?.length
-
-    a.baz3()<!UNSAFE_CALL!>.<!>get(0).length
-    a.baz3()!!.get(0).length
-    a.baz3()!!.get(0)<!UNNECESSARY_SAFE_CALL!>?.<!>length
 }
