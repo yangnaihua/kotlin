@@ -18,10 +18,17 @@ package org.jetbrains.kotlin.psi
 
 import com.intellij.lang.html.HTMLLanguage
 import com.intellij.openapi.fileTypes.PlainTextLanguage
+import com.intellij.util.io.ZipUtil
+import com.sun.management.HotSpotDiagnosticMXBean
 import org.intellij.lang.regexp.RegExpLanguage
 import org.intellij.plugins.intelliLang.Configuration
 import org.intellij.plugins.intelliLang.inject.config.BaseInjection
 import org.intellij.plugins.intelliLang.inject.config.InjectionPlace
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.lang.management.ManagementFactory
+import java.util.zip.ZipOutputStream
 
 class KotlinInjectionTest : AbstractInjectionTest() {
     fun testInjectionOnJavaPredefinedMethodWithAnnotation() = doInjectionPresentTest(
@@ -326,7 +333,21 @@ class KotlinInjectionTest : AbstractInjectionTest() {
             languageId = HTMLLanguage.INSTANCE.id, unInjectShouldBePresent = false
     )
 
-    fun testInjectionOnInterpolationWithAnnotation() = doInjectionPresentTest(
+    fun testInjectionOnInterpolationWithAnnotation() {
+        val timeMillis = System.currentTimeMillis()
+        val dumpName = "testInjectionOnInterpolationWithAnnotation-$timeMillis.hprof"
+        val dumpFileName = "out/$dumpName"
+        ManagementFactory.newPlatformMXBeanProxy(
+                ManagementFactory.getPlatformMBeanServer(),
+                "com.sun.management:type=HotSpotDiagnostic",
+                HotSpotDiagnosticMXBean::class.java)
+                .dumpHeap(dumpFileName, false)
+        val dumpFile = File(dumpFileName)
+        ZipOutputStream(BufferedOutputStream(FileOutputStream("out/testInjectionOnInterpolationWithAnnotation-$timeMillis-zipped.hprof"))).use {
+            ZipUtil.addFileToZip(it, dumpFile, dumpName, null, null)
+        }
+        dumpFile.delete()
+        doInjectionPresentTest(
             """
             val b = 2
 
@@ -339,7 +360,7 @@ class KotlinInjectionTest : AbstractInjectionTest() {
                     ShredInfo(range(6, 21), hostRange=range(11, 14), prefix="missingValue")
             )
     )
-
+}
     fun testInjectionOnInterpolatedStringWithComment() = doInjectionPresentTest(
             """
             val some = 42
