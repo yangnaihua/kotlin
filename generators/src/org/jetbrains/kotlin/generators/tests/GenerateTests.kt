@@ -533,6 +533,10 @@ fun main(args: Array<String>) {
             model("loadJava8/sourceJava", extension = "java", testMethod = "doTestSourceJava")
         }
 
+        testClass<AbstractLoadJava8WithFastClassReadingTest> {
+            model("loadJava8/compiledJava", extension = "java", testMethod = "doTestCompiledJava")
+        }
+
         testClass<AbstractEnhancedSignaturesResolvedCallsTest> {
             model("resolvedCalls/enhancedSignatures")
         }
