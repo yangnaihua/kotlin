@@ -20,6 +20,7 @@
     <property name="compiler.ant.fork.jvmargs" value="-Xmx1024m"/>
 
     <property name="plugin.zip" value="${artifact.output.path}/kotlin-plugin-${build.number}.zip"/>
+    <property name="pluginArtifactDir" value="Kotlin" />
 
     <macrodef name="echoprop">
         <attribute name="prop"/>
@@ -122,7 +123,7 @@
             </sequential>
         </macrodef>
 
-        <zipPlugin filename="${plugin.zip}" dir="Kotlin"/>
+        <zipPlugin filename="${plugin.zip}" dir="${pluginArtifactDir}"/>
     </target>
 
     <macrodef name="print-statistic">
