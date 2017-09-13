@@ -4,12 +4,13 @@ import com.intellij.psi.*
 import com.intellij.psi.impl.light.LightTypeElement
 import org.jetbrains.kotlin.asJava.elements.LightVariableBuilder
 import org.jetbrains.kotlin.builtins.createFunctionType
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
-import org.jetbrains.kotlin.utils.ifEmpty
+import org.jetbrains.kotlin.types.isError
 import org.jetbrains.uast.UDeclaration
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UastErrorType
@@ -37,6 +38,8 @@ class UastKotlinPsiVariable(
         ktInitializer?.let { KotlinUastPsiExpression(it, containingElement) }
     }
 
+    override fun getText(): String = ktElement.text
+
     override fun getParent() = psiParent
 
     override fun hasInitializer() = ktInitializer != null
@@ -61,54 +64,58 @@ class UastKotlinPsiVariable(
         fun create(
                 declaration: KtVariableDeclaration, 
                 parent: PsiElement?, 
-                containingElement: UElement, 
+                containingElement: UElement,
                 initializer: KtExpression? = null
         ): PsiLocalVariable {
             val psiParent = containingElement.getParentOfType<UDeclaration>()?.psi ?: parent
+            val initializerExpression = initializer ?: declaration.initializer
+            val psiType = declaration.getType(containingElement) ?: UastErrorType
+
             return UastKotlinPsiVariable(
-                    declaration.manager,
-                    declaration.name.orAnonymous("unnamed"),
-                    declaration.typeReference.toPsiType(containingElement),
-                    initializer ?: declaration.initializer,
-                    psiParent,
-                    containingElement,
-                    declaration)
+                    manager = declaration.manager,
+                    name = declaration.name.orAnonymous("<unnamed>"),
+                    type = psiType,
+                    ktInitializer = initializerExpression,
+                    psiParent = psiParent,
+                    containingElement = containingElement,
+                    ktElement = declaration)
         }
         
         fun create(declaration: KtDestructuringDeclaration, containingElement: UElement): PsiLocalVariable {
             val psiParent = containingElement.getParentOfType<UDeclaration>()?.psi ?: declaration.parent
+            val psiType = declaration.getType(containingElement) ?: UastErrorType
             return UastKotlinPsiVariable(
-                    declaration.manager,
-                    "var" + Integer.toHexString(declaration.getHashCode()),
-                    declaration.initializer?.getType(containingElement) ?: UastErrorType,
-                    declaration.initializer,
-                    psiParent,
-                    containingElement,
-                    declaration)
+                    manager = declaration.manager,
+                    name = "var" + Integer.toHexString(declaration.getHashCode()),
+                    type = psiType,
+                    ktInitializer = declaration.initializer,
+                    psiParent = psiParent,
+                    containingElement = containingElement,
+                    ktElement = declaration)
         }
 
         fun create(initializer: KtExpression, containingElement: UElement, parent: PsiElement): PsiLocalVariable {
             val psiParent = containingElement.getParentOfType<UDeclaration>()?.psi ?: parent
             return UastKotlinPsiVariable(
-                    initializer.manager,
-                    "var" + Integer.toHexString(initializer.getHashCode()),
-                    initializer.getType(containingElement) ?: UastErrorType,
-                    initializer,
-                    psiParent,
-                    containingElement,
-                    initializer)
+                    manager = initializer.manager,
+                    name = "var" + Integer.toHexString(initializer.getHashCode()),
+                    type = initializer.getType(containingElement) ?: UastErrorType,
+                    ktInitializer = initializer,
+                    psiParent = psiParent,
+                    containingElement = containingElement,
+                    ktElement = initializer)
         }
 
         fun create(name: String, localFunction: KtFunction, containingElement: UElement): PsiLocalVariable {
             val psiParent = containingElement.getParentOfType<UDeclaration>()?.psi ?: localFunction.parent
             return UastKotlinPsiVariable(
-                    localFunction.manager,
-                    name,
-                    localFunction.getFunctionType(containingElement) ?: UastErrorType,
-                    localFunction,
-                    psiParent,
-                    containingElement,
-                    localFunction)
+                    manager = localFunction.manager,
+                    name = name,
+                    type = localFunction.getFunctionType(containingElement) ?: UastErrorType,
+                    ktInitializer = localFunction,
+                    psiParent = psiParent,
+                    containingElement = containingElement,
+                    ktElement = localFunction)
         }
     }
 }
@@ -122,17 +129,24 @@ private fun KtFunction.getFunctionType(parent: UElement): PsiType? {
     val returnType = descriptor.returnType ?: return null
 
     return createFunctionType(
-            descriptor.builtIns,
-            descriptor.annotations,
-            descriptor.extensionReceiverParameter?.type,
-            descriptor.valueParameters.map { it.type },
-            descriptor.valueParameters.map { it.name },
-            returnType
+            builtIns = descriptor.builtIns,
+            annotations = descriptor.annotations,
+            receiverType = descriptor.extensionReceiverParameter?.type,
+            parameterTypes = descriptor.valueParameters.map { it.type },
+            parameterNames = descriptor.valueParameters.map { it.name },
+            returnType = returnType
     ).toPsiType(parent, this, boxed = false)
 }
 
 private fun KtExpression.getType(parent: UElement): PsiType? =
         analyze()[BindingContext.EXPRESSION_TYPE_INFO, this]?.type?.toPsiType(parent, this, boxed = false)
+
+private fun KtDeclaration.getType(parent: UElement): PsiType? {
+    return (analyze()[BindingContext.DECLARATION_TO_DESCRIPTOR, this] as? CallableDescriptor)
+                   ?.returnType
+                   ?.takeIf { !it.isError }
+                   ?.toPsiType(parent, this, false)
+}
 
 private fun PsiElement.getHashCode(): Int {
     var result = 42
