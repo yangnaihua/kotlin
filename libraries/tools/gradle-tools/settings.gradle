@@ -5,7 +5,7 @@ include ':kotlin-gradle-plugin-api',
         ':kotlin-noarg',
         ':kotlin-sam-with-receiver',
         ':kotlin-gradle-subplugin-example',
-        ':kotlin-serialization',
+        ':kotlinx-gradle-serialization-plugin',
 
         // plugin markers:
         ':kotlin-gradle-plugin:plugin-marker',
@@ -19,7 +19,7 @@ project(':kotlin-allopen').projectDir = file("../kotlin-allopen")
 project(':kotlin-noarg').projectDir = file("../kotlin-noarg")
 project(':kotlin-sam-with-receiver').projectDir = file("../kotlin-sam-with-receiver")
 project(':kotlin-gradle-subplugin-example').projectDir = file("../../examples/kotlin-gradle-subplugin-example")
-project(':kotlin-serialization').projectDir = file("../kotlin-serialization")
+project(':kotlinx-gradle-serialization-plugin').projectDir = file("../kotlin-serialization")
 
 // plugin markers:
 project(':kotlin-gradle-plugin:plugin-marker').projectDir = file("../kotlin-gradle-plugin/plugin-marker")
