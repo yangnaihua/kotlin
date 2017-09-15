@@ -16,17 +16,25 @@
 
 package kotlin.internal.contracts
 
-import kotlin.internal.ContractsDSL
+import kotlin.internal.ContractsDsl
 import kotlin.internal.InlineOnly
 
-@ContractsDSL
+@ContractsDsl
 internal interface ContractBuilder {
-    @ContractsDSL fun returns(): Returns
-    @ContractsDSL fun returns(value: Any?): Returns
-    @ContractsDSL fun returnsNotNull(): ReturnsNotNull
-    @ContractsDSL fun <R> callsInPlace(lambda: Function<R>, kind: InvocationKind = InvocationKind.UNKNOWN): CallsInPlace
+    @ContractsDsl fun returns(): Returns
+    @ContractsDsl fun returns(value: Any?): Returns
+    @ContractsDsl fun returnsNotNull(): ReturnsNotNull
+    @ContractsDsl fun <R> callsInPlace(lambda: Function<R>, kind: InvocationKind = InvocationKind.UNKNOWN): CallsInPlace
 }
 
-@ContractsDSL
+@ContractsDsl
+internal enum class InvocationKind {
+    @ContractsDsl AT_MOST_ONCE,
+    @ContractsDsl AT_LEAST_ONCE,
+    @ContractsDsl EXACTLY_ONCE,
+    @ContractsDsl UNKNOWN
+}
+
+@ContractsDsl
 @InlineOnly
 internal inline fun contract(builder: ContractBuilder.() -> Unit) { }

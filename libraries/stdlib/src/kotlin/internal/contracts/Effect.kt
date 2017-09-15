@@ -16,26 +16,26 @@
 
 package kotlin.internal.contracts
 
-import kotlin.internal.ContractsDSL
+import kotlin.internal.ContractsDsl
 
-@ContractsDSL
+@ContractsDsl
 internal interface Effect
 
-@ContractsDSL
+@ContractsDsl
 internal interface ConditionalEffect : Effect
 
-@ContractsDSL
+@ContractsDsl
 internal interface SimpleEffect {
-    @ContractsDSL
+    @ContractsDsl
     infix fun implies(booleanExpression: Boolean): ConditionalEffect
 }
 
 
-@ContractsDSL
+@ContractsDsl
 internal interface Returns : SimpleEffect
 
-@ContractsDSL
+@ContractsDsl
 internal interface ReturnsNotNull : SimpleEffect
 
-@ContractsDSL
+@ContractsDsl
 internal interface CallsInPlace : SimpleEffect

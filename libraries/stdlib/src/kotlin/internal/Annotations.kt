@@ -70,4 +70,4 @@ internal annotation class DynamicExtension
  * Specifies that this declaration is a part of special DSL, used for constructing function's contract.
  */
 @Retention(AnnotationRetention.BINARY)
-internal annotation class ContractsDSL
+internal annotation class ContractsDsl
