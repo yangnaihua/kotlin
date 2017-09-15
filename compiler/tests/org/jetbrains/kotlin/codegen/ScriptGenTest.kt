@@ -101,7 +101,7 @@ class ScriptGenTest : CodegenTestCase() {
     }
 
     private fun setUpEnvironment(sourcePaths: List<String>) {
-        val configuration = KotlinTestUtils.newConfiguration(ConfigurationKind.JDK_ONLY, TestJdkKind.FULL_JDK).apply {
+        val configuration = KotlinTestUtils.newConfiguration(ConfigurationKind.ALL, TestJdkKind.FULL_JDK).apply {
             put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
             add(JVMConfigurationKeys.SCRIPT_DEFINITIONS, FIB_SCRIPT_DEFINITION)
             add(JVMConfigurationKeys.SCRIPT_DEFINITIONS, NO_PARAM_SCRIPT_DEFINITION)
