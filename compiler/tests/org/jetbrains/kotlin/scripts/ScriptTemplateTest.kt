@@ -37,6 +37,7 @@ import org.jetbrains.kotlin.test.TestJdkKind
 import org.jetbrains.kotlin.util.KotlinFrontEndException
 import org.jetbrains.kotlin.utils.PathUtil
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import java.io.File
 import java.io.OutputStream
@@ -314,6 +315,7 @@ class ScriptTemplateTest {
     }
 
     @Test
+    @Ignore
     fun testThrowing() {
         val messageCollector = TestMessageCollector()
         compileScript("fib.kts", ScriptWithThrowingResolver::class, null, messageCollector = messageCollector)
@@ -322,6 +324,7 @@ class ScriptTemplateTest {
     }
 
     @Test
+    @Ignore
     fun testSmokeScriptException() {
         val messageCollector = TestMessageCollector()
         val aClass = compileScript("smoke_exception.kts", ScriptWithArrayParam::class, messageCollector = messageCollector)
@@ -337,19 +340,20 @@ class ScriptTemplateTest {
         Assert.assertTrue(exceptionThrown)
     }
 
-//    @Test
-//    fun testScriptWithNoMatchingTemplate() {
-//        try {
-//            compileScript("fib.kts", ScriptWithDifferentFileNamePattern::class, null)
-//            Assert.fail("should throw compilation error")
-//        }
-//        catch (e: KotlinFrontEndException) {
-//            if (e.message?.contains("Should not parse a script without definition") != true) {
-//                // unexpected error
-//                throw e
-//            }
-//        }
-//    }
+    @Test
+    @Ignore
+    fun testScriptWithNoMatchingTemplate() {
+        try {
+            compileScript("fib.kts", ScriptWithDifferentFileNamePattern::class, null)
+            Assert.fail("should throw compilation error")
+        }
+        catch (e: KotlinFrontEndException) {
+            if (e.message?.contains("Should not parse a script without definition") != true) {
+                // unexpected error
+                throw e
+            }
+        }
+    }
 
     private fun compileScript(
             scriptPath: String,
