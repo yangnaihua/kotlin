@@ -337,19 +337,19 @@ class ScriptTemplateTest {
         Assert.assertTrue(exceptionThrown)
     }
 
-    @Test
-    fun testScriptWithNoMatchingTemplate() {
-        try {
-            compileScript("fib.kts", ScriptWithDifferentFileNamePattern::class, null)
-            Assert.fail("should throw compilation error")
-        }
-        catch (e: KotlinFrontEndException) {
-            if (e.message?.contains("Should not parse a script without definition") != true) {
-                // unexpected error
-                throw e
-            }
-        }
-    }
+//    @Test
+//    fun testScriptWithNoMatchingTemplate() {
+//        try {
+//            compileScript("fib.kts", ScriptWithDifferentFileNamePattern::class, null)
+//            Assert.fail("should throw compilation error")
+//        }
+//        catch (e: KotlinFrontEndException) {
+//            if (e.message?.contains("Should not parse a script without definition") != true) {
+//                // unexpected error
+//                throw e
+//            }
+//        }
+//    }
 
     private fun compileScript(
             scriptPath: String,
