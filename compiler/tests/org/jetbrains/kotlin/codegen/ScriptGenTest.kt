@@ -16,11 +16,13 @@
 
 package org.jetbrains.kotlin.codegen
 
+import java.io.File
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.script.KotlinScriptDefinitionFromAnnotatedTemplate
@@ -38,6 +40,12 @@ class ScriptGenTest : CodegenTestCase() {
 
     override fun setUp() {
         super.setUp()
+        additionalDependencies =
+                System.getenv("PROJECT_CLASSES_DIRS")?.split(File.pathSeparator)?.map { File(it) }
+                ?: listOf("compiler/build/classes/kotlin/test", "build/compiler/classes/kotlin/test")
+                        .mapNotNull { File(it).canonicalFile.takeIf { it.isDirectory } }
+                        .takeIf { it.isNotEmpty() }
+                ?: throw IllegalStateException("Unable to get classes output dirs, set PROJECT_CLASSES_DIRS environment variable")
     }
 
     fun testLanguage() {
@@ -108,6 +116,7 @@ class ScriptGenTest : CodegenTestCase() {
             put(JVMConfigurationKeys.RETAIN_OUTPUT_IN_MEMORY, true)
 
             addKotlinSourceRoots(sourcePaths.map { "${KotlinTestUtils.getTestDataPathBase()}/codegen/$it" })
+            addJvmClasspathRoots(additionalDependencies)
         }
 
         myEnvironment = KotlinCoreEnvironment.createForTests(testRootDisposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
