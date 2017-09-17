@@ -29,8 +29,8 @@ dependencies {
     compile(project(":compiler:frontend")) { isTransitive = false }
     compile(project(":compiler:frontend.java")) { isTransitive = false }
     compile(project(":js:js.frontend")) { isTransitive = false }
-    compile(project(":idea"))
-    compile(project(":idea:idea-jvm"))
+    compile(projectClasses(":idea"))
+    compile(project(":idea:idea-jvm")) { isTransitive = false }
     compile(project(":idea:idea-core")) { isTransitive = false }
     compile(project(":idea:ide-common")) { isTransitive = false }
     compile(project(":idea:idea-gradle")) { isTransitive = false }
@@ -113,6 +113,14 @@ val ultimatePluginXmlContent: String by lazy {
             .joinToString("\n")
 }
 
+val prepareResources by task<Copy> {
+    dependsOn(":idea:assemble")
+    from(ideaProjectResources, {
+        exclude("META-INF/plugin.xml")
+    })
+    into(preparedResources)
+}
+
 val preparePluginXml by task<Copy> {
     dependsOn(":idea:assemble")
     from(ideaProjectResources, { include("META-INF/plugin.xml") })
@@ -155,6 +163,7 @@ task("ideaUltimatePluginTest") {
 }
 
 projectTest {
+    dependsOn(prepareResources)
     dependsOn(preparePluginXml)
     workingDir = rootDir
 }
