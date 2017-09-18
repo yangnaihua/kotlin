@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.test.JUnit3RunnerWithInners;
 import org.jetbrains.kotlin.test.KotlinTestUtils;
 import org.jetbrains.kotlin.test.TargetBackend;
 import org.jetbrains.kotlin.test.TestMetadata;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 import java.io.File;
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
 @TestMetadata("compiler/testData/modules.xml")
 @TestDataPath("$PROJECT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
+@Ignore
 public class ModuleXmlParserTestGenerated extends AbstractModuleXmlParserTest {
     public void testAllFilesPresentInModules_xml() throws Exception {
         KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/modules.xml"), Pattern.compile("^(.+)\\.xml$"), TargetBackend.ANY, true);
