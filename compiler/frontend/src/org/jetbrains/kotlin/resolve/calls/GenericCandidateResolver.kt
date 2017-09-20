@@ -156,7 +156,7 @@ class GenericCandidateResolver(
             context: CallCandidateResolutionContext<*>,
             builder: ConstraintSystem.Builder
     ) {
-        if (!languageVersionSettings.supportsFeature(LanguageFeature.ExpectedTypeFromCast)) return
+//        if (!languageVersionSettings.supportsFeature(LanguageFeature.ExpectedTypeFromCast)) return
 
         if (context.candidateCall is VariableAsFunctionResolvedCall) return
 
