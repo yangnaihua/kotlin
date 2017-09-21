@@ -41,4 +41,10 @@ public class IncrementalJava9JpsTestGenerated extends AbstractIncrementalJava9Jp
     public void testAllFilesPresentInJava9() throws Exception {
         KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("jps-plugin/testData/incremental/java9"), Pattern.compile("^([^\\.]+)$"), TargetBackend.ANY, false);
     }
+
+    @TestMetadata("updateFileInUnexportedPackage")
+    public void testUpdateFileInUnexportedPackage() throws Exception {
+        String fileName = KotlinTestUtils.navigationMetadata("jps-plugin/testData/incremental/java9/updateFileInUnexportedPackage/");
+        doTest(fileName);
+    }
 }
