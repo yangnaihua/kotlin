@@ -40,6 +40,7 @@ import org.jetbrains.kotlin.resolve.scopes.TraceBasedLocalRedeclarationChecker;
 import org.jetbrains.kotlin.types.ErrorUtils;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.kotlin.types.expressions.typeInfoFactory.TypeInfoFactoryKt;
+import org.jetbrains.kotlin.util.slicedMap.WritableSlice;
 
 import java.util.Iterator;
 import java.util.List;
@@ -264,12 +265,12 @@ public class ExpressionTypingServices {
         boolean isFirstStatement = true;
         for (Iterator<? extends KtElement> iterator = block.iterator(); iterator.hasNext(); ) {
             // Use filtering trace to keep effect system cache only for one statement
-            TemporaryBindingTrace traceForSingleStatement = TemporaryBindingTrace.create(
-                    context.trace,
-                    "trace for single statement",
-                    BindingTraceFilter.Companion.getACCEPT_ALL(),
-                    true
-            );
+            AbstractFilteringTrace traceForSingleStatement = new AbstractFilteringTrace(context.trace, "trace for single statement") {
+                @Override
+                protected <K, V> boolean shouldBeHiddenFromParent(@NotNull WritableSlice<K, V> slice, K key) {
+                    return slice == BindingContext.EXPRESSION_EFFECTS;
+                }
+            };
 
             newContext = newContext.replaceBindingTrace(traceForSingleStatement);
 
@@ -308,12 +309,6 @@ public class ExpressionTypingServices {
                 // We take current data flow info if jump there is not possible
             }
             blockLevelVisitor = new ExpressionTypingVisitorDispatcher.ForBlock(expressionTypingComponents, annotationChecker, scope);
-
-            // Don't commit cache of effect system into parent trace
-            traceForSingleStatement.commit(
-                    (slice, key) -> slice != BindingContext.EXPRESSION_EFFECTS,
-                    true
-            );
 
             expressionTypingComponents.contractParsingServices.checkContractAndRecordIfPresent(statementExpression, context.trace, scope, isFirstStatement);
 
