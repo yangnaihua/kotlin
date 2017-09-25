@@ -40,7 +40,7 @@ fun test() {
 
     foo(<!UNDERSCORE_USAGE_WITHOUT_BACKTICKS!>_<!>, z)
 
-    val (_, <!REDECLARATION, NAME_SHADOWING!>`_`<!>) = A()
+    val (_, <!NAME_SHADOWING, REDECLARATION!>`_`<!>) = A()
 
     foo(<!UNDERSCORE_USAGE_WITHOUT_BACKTICKS, TYPE_MISMATCH!>_<!>, y)
 
