@@ -51,6 +51,7 @@ public final class InitializerVisitor extends TranslatorVisitor<Void> {
         KtExpression delegate = property.getDelegateExpression();
         if (initializer != null) {
             assert value != null;
+            value = TranslationUtils.coerce(context, value, TranslationUtils.getReturnTypeForCoercion(descriptor));
             statement = generateInitializerForProperty(context, descriptor, value);
         }
         else if (delegate != null) {
