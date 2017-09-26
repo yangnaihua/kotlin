@@ -14,8 +14,9 @@ dependencies {
 
     compile(ideaSdkDeps("openapi", "idea"))
     compile(ideaPluginDeps("gradle-tooling-api", plugin = "gradle"))
-    compile(ideaPluginDeps("android", "android-common", "sdklib", "sdk-common", "layoutlib-api", /*"common",*/ plugin = "android"))
+    compile(ideaPluginDeps("android", "android-common", "sdklib", "sdk-common", "layoutlib-api", "sdk-tools", "adt-ui", /*"common",*/ plugin = "android"))
     compile(preloadedDeps("dx", subdir = "android-5.0/lib"))
+    compile(ideaSdkDeps("android-base-common"))
 
     testCompile(projectDist(":kotlin-test:kotlin-test-jvm"))
     testCompile(project(":compiler.tests-common"))
@@ -27,6 +28,7 @@ dependencies {
     testCompile(ideaPluginDeps("properties", plugin = "properties"))
     testCompile(ideaSdkDeps("gson"))
     testCompile(commonDep("junit:junit"))
+    testCompile(ideaPluginDeps("build-common", plugin = "android"))
 
     testRuntime(project(":plugins:android-extensions-ide"))
     testRuntime(project(":sam-with-receiver-ide-plugin"))
