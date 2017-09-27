@@ -21,7 +21,8 @@ dependencies {
 projectTest()
 
 projectTest("test9") {
-    val jdkPath = project.property("JDK_9") ?: error("JDK_9 is not optional to run this test")
+    val jdkPath = project.property("JDK_9")
+    onlyIf { jdkPath != null }
     executable = "$jdkPath/bin/java"
     doFirst {
         systemProperty("kotlin.script.classpath", scriptCP.asFileTree.asPath)
