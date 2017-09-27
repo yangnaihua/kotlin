@@ -8084,6 +8084,12 @@ public class BoxJsTestGenerated extends AbstractBoxJsTest {
             doTest(fileName);
         }
 
+        @TestMetadata("interfacesInMetadata.kt")
+        public void testInterfacesInMetadata() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("js/js.translator/testData/box/trait/interfacesInMetadata.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("traitAddsFunctionsToClass.kt")
         public void testTraitAddsFunctionsToClass() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("js/js.translator/testData/box/trait/traitAddsFunctionsToClass.kt");
