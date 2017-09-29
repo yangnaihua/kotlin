@@ -42,13 +42,14 @@ import kotlin.reflect.KClass
 // thus making the original purpose useless.
 // The class will probably not be deleted in the close future,
 // but do not use them in your new code.
-@Suppress("DEPRECATION")
-@Deprecated("Please do not use for new inspections. Use AbstractKotlinInspection as base class for them")
 abstract class IntentionBasedInspection<TElement : PsiElement>(
         private val intentionInfos: List<IntentionBasedInspection.IntentionData<TElement>>,
         protected open val problemText: String?
 ) : AbstractKotlinInspection() {
 
+    @Deprecated("Not recommended for new inspections without additional checkers (see other constructors). " +
+                "Use AbstractKotlinInspection as base class for them " +
+                "(with ProblemHighlightType.INFORMATION if you do not want highlighting)")
     constructor(
             intention: KClass<out SelfTargetingRangeIntention<TElement>>,
             problemText: String? = null
@@ -112,7 +113,7 @@ abstract class IntentionBasedInspection<TElement : PsiElement>(
                     if (range != null && additionalChecker(targetElement, this@IntentionBasedInspection)) {
                         problemRange = problemRange?.union(range) ?: range
                         if (fixes == null) {
-                            fixes = SmartList<LocalQuickFix>()
+                            fixes = SmartList()
                         }
                         fixes.add(createQuickFix(intention, additionalChecker, targetElement))
                     }
@@ -120,7 +121,7 @@ abstract class IntentionBasedInspection<TElement : PsiElement>(
 
                 val range = inspectionTarget(targetElement)?.toRange(element) ?: problemRange
                 if (range != null) {
-                    val allFixes = fixes ?: SmartList<LocalQuickFix>()
+                    val allFixes = fixes ?: SmartList()
                     additionalFixes(targetElement)?.let { allFixes.addAll(it) }
                     if (!allFixes.isEmpty()) {
                         holder.registerProblem(targetElement, problemText ?: allFixes.first().name,
@@ -138,12 +139,10 @@ abstract class IntentionBasedInspection<TElement : PsiElement>(
             intention: SelfTargetingRangeIntention<TElement>,
             additionalChecker: (TElement, IntentionBasedInspection<TElement>) -> Boolean,
             targetElement: TElement
-    ): IntentionBasedQuickFix {
-        return when (intention) {
-            is LowPriorityAction -> LowPriorityIntentionBasedQuickFix(intention, additionalChecker, targetElement)
-            is HighPriorityAction -> HighPriorityIntentionBasedQuickFix(intention, additionalChecker, targetElement)
-            else -> IntentionBasedQuickFix(intention, additionalChecker, targetElement)
-        }
+    ): IntentionBasedQuickFix = when (intention) {
+        is LowPriorityAction -> LowPriorityIntentionBasedQuickFix(intention, additionalChecker, targetElement)
+        is HighPriorityAction -> HighPriorityIntentionBasedQuickFix(intention, additionalChecker, targetElement)
+        else -> IntentionBasedQuickFix(intention, additionalChecker, targetElement)
     }
 
     /* we implement IntentionAction to provide isAvailable which will be used to hide outdated items and make sure we never call 'invoke' for such item */
