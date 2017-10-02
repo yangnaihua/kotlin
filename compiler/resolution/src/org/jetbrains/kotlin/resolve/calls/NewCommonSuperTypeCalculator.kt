@@ -19,7 +19,10 @@ package org.jetbrains.kotlin.resolve.calls
 import org.jetbrains.kotlin.descriptors.TypeParameterDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.types.*
-import org.jetbrains.kotlin.types.checker.*
+import org.jetbrains.kotlin.types.checker.NewKotlinTypeChecker
+import org.jetbrains.kotlin.types.checker.NullabilityChecker
+import org.jetbrains.kotlin.types.checker.TypeCheckerContext
+import org.jetbrains.kotlin.types.checker.intersectTypes
 import org.jetbrains.kotlin.types.typeUtil.asTypeProjection
 
 object NewCommonSuperTypeCalculator {
@@ -110,9 +113,8 @@ object NewCommonSuperTypeCalculator {
         }
     }
 
-    private fun collectAllSupertypes(type: SimpleType) = LinkedHashSet<TypeConstructor>().apply {
-        type.anySuperTypeConstructor { add(it); false }
-    }
+    private fun collectAllSupertypes(type: SimpleType) =
+            TypeUtils.getAllSupertypes(type).mapTo(linkedSetOf(), KotlinType::constructor)
 
     private fun superTypeWithGivenConstructor(
             types: List<SimpleType>,
