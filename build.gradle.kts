@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 buildscript {
     val repos = listOfNotNull(
-            System.getProperty("bootstrap.kotlin.repo"),
+            property("bootstrap.kotlin.repo") as String,
             "https://repo.gradle.org/gradle/repo",
             "https://plugins.gradle.org/m2",
             "http://repository.jetbrains.com/utils/")

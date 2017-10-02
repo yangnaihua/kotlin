@@ -12,10 +12,10 @@ import org.gradle.plugin.use.PluginDependencySpec
 import java.io.File
 import java.util.*
 
-val bootstrapKotlinVersion: String = System.getProperty("bootstrap.kotlin.version") ?: embeddedKotlinVersion
+val Project.bootstrapKotlinVersion: String get() = this.property("bootstrap.kotlin.version") as String
 
-fun PluginDependenciesSpec.kotlin(module: String, version: String? = null): PluginDependencySpec =
-        id("org.jetbrains.kotlin.$module") version (version ?: bootstrapKotlinVersion)
+//fun PluginDependenciesSpec.kotlin(module: String, version: String? = null): PluginDependencySpec =
+//        id("org.jetbrains.kotlin.$module") version (version ?: bootstrapKotlinVersion)
 
 fun Project.commonDep(coord: String): String {
     val parts = coord.split(':')
