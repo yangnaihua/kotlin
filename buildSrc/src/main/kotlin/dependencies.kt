@@ -63,7 +63,7 @@ fun Project.ideaPluginDeps(vararg artifactBaseNames: String, plugin: String, sub
 fun Project.ideaUltimatePluginDeps(vararg artifactBaseNames: String, plugin: String, subdir: String = "lib"): ConfigurableFileCollection =
         ideaUltimateSdkDeps(*artifactBaseNames, subdir = "plugins/$plugin/$subdir")
 
-fun Project.kotlinDep(artifactBaseName: String, version: String? = null): String = "org.jetbrains.kotlin:kotlin-$artifactBaseName:${version ?: bootstrapKotlinVersion}"
+fun Project.kotlinDep(artifactBaseName: String, version: String): String = "org.jetbrains.kotlin:kotlin-$artifactBaseName:$version"
 
 fun DependencyHandler.projectDist(name: String): Dependency = project(name, configuration = "distJar").apply { isTransitive = false }
 fun DependencyHandler.projectTests(name: String): Dependency = project(name, configuration = "tests-jar").apply { isTransitive = false }
