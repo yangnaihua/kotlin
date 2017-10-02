@@ -59,7 +59,7 @@ open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean, val allowe
         supertypesLocked = false
     }
 
-    internal fun anySupertype(
+    internal inline fun anySupertype(
             start: SimpleType,
             predicate: (SimpleType) -> Boolean,
             supertypesPolicy: (SimpleType) -> SupertypesPolicy
