@@ -21,18 +21,19 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.intellij.openapi.util.Key;
 import com.intellij.util.keyFMap.KeyFMap;
-import gnu.trove.THashMap;
 import kotlin.jvm.functions.Function3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SlicedMapImpl implements MutableSlicedMap {
 
     private final boolean alwaysAllowRewrite;
-    private final Map<Object, KeyFMap> map = new THashMap<>(0);
+    private final Map<Object, KeyFMap> map = new HashMap<>(0);
+
     private Multimap<WritableSlice<?, ?>, Object> collectiveSliceKeys = null;
 
     public SlicedMapImpl(boolean alwaysAllowRewrite) {
