@@ -17,7 +17,6 @@
 package org.jetbrains.kotlin.types.checker
 
 import org.jetbrains.kotlin.types.*
-import org.jetbrains.kotlin.utils.SmartSet
 import java.util.*
 
 open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean, val allowedTypeVariable: Boolean = true) {
@@ -25,7 +24,6 @@ open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean, val allowe
 
     private var supertypesLocked = false
     private var supertypesDeque: ArrayDeque<SimpleType>? = null
-    private var supertypesSet: MutableSet<SimpleType>? = null
 
     open fun addSubtypeConstraint(subType: UnwrappedType, superType: UnwrappedType): Boolean? = null
 
@@ -54,14 +52,10 @@ open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean, val allowe
         if (supertypesDeque == null) {
             supertypesDeque = ArrayDeque()
         }
-        if (supertypesSet == null) {
-            supertypesSet = SmartSet.create()
-        }
     }
 
     private fun clear() {
         supertypesDeque!!.clear()
-        supertypesSet!!.clear()
         supertypesLocked = false
     }
 
@@ -73,18 +67,10 @@ open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean, val allowe
         initialize()
 
         val deque = supertypesDeque!!
-        val visitedSupertypes = supertypesSet!!
 
         deque.push(start)
         while (deque.isNotEmpty()) {
-            if (visitedSupertypes.size > 1000) {
-                error("Too many supertypes for type: $start. Supertypes = ${visitedSupertypes.joinToString()}")
-            }
             val current = deque.pop()
-
-            if (!visitedSupertypes.add(current)) {
-                continue
-            }
 
             if (predicate(current)) {
                 clear()
