@@ -38,6 +38,7 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
+import org.jetbrains.kotlin.serialization.ContractSerializer
 import org.jetbrains.kotlin.serialization.DescriptorSerializer
 import org.jetbrains.kotlin.serialization.KotlinSerializerExtensionBase
 import org.jetbrains.kotlin.serialization.ProtoBuf
@@ -157,7 +158,7 @@ open class MetadataSerializer(private val dependOnOldBuiltIns: Boolean) {
         }
 
         private fun serializeClass(classDescriptor: ClassDescriptor) {
-            val classProto = DescriptorSerializer.createTopLevel(extension).classProto(classDescriptor).build()
+            val classProto = DescriptorSerializer.createTopLevel(extension, ContractSerializer.DEFAULT).classProto(classDescriptor).build()
             proto.addClass_(classProto)
 
             serializeClasses(classDescriptor.unsubstitutedInnerClassesScope.getContributedDescriptors(DescriptorKindFilter.CLASSIFIERS))
@@ -172,7 +173,7 @@ open class MetadataSerializer(private val dependOnOldBuiltIns: Boolean) {
         }
 
         private fun serializeMembers(members: Collection<DeclarationDescriptor>) {
-            proto.`package` = DescriptorSerializer.createTopLevel(extension).packagePartProto(packageFqName, members).build()
+            proto.`package` = DescriptorSerializer.createTopLevel(extension, ContractSerializer.DEFAULT).packagePartProto(packageFqName, members).build()
         }
 
         private fun serializeStringTable() {

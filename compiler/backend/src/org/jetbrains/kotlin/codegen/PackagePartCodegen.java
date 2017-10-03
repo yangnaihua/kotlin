@@ -129,7 +129,7 @@ public class PackagePartCodegen extends MemberCodegen<KtFile> {
         });
 
         JvmSerializerExtension extension = new JvmSerializerExtension(codegen.v.getSerializationBindings(), codegen.state);
-        DescriptorSerializer serializer = DescriptorSerializer.createTopLevel(extension);
+        DescriptorSerializer serializer = DescriptorSerializer.createTopLevel(extension, new ContractSerializerImpl());
         ProtoBuf.Package.Builder builder = serializer.packagePartProto(codegen.element.getPackageFqName(), members);
         extension.serializeJvmPackage(builder, packagePartType);
 

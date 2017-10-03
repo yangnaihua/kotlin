@@ -853,7 +853,7 @@ public abstract class MemberCodegen<T extends KtPureElement/* TODO: & KtDeclarat
 
     protected void generateKotlinClassMetadataAnnotation(@NotNull ClassDescriptor descriptor, boolean isScript) {
         DescriptorSerializer serializer =
-                DescriptorSerializer.create(descriptor, new JvmSerializerExtension(v.getSerializationBindings(), state));
+                DescriptorSerializer.create(descriptor, new JvmSerializerExtension(v.getSerializationBindings(), state), new ContractSerializerImpl());
 
         ProtoBuf.Class classProto = serializer.classProto(descriptor).build();
 

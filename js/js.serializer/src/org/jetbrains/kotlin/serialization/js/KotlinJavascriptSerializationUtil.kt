@@ -139,7 +139,7 @@ object KotlinJavascriptSerializationUtil {
 
         val fileRegistry = KotlinFileRegistry()
         val serializerExtension = KotlinJavascriptSerializerExtension(fileRegistry)
-        val serializer = DescriptorSerializer.createTopLevel(serializerExtension)
+        val serializer = DescriptorSerializer.createTopLevel(serializerExtension, ContractSerializerForJS())
 
         val classDescriptors = DescriptorSerializer.sort(scope).filterIsInstance<ClassDescriptor>()
 

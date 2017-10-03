@@ -42,6 +42,7 @@ class DescriptorSerializer private constructor(
         private val extension: SerializerExtension,
         private val typeTable: MutableTypeTable,
         private val sinceKotlinInfoTable: MutableSinceKotlinInfoTable,
+        private val contractSerializer: ContractSerializer,
         private val serializeTypeTableToFunction: Boolean
 ) {
     fun serialize(message: MessageLite): ByteArray {
@@ -53,7 +54,7 @@ class DescriptorSerializer private constructor(
 
     private fun createChildSerializer(descriptor: DeclarationDescriptor): DescriptorSerializer =
             DescriptorSerializer(descriptor, Interner(typeParameters), extension, typeTable, sinceKotlinInfoTable,
-                                 serializeTypeTableToFunction = false)
+                                 contractSerializer, serializeTypeTableToFunction = false)
 
     val stringTable: StringTable
         get() = extension.stringTable
@@ -140,7 +141,6 @@ class DescriptorSerializer private constructor(
         }
 
         extension.serializeClass(classDescriptor, builder)
-
         return builder
     }
 
@@ -276,6 +276,8 @@ class DescriptorSerializer private constructor(
         if (descriptor.isSuspendOrHasSuspendTypesInSignature()) {
             builder.sinceKotlinInfo = writeSinceKotlinInfo(LanguageFeature.Coroutines)
         }
+
+        contractSerializer.serializeContractOfFunctionIfAny(descriptor, builder, this)
 
         extension.serializeFunction(descriptor, builder)
 
@@ -425,9 +427,9 @@ class DescriptorSerializer private constructor(
         return builder
     }
 
-    private fun typeId(type: KotlinType): Int = typeTable[type(type)]
+    fun typeId(type: KotlinType): Int = typeTable[type(type)]
 
-    private fun type(type: KotlinType): ProtoBuf.Type.Builder {
+    fun type(type: KotlinType): ProtoBuf.Type.Builder {
         val builder = ProtoBuf.Type.newBuilder()
 
         if (type.isError) {
@@ -587,26 +589,28 @@ class DescriptorSerializer private constructor(
     private fun getTypeParameterId(descriptor: TypeParameterDescriptor): Int =
             typeParameters.intern(descriptor)
 
+
+
     companion object {
         @JvmStatic
-        fun createTopLevel(extension: SerializerExtension): DescriptorSerializer {
+        fun createTopLevel(extension: SerializerExtension, contractSerializer: ContractSerializer): DescriptorSerializer {
             return DescriptorSerializer(null, Interner(), extension, MutableTypeTable(), MutableSinceKotlinInfoTable(),
-                                        serializeTypeTableToFunction = false)
+                                        contractSerializer, serializeTypeTableToFunction = false)
         }
 
         @JvmStatic
-        fun createForLambda(extension: SerializerExtension): DescriptorSerializer {
+        fun createForLambda(extension: SerializerExtension, contractSerializer: ContractSerializer): DescriptorSerializer {
             return DescriptorSerializer(null, Interner(), extension, MutableTypeTable(), MutableSinceKotlinInfoTable(),
-                                        serializeTypeTableToFunction = true)
+                                        contractSerializer, serializeTypeTableToFunction = true)
         }
 
         @JvmStatic
-        fun create(descriptor: ClassDescriptor, extension: SerializerExtension): DescriptorSerializer {
+        fun create(descriptor: ClassDescriptor, extension: SerializerExtension, contractSerializer: ContractSerializer): DescriptorSerializer {
             val container = descriptor.containingDeclaration
             val parentSerializer = if (container is ClassDescriptor)
-                create(container, extension)
+                create(container, extension, contractSerializer)
             else
-                createTopLevel(extension)
+                createTopLevel(extension, contractSerializer)
 
             // Calculate type parameter ids for the outer class beforehand, as it would've had happened if we were always
             // serializing outer classes before nested classes.
@@ -617,6 +621,7 @@ class DescriptorSerializer private constructor(
                     parentSerializer.extension,
                     MutableTypeTable(),
                     MutableSinceKotlinInfoTable(),
+                    contractSerializer,
                     serializeTypeTableToFunction = false
             )
             for (typeParameter in descriptor.declaredTypeParameters) {

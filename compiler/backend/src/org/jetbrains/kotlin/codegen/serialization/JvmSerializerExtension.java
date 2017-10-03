@@ -20,6 +20,7 @@ import com.intellij.openapi.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.codegen.ClassBuilderMode;
+import org.jetbrains.kotlin.codegen.ContractSerializerImpl;
 import org.jetbrains.kotlin.codegen.FakeDescriptorsForReferencesKt;
 import org.jetbrains.kotlin.codegen.binding.CodegenBinding;
 import org.jetbrains.kotlin.codegen.state.GenerationState;
@@ -115,7 +116,7 @@ public class JvmSerializerExtension extends SerializerExtension {
             if (localVariable instanceof LocalVariableDescriptor) {
                 PropertyDescriptor propertyDescriptor =
                         FakeDescriptorsForReferencesKt.createFreeFakeLocalPropertyDescriptor((LocalVariableDescriptor) localVariable);
-                DescriptorSerializer serializer = DescriptorSerializer.createForLambda(this);
+                DescriptorSerializer serializer = DescriptorSerializer.createForLambda(this, new ContractSerializerImpl());
                 proto.addExtension(extension, serializer.propertyProto(propertyDescriptor).build());
             }
         }
