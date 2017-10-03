@@ -156,7 +156,7 @@ class CreateActualClassFix(
         klass: KtClassOrObject,
         actualPlatform: MultiTargetPlatform.Specific
 ) : CreateActualFix<KtClassOrObject>(klass, actualPlatform, { project, element ->
-    generateClassOrObject(project, element, actualNeeded = true)
+    generateClassOrObjectByExpectedClass(project, element, actualNeeded = true)
 }) {
 
     override val elementType = run {
@@ -206,7 +206,7 @@ private fun KtModifierListOwner.replaceExpectModifier(actualNeeded: Boolean) {
     }
 }
 
-private fun KtPsiFactory.generateClassOrObject(
+internal fun KtPsiFactory.generateClassOrObjectByExpectedClass(
         project: Project,
         expectedClass: KtClassOrObject,
         actualNeeded: Boolean
@@ -234,7 +234,7 @@ private fun KtPsiFactory.generateClassOrObject(
         val actualDeclaration: KtDeclaration = when (expectedDeclaration) {
             is KtClassOrObject ->
                 if (expectedDeclaration !is KtEnumEntry) {
-                    generateClassOrObject(project, expectedDeclaration, actualNeeded = true)
+                    generateClassOrObjectByExpectedClass(project, expectedDeclaration, actualNeeded = true)
                 }
                 else {
                     continue@declLoop
