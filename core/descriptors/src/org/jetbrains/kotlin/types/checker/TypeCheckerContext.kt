@@ -64,6 +64,8 @@ open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean, val allowe
             predicate: (SimpleType) -> Boolean,
             supertypesPolicy: (SimpleType) -> SupertypesPolicy
     ): Boolean {
+        if (predicate(start)) return true
+
         initialize()
 
         val deque = supertypesDeque!!
@@ -71,14 +73,15 @@ open class TypeCheckerContext(val errorTypeEqualsToAnything: Boolean, val allowe
         deque.push(start)
         while (deque.isNotEmpty()) {
             val current = deque.pop()
-
-            if (predicate(current)) {
-                clear()
-                return true
-            }
-
             val policy = supertypesPolicy(current).takeIf { it != SupertypesPolicy.None } ?: continue
-            for (supertype in current.constructor.supertypes) deque.add(policy.transformType(supertype))
+            for (supertype in current.constructor.supertypes) {
+                val newType = policy.transformType(supertype)
+                if (predicate(newType)) {
+                    clear()
+                    return true
+                }
+                deque.add(newType)
+            }
         }
 
         clear()
