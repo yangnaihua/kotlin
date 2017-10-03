@@ -109,10 +109,6 @@ public class ArgumentTypeResolver {
         return KotlinTypeChecker.DEFAULT.isSubtypeOf(actualType, expectedType);
     }
 
-    public void checkTypesWithNoCallee(@NotNull CallResolutionContext<?> context) {
-        checkTypesWithNoCallee(context, SHAPE_FUNCTION_ARGUMENTS);
-    }
-
     public void checkTypesWithNoCallee(
             @NotNull CallResolutionContext<?> context,
             @NotNull ResolveArgumentsMode resolveFunctionArgumentBodies
