@@ -44,6 +44,8 @@ class DescriptorSerializer private constructor(
         private val sinceKotlinInfoTable: MutableSinceKotlinInfoTable,
         private val serializeTypeTableToFunction: Boolean
 ) {
+    private val contractSerializer = ContractSerializer()
+
     fun serialize(message: MessageLite): ByteArray {
         return ByteArrayOutputStream().apply {
             stringTable.serializeTo(this)
@@ -140,7 +142,6 @@ class DescriptorSerializer private constructor(
         }
 
         extension.serializeClass(classDescriptor, builder)
-
         return builder
     }
 
@@ -276,6 +277,8 @@ class DescriptorSerializer private constructor(
         if (descriptor.isSuspendOrHasSuspendTypesInSignature()) {
             builder.sinceKotlinInfo = writeSinceKotlinInfo(LanguageFeature.Coroutines)
         }
+
+        contractSerializer.serializeContractOfFunctionIfAny(descriptor, builder, this)
 
         extension.serializeFunction(descriptor, builder)
 
@@ -425,9 +428,9 @@ class DescriptorSerializer private constructor(
         return builder
     }
 
-    private fun typeId(type: KotlinType): Int = typeTable[type(type)]
+    internal fun typeId(type: KotlinType): Int = typeTable[type(type)]
 
-    private fun type(type: KotlinType): ProtoBuf.Type.Builder {
+    internal fun type(type: KotlinType): ProtoBuf.Type.Builder {
         val builder = ProtoBuf.Type.newBuilder()
 
         if (type.isError) {
@@ -586,6 +589,8 @@ class DescriptorSerializer private constructor(
 
     private fun getTypeParameterId(descriptor: TypeParameterDescriptor): Int =
             typeParameters.intern(descriptor)
+
+
 
     companion object {
         @JvmStatic
