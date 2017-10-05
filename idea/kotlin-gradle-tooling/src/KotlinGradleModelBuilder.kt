@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ProjectDependency
 import org.jetbrains.plugins.gradle.tooling.ErrorMessageBuilder
 import org.jetbrains.plugins.gradle.tooling.ModelBuilderService
@@ -108,10 +109,9 @@ class KotlinGradleModelBuilder : AbstractKotlinGradleModelBuilder() {
             val isCommonProject = project.isCommon
             if (isCommonProject && collectImpls) return
 
-            val configName = if (collectImpls) "implement" else "compile"
-            val compileConfiguration = project.configurations.findByName(configName) ?: return
-            val dependencies = compileConfiguration
-                    .dependencies
+            val configNames = if (collectImpls) listOf("implement", "expectedBy") else listOf("compile")
+            val dependencies = configNames
+                    .flatMap { project.configurations.findByName(it)?.dependencies ?: emptyList<Dependency>() }
                     .filterIsInstance<ProjectDependency>()
                     .map { it.dependencyProject }
 
