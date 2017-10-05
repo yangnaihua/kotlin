@@ -33,8 +33,8 @@ import org.jetbrains.kotlin.diagnostics.Errors.*
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.hasExpectModifier
 import org.jetbrains.kotlin.psi.psiUtil.hasActualModifier
+import org.jetbrains.kotlin.psi.psiUtil.hasExpectModifier
 import org.jetbrains.kotlin.resolve.DescriptorResolver.getDefaultModality
 import org.jetbrains.kotlin.resolve.DescriptorResolver.getDefaultVisibility
 import org.jetbrains.kotlin.resolve.DescriptorUtils.getDispatchReceiverParameterIfNeeded
@@ -185,7 +185,7 @@ class FunctionDescriptorResolver(
         functionDescriptor.isTailrec = function.hasModifier(KtTokens.TAILREC_KEYWORD)
         functionDescriptor.isSuspend = function.hasModifier(KtTokens.SUSPEND_KEYWORD)
         functionDescriptor.isExpect = container is PackageFragmentDescriptor && function.hasExpectModifier() ||
-                                      container is ClassDescriptor && container.isExpect
+                                      DescriptorUtils.isExpectedClassDescriptor(container)
         functionDescriptor.isActual = function.hasActualModifier()
 
         receiverType?.let { ForceResolveUtil.forceResolveAllContents(it.annotations) }

@@ -617,4 +617,8 @@ public class DescriptorUtils {
                : descriptor;
     }
 
+    public static boolean isExpectedClassDescriptor(DeclarationDescriptor descriptor) {
+        return descriptor instanceof ClassDescriptor && ((ClassDescriptor) descriptor).isExpect();
+    }
+
 }
