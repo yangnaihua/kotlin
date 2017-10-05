@@ -143,13 +143,13 @@ object NewKotlinTypeChecker : KotlinTypeChecker {
             is IntegerValueTypeConstructor -> {
                 val newSuperTypes = constructor.supertypes.map { TypeUtils.makeNullableAsSpecified(it, type.isMarkedNullable) }
                 val newConstructor = IntersectionTypeConstructor(newSuperTypes)
-                return KotlinTypeFactory.simpleType(type.annotations, newConstructor, listOf(), false, type.memberScope)
+                return KotlinTypeFactory.simpleTypeWithNonTrivialMemberScope(type.annotations, newConstructor, listOf(), false, type.memberScope)
             }
 
             is IntersectionTypeConstructor -> if (type.isMarkedNullable) {
                 val newSuperTypes = constructor.supertypes.map { it.makeNullable() }
                 val newConstructor = IntersectionTypeConstructor(newSuperTypes)
-                return KotlinTypeFactory.simpleType(type.annotations, newConstructor, listOf(), false, newConstructor.createScopeForKotlinType())
+                return KotlinTypeFactory.simpleTypeWithNonTrivialMemberScope(type.annotations, newConstructor, listOf(), false, newConstructor.createScopeForKotlinType())
             }
         }
 
