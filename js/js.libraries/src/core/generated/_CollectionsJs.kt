@@ -1991,7 +1991,8 @@ public infix fun <T, R> Iterable<T>.zip(other: Iterable<R>): List<Pair<T, R>> {
 public inline fun <T, R, V> Iterable<T>.zip(other: Iterable<R>, transform: (a: T, b: R) -> V): List<V> {
     val first = iterator()
     val second = other.iterator()
-    val list = ArrayList<V>(minOf(collectionSizeOrDefault(10), other.collectionSizeOrDefault(10)))
+    val initialCapacity = minOf(collectionSizeOrDefault(10), other.collectionSizeOrDefault(10))
+    val list = ArrayList<V>(initialCapacity)
     while (first.hasNext() && second.hasNext()) {
         list.add(transform(first.next(), second.next()))
     }

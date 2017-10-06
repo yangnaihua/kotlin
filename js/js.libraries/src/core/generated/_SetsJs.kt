@@ -101,7 +101,8 @@ public operator fun <T> Set<T>.plus(elements: Array<out T>): Set<T> {
  * The returned set preserves the element iteration order of the original set.
  */
 public operator fun <T> Set<T>.plus(elements: Iterable<T>): Set<T> {
-    val result = LinkedHashSet<T>(mapCapacity(elements.collectionSizeOrNull()?.let { this.size + it } ?: this.size * 2))
+    val initialCapacity = mapCapacity(elements.collectionSizeOrNull()?.let { this.size + it } ?: this.size * 2)
+    val result = LinkedHashSet<T>(initialCapacity)
     result.addAll(this)
     result.addAll(elements)
     return result

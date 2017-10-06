@@ -118,7 +118,8 @@ fun generators(): List<GenericFunction> {
         }
         body(Sets) {
             """
-            val result = LinkedHashSet<T>(mapCapacity(elements.collectionSizeOrNull()?.let { this.size + it } ?: this.size * 2))
+            val initialCapacity = mapCapacity(elements.collectionSizeOrNull()?.let { this.size + it } ?: this.size * 2)
+            val result = LinkedHashSet<T>(initialCapacity)
             result.addAll(this)
             result.addAll(elements)
             return result
@@ -558,7 +559,8 @@ fun generators(): List<GenericFunction> {
             """
             val first = iterator()
             val second = other.iterator()
-            val list = ArrayList<V>(minOf(collectionSizeOrDefault(10), other.collectionSizeOrDefault(10)))
+            val initialCapacity = minOf(collectionSizeOrDefault(10), other.collectionSizeOrDefault(10))
+            val list = ArrayList<V>(initialCapacity)
             while (first.hasNext() && second.hasNext()) {
                 list.add(transform(first.next(), second.next()))
             }
