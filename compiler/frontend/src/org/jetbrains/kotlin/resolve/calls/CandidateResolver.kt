@@ -80,10 +80,6 @@ class CandidateResolver(
             return
         }
 
-        if (!context.isDebuggerContext) {
-            checkVisibilityWithoutReceiver()
-        }
-
         when (checkArguments) {
             CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS ->
                 mapArguments()
@@ -100,6 +96,10 @@ class CandidateResolver(
 
         checkAbstractAndSuper()
         checkConstructedExpandedType()
+
+        if (!context.isDebuggerContext) {
+            checkVisibilityWithoutReceiver()
+        }
     }
 
     private fun CallCandidateResolutionContext<*>.checkValueArguments() = checkAndReport {
@@ -703,18 +703,18 @@ class CandidateResolver(
     }
 
     private fun <D : CallableDescriptor> CallCandidateResolutionContext<D>.shouldContinue() =
-            candidateResolveMode == CandidateResolveMode.FULLY || candidateCall.status.possibleTransformToSuccess()
+            candidateCall.status.possibleTransformToSuccess()
 
     private inline fun <D : CallableDescriptor> CallCandidateResolutionContext<D>.check(
-            checker: CallCandidateResolutionContext<D>.() -> Unit
+            crossinline checker: CallCandidateResolutionContext<D>.() -> Unit
     ) {
-        if (shouldContinue()) checker()
+        if (shouldContinue()) checker() else candidateCall.addRemainingCheck { checker() }
     }
 
     private inline fun <D : CallableDescriptor> CallCandidateResolutionContext<D>.checkAndReport(
-            checker: CallCandidateResolutionContext<D>.() -> ResolutionStatus
+            crossinline checker: CallCandidateResolutionContext<D>.() -> ResolutionStatus
     ) {
-        if (shouldContinue()) {
+        check {
             candidateCall.addStatus(checker())
         }
     }

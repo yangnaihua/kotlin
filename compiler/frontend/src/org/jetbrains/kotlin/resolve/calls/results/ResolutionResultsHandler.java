@@ -105,6 +105,7 @@ public class ResolutionResultsHandler {
                 successfulAndIncomplete, true, context.isDebuggerContext, checkArgumentsMode, languageVersionSettings);
         if (results.isSingleResult()) {
             MutableResolvedCall<D> resultingCall = results.getResultingCall();
+            resultingCall.performRemainingChecks();
             resultingCall.getTrace().moveAllMyDataTo(context.trace);
             if (resultingCall.getStatus() == INCOMPLETE_TYPE_INFERENCE) {
                 return OverloadResolutionResultsImpl.incompleteTypeInference(resultingCall);
@@ -173,6 +174,7 @@ public class ResolutionResultsHandler {
     ) {
         if (candidates.size() == 1) {
             MutableResolvedCall<D> failed = candidates.iterator().next();
+            failed.performRemainingChecks();
             failed.getTrace().moveAllMyDataTo(trace);
             return OverloadResolutionResultsImpl.singleFailedCandidate(failed);
         }
