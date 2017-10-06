@@ -99,13 +99,15 @@ fun createCapturedType(typeProjection: TypeProjection): KotlinType
 fun KotlinType.isCaptured(): Boolean = constructor is CapturedTypeConstructor
 
 fun TypeSubstitution.wrapWithCapturingSubstitution(needApproximation: Boolean = true): TypeSubstitution =
-    if (this is IndexedParametersSubstitution)
+    if (this is IndexedParametersSubstitution) {
+        val arguments = this.arguments.zip(this.parameters).map {
+            it.first.createCapturedIfNeeded(it.second)
+        }.toTypedArray()
         IndexedParametersSubstitution(
                 this.parameters,
-                this.arguments.zip(this.parameters).map {
-                    it.first.createCapturedIfNeeded(it.second)
-                }.toTypedArray(),
+                arguments,
                 approximateCapturedTypes = needApproximation)
+    }
     else
         object : DelegatedTypeSubstitution(this@wrapWithCapturingSubstitution) {
             override fun approximateContravariantCapturedTypes() = needApproximation
