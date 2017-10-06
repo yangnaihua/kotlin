@@ -93,16 +93,20 @@ class FlatSignature<out T> private constructor(
         ): FlatSignature<D> =
                 create(descriptor, descriptor, numDefaults = 0, parameterTypes = descriptor.valueParameters.map { it.argumentValueType })
 
-        fun <D : CallableDescriptor> createForPossiblyShadowedExtension(descriptor: D): FlatSignature<D> =
-                FlatSignature(descriptor,
-                              descriptor.typeParameters,
-                              valueParameterTypes = descriptor.valueParameters.map { it.argumentValueType },
-                              hasExtensionReceiver = false,
-                              hasVarargs = descriptor.valueParameters.any { it.varargElementType != null },
-                              numDefaults = descriptor.valueParameters.count { it.hasDefaultValue() },
-                              isExpect = descriptor is MemberDescriptor && descriptor.isExpect,
-                              isSyntheticMember = descriptor is SyntheticMemberDescriptor<*>
-                )
+        fun <D : CallableDescriptor> createForPossiblyShadowedExtension(descriptor: D): FlatSignature<D> {
+            val valueParameterTypes = descriptor.valueParameters.map { it.argumentValueType }
+            val hasVarargs = descriptor.valueParameters.any { it.varargElementType != null }
+            val numDefaults = descriptor.valueParameters.count { it.hasDefaultValue() }
+            return FlatSignature(descriptor,
+                                 descriptor.typeParameters,
+                                 valueParameterTypes = valueParameterTypes,
+                                 hasExtensionReceiver = false,
+                                 hasVarargs = hasVarargs,
+                                 numDefaults = numDefaults,
+                                 isExpect = descriptor is MemberDescriptor && descriptor.isExpect,
+                                 isSyntheticMember = descriptor is SyntheticMemberDescriptor<*>
+            )
+        }
 
         val ValueParameterDescriptor.argumentValueType get() = varargElementType ?: type
     }

@@ -596,6 +596,7 @@ class LazyJavaClassMemberScope(
             returnType: KotlinType,
             varargElementType: KotlinType?
     ) {
+        val notNullableVarargElementType = varargElementType?.let { TypeUtils.makeNotNullable(it) }
         add(ValueParameterDescriptorImpl(
                 constructor,
                 null,
@@ -608,7 +609,7 @@ class LazyJavaClassMemberScope(
                 /* isCrossinline = */ false,
                 /* isNoinline = */ false,
                 // Nulls are not allowed in annotation arguments in Java
-                varargElementType?.let { TypeUtils.makeNotNullable(it) },
+                notNullableVarargElementType,
                 c.components.sourceElementFactory.source(method)
         ))
     }

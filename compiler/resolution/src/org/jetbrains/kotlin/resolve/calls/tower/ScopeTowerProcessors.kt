@@ -256,7 +256,7 @@ fun <C: Candidate> createProcessorWithReceiverValueOrEmpty(
 ): ScopeTowerProcessor<C> {
     return if (explicitReceiver is QualifierReceiver) {
         explicitReceiver.classValueReceiverWithSmartCastInfo?.let(create)
-        ?: KnownResultProcessor<C>(listOf())
+        ?: KnownResultProcessor(emptyList())
     }
     else {
         create(explicitReceiver as ReceiverValueWithSmartCastInfo?)

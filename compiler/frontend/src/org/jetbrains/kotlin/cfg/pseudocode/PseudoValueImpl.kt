@@ -16,8 +16,8 @@
 
 package org.jetbrains.kotlin.cfg.pseudocode
 
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.cfg.pseudocode.instructions.eval.InstructionWithValue
+import org.jetbrains.kotlin.psi.KtElement
 
 class PseudoValueImpl(
         override val debugName: String,
@@ -31,6 +31,7 @@ open class PseudoValueFactoryImpl: PseudoValueFactory {
     private var lastIndex: Int = 0
 
     override fun newValue(element: KtElement?, instruction: InstructionWithValue?): PseudoValue {
-        return PseudoValueImpl((instruction?.let { "" } ?: "!") + "<v${lastIndex++}>", element, instruction)
+        val debugName = (instruction?.let { "" } ?: "!") + "<v${lastIndex++}>"
+        return PseudoValueImpl(debugName, element, instruction)
     }
 }
