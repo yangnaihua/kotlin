@@ -27,8 +27,6 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.compile.AbstractCompile
 import org.gradle.api.tasks.incremental.IncrementalTaskInputs
-import org.jetbrains.kotlin.annotation.AnnotationFileUpdater
-import org.jetbrains.kotlin.annotation.AnnotationFileUpdaterImpl
 import org.jetbrains.kotlin.cli.common.ExitCode
 import org.jetbrains.kotlin.cli.common.arguments.CommonCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.CommonToolArguments
@@ -272,8 +270,6 @@ open class KotlinCompile : AbstractKotlinCompile<K2JVMCompilerArguments>(), Kotl
 
     override fun setupPlugins(compilerArgs: K2JVMCompilerArguments) {
         compilerArgs.pluginClasspaths = pluginOptions.classpath.toTypedArray()
-
-        val kaptPluginOptions = getKaptPluginOptions()
         compilerArgs.pluginOptions = (pluginOptions.arguments + kaptPluginOptions.arguments).toTypedArray()
     }
 
