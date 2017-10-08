@@ -666,7 +666,7 @@ public abstract class FunctionDescriptorImpl extends DeclarationDescriptorNonRoo
         substitutedDescriptor.setTailrec(isTailrec);
         substitutedDescriptor.setSuspend(isSuspend);
         DeclarationDescriptor container = substitutedDescriptor.getContainingDeclaration();
-        substitutedDescriptor.setExpect(isExpect || isEffectivelyExpected(configuration.newModality, container));
+        substitutedDescriptor.setExpect(isExpect || (!isActual && isEffectivelyExpected(configuration.newModality, container)));
         substitutedDescriptor.setActual(isActual);
         substitutedDescriptor.setHasStableParameterNames(hasStableParameterNames);
         substitutedDescriptor.setHiddenToOvercomeSignatureClash(configuration.isHiddenToOvercomeSignatureClash);
