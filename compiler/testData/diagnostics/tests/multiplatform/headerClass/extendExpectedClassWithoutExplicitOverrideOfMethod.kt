@@ -32,5 +32,5 @@ actual class DerivedExplicit : Base() {
 }
 
 actual class DerivedExplicitCheck : Base() {
-    <!ACTUAL_MISSING!>override fun foo()<!> {}
+    override fun <!ACTUAL_MISSING!>foo<!>() {}
 }
