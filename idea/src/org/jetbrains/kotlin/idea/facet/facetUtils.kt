@@ -164,21 +164,14 @@ val ModuleDescriptor.implementedDescriptor: ModuleDescriptor?
     get() {
         val moduleSourceInfo = getCapability(ModuleInfo.Capability) as? ModuleSourceInfo ?: return null
         val module = moduleSourceInfo.module
-        return module.cached(CachedValueProvider {
-            val modelsProvider = IdeModifiableModelsProviderImpl(module.project)
-            val implementedModuleName = module.findImplementedModuleName(modelsProvider)
-            val implementedModule = implementedModuleName?.let { modelsProvider.findIdeModule(it) }
-            val implementedModuleInfo = implementedModule?.getModuleInfo(moduleSourceInfo)
-            val implementedModuleDescriptor = implementedModuleInfo?.let {
-                KotlinCacheService.getInstance(module.project).getResolutionFacadeByModuleInfo(it, it.platform)?.moduleDescriptor
-            }
-            CachedValueProvider.Result(
-                    implementedModuleDescriptor,
-                    *(listOfNotNull(implementedModuleInfo?.createModificationTracker()) +
-                      ProjectRootModificationTracker.getInstance(module.project)).toTypedArray()
 
-            )
-        })
+        val modelsProvider = IdeModifiableModelsProviderImpl(module.project)
+        val implementedModuleName = module.findImplementedModuleName(modelsProvider)
+        val implementedModule = implementedModuleName?.let { modelsProvider.findIdeModule(it) }
+        val implementedModuleInfo = implementedModule?.getModuleInfo(moduleSourceInfo)
+        return implementedModuleInfo?.let {
+            KotlinCacheService.getInstance(module.project).getResolutionFacadeByModuleInfo(it, it.platform)?.moduleDescriptor
+        }
     }
 
 fun Module.getOrCreateFacet(modelsProvider: IdeModifiableModelsProvider,
