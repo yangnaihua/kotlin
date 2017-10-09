@@ -48,7 +48,7 @@ class KotlinGradleModuleConfigurator : KotlinWithGradleConfigurator() {
     ) {
         super.configureModule(module, file, isTopLevelProjectFile, version, collector, filesToOpen)
 
-        val moduleGroup = module.toModuleGroup()
+        val moduleGroup = module.getWholeModuleGroup()
         for (sourceModule in moduleGroup.allModules()) {
             if (addStdlibToJavaModuleInfo(sourceModule, collector)) {
                 break
