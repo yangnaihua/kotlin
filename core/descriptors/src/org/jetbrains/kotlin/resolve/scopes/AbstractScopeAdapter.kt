@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,10 @@ abstract class AbstractScopeAdapter : MemberScope {
 
     override fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? {
         return workerScope.getContributedClassifier(name, location)
+    }
+
+    override fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor? {
+        return workerScope.getContributedClassifier(name, location, discriminateExpect)
     }
 
     override fun getContributedVariables(name: Name, location: LookupLocation): Collection<PropertyDescriptor> {

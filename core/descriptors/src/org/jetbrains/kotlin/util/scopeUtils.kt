@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.util.collectionUtils
 
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptorWithTypeParameters
+import org.jetbrains.kotlin.resolve.scopes.ResolutionScope
 import java.util.*
 
 /**
@@ -72,18 +73,33 @@ inline fun <Scope, T> getFromAllScopes(firstScope: Scope, restScopes: List<Scope
     return result ?: emptySet()
 }
 
-inline fun <Scope, T : ClassifierDescriptor> getFirstClassifierDiscriminateHeaders(scopes: List<Scope>, callback: (Scope) -> T?): T? {
+inline fun <Scope : ResolutionScope, T : ClassifierDescriptor> getFirstClassifierDiscriminateHeaders(
+        scopes: List<Scope>,
+        discriminateExpect: Boolean = true,
+        callback: (Scope) -> T?
+): T? {
     // NOTE: This is performance-sensitive; please don't replace with map().firstOrNull()
     var result: T? = null
     for (scope in scopes) {
         val newResult = callback(scope)
         if (newResult != null) {
-            if (newResult is ClassifierDescriptorWithTypeParameters && newResult.isExpect) {
-                if (result == null) result = newResult
+            if (discriminateExpect) {
+                if (newResult is ClassifierDescriptorWithTypeParameters && newResult.isExpect) {
+                    if (result == null) result = newResult
+                }
+                // this class is Impl or usual class
+                else {
+                    return newResult
+                }
             }
-            // this class is Impl or usual class
             else {
-                return newResult
+                if (newResult is ClassifierDescriptorWithTypeParameters && !newResult.isExpect) {
+                    if (result == null) result = newResult
+                }
+                // this class is Impl or usual class
+                else {
+                    return newResult
+                }
             }
         }
     }

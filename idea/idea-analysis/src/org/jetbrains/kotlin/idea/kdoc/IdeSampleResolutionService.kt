@@ -20,8 +20,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
-import org.jetbrains.kotlin.idea.caches.resolve.unsafeResolveToDescriptor
 import org.jetbrains.kotlin.idea.caches.resolve.resolveToDescriptorIfAny
+import org.jetbrains.kotlin.idea.caches.resolve.unsafeResolveToDescriptor
 import org.jetbrains.kotlin.idea.resolve.ResolutionFacade
 import org.jetbrains.kotlin.idea.stubindex.*
 import org.jetbrains.kotlin.incremental.components.LookupLocation
@@ -79,6 +79,10 @@ private class GlobalSyntheticPackageViewDescriptor(override val fqName: FqName, 
         override fun getClassifierNames(): Set<Name> = shouldNotBeCalled()
 
         override fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? = shouldNotBeCalled()
+
+        override fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor? {
+            return getContributedClassifier(name, location)
+        }
 
         override fun printScopeStructure(p: Printer) {
             p.printIndent()

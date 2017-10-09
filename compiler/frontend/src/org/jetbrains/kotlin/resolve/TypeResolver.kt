@@ -833,7 +833,7 @@ class TypeResolver(
     private fun LexicalScope.findImplicitOuterClassArguments(
             outerClass: ClassDescriptor
     ): List<TypeProjection>? {
-        val enclosingClass = findFirstFromMeAndParent { scope ->
+        val enclosingClass = findFirstFromMeAndParent { scope, _ ->
             if (scope is LexicalScope && scope.kind == LexicalScopeKind.CLASS_MEMBER_SCOPE)
                 scope.ownerDescriptor as ClassDescriptor
             else

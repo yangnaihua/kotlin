@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,13 @@ interface ResolutionScope {
 
     fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor?
 
+    fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor?
+
     fun getContributedVariables(name: Name, location: LookupLocation): Collection<VariableDescriptor>
 
     fun getContributedFunctions(name: Name, location: LookupLocation): Collection<FunctionDescriptor>
+
+    fun discriminateExpect(): Boolean = true
 
     /**
      * All visible descriptors from current scope possibly filtered by the given name and kind filters

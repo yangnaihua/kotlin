@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -239,6 +239,10 @@ class LazyImportScope(
             else
                 null /* type parameters can't be imported */
         }
+    }
+
+    override fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor? {
+        return getContributedClassifier(name, location)
     }
 
     override fun getContributedPackage(name: Name) = null

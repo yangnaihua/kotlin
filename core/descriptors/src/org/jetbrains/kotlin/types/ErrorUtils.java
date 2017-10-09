@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -175,6 +175,14 @@ public class ErrorUtils {
             return createErrorClass(name.asString());
         }
 
+        @Nullable
+        @Override
+        public ClassifierDescriptor getContributedClassifier(
+                @NotNull Name name, @NotNull LookupLocation location, boolean discriminateExpect
+        ) {
+            return getContributedClassifier(name, location);
+        }
+
         @NotNull
         @Override
         // TODO: Convert to Kotlin or add @JvmWildcard to MemberScope declarations
@@ -238,6 +246,11 @@ public class ErrorUtils {
         public void printScopeStructure(@NotNull Printer p) {
             p.println(getClass().getSimpleName(), ": ", debugMessage);
         }
+
+        @Override
+        public boolean discriminateExpect() {
+            return true;
+        }
     }
 
     private static class ThrowingScope implements MemberScope {
@@ -251,6 +264,14 @@ public class ErrorUtils {
         @Override
         public ClassifierDescriptor getContributedClassifier(@NotNull Name name, @NotNull LookupLocation location) {
             throw new IllegalStateException(debugMessage+", required name: " + name);
+        }
+
+        @Nullable
+        @Override
+        public ClassifierDescriptor getContributedClassifier(
+                @NotNull Name name, @NotNull LookupLocation location, boolean discriminateExpect
+        ) {
+            return getContributedClassifier(name, location);
         }
 
         @NotNull
@@ -312,6 +333,11 @@ public class ErrorUtils {
         @Override
         public void printScopeStructure(@NotNull Printer p) {
             p.println(getClass().getSimpleName(), ": ", debugMessage);
+        }
+
+        @Override
+        public boolean discriminateExpect() {
+            return true;
         }
     }
 

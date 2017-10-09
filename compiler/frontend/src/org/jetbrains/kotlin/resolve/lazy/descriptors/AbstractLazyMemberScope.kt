@@ -82,6 +82,27 @@ protected constructor(
         return result
     }
 
+    override fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor? {
+        recordLookup(name, location)
+        // NB we should resolve type alias descriptors even if a class descriptor with corresponding name is present
+        val classes = classDescriptors(name)
+        val typeAliases = typeAliasDescriptors(name)
+        // See getFirstClassifierDiscriminateHeaders()
+        var result: ClassifierDescriptor? = null
+        for (klass in classes) {
+            if (!klass.isExpect && discriminateExpect) return klass
+            if (klass.isExpect && !discriminateExpect) return klass
+            if (result == null) result = klass
+        }
+        for (typeAlias in typeAliases) {
+            if (!typeAlias.isExpect && discriminateExpect) return typeAlias
+            if (typeAlias.isExpect && !discriminateExpect) return typeAlias
+            if (result == null) result = typeAlias
+        }
+        return result
+    }
+
+
     override fun getContributedFunctions(name: Name, location: LookupLocation): Collection<SimpleFunctionDescriptor> {
         recordLookup(name, location)
         return functionDescriptors(name)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.util.collectionUtils.concat
 import org.jetbrains.kotlin.utils.Printer
 import org.jetbrains.kotlin.utils.SmartList
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 val HierarchicalScope.parentsWithSelf: Sequence<HierarchicalScope>
     get() = generateSequence(this) { it.parent }
@@ -63,11 +64,11 @@ fun HierarchicalScope.collectDescriptorsFiltered(
 }
 
 @Deprecated("Use getContributedProperties instead") fun LexicalScope.findLocalVariable(name: Name): VariableDescriptor? {
-    return findFirstFromMeAndParent {
+    return findFirstFromMeAndParent { scope, discriminateExpect ->
         when {
-            it is LexicalScopeWrapper -> it.delegate.findLocalVariable(name)
+            scope is LexicalScopeWrapper -> scope.delegate.findLocalVariable(name)
 
-            it !is ImportingScope && it !is LexicalChainedScope -> it.getContributedVariables(name, NoLookupLocation.WHEN_GET_LOCAL_VARIABLE).singleOrNull() /* todo check this*/
+            scope !is ImportingScope && scope !is LexicalChainedScope -> scope.getContributedVariables(name, NoLookupLocation.WHEN_GET_LOCAL_VARIABLE).singleOrNull() /* todo check this*/
 
             else -> null
         }
@@ -75,7 +76,7 @@ fun HierarchicalScope.collectDescriptorsFiltered(
 }
 
 fun HierarchicalScope.findClassifier(name: Name, location: LookupLocation): ClassifierDescriptor?
-        = findFirstFromMeAndParent { it.getContributedClassifier(name, location) }
+        = findFirstFromMeAndParent { scope, discriminateExpect -> scope.getContributedClassifier(name, location, discriminateExpect) }
 
 fun HierarchicalScope.findPackage(name: Name): PackageViewDescriptor?
         = findFirstFromImportingScopes { it.getContributedPackage(name) }
@@ -87,15 +88,15 @@ fun HierarchicalScope.collectFunctions(name: Name, location: LookupLocation): Co
         = collectAllFromMeAndParent { it.getContributedFunctions(name, location) }
 
 fun HierarchicalScope.findVariable(name: Name, location: LookupLocation, predicate: (VariableDescriptor) -> Boolean = { true }): VariableDescriptor? {
-    processForMeAndParent {
-        it.getContributedVariables(name, location).firstOrNull(predicate)?.let { return it }
+    processForMeAndParent { scope, discriminateExpect ->
+        scope.getContributedVariables(name, location).firstOrNull(predicate)?.let { return it }
     }
     return null
 }
 
 fun HierarchicalScope.findFunction(name: Name, location: LookupLocation, predicate: (FunctionDescriptor) -> Boolean = { true }): FunctionDescriptor? {
-    processForMeAndParent {
-        it.getContributedFunctions(name, location).firstOrNull(predicate)?.let { return it }
+    processForMeAndParent { scope, discriminateExpect ->
+        scope.getContributedFunctions(name, location).firstOrNull(predicate)?.let { return it }
     }
     return null
 }
@@ -111,6 +112,10 @@ private class MemberScopeToImportingScopeAdapter(override val parent: ImportingS
             = memberScope.getContributedDescriptors(kindFilter, nameFilter)
 
     override fun getContributedClassifier(name: Name, location: LookupLocation) = memberScope.getContributedClassifier(name, location)
+
+    override fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor? {
+        return getContributedClassifier(name, location)
+    }
 
     override fun getContributedVariables(name: Name, location: LookupLocation) = memberScope.getContributedVariables(name, location)
 
@@ -135,10 +140,11 @@ private class MemberScopeToImportingScopeAdapter(override val parent: ImportingS
     }
 }
 
-inline fun HierarchicalScope.processForMeAndParent(process: (HierarchicalScope) -> Unit) {
+inline fun HierarchicalScope.processForMeAndParent(process: (HierarchicalScope, Boolean) -> Unit) {
     var currentScope = this
+    val discriminateExpect = this.safeAs<LexicalScope>()?.ownerDescriptor?.safeAs<ClassDescriptor>()?.isExpect?.not() ?: true
     while (true) {
-        process(currentScope)
+        process(currentScope, discriminateExpect)
         currentScope = currentScope.parent ?: break
     }
 }
@@ -147,8 +153,8 @@ private inline fun <T: Any> HierarchicalScope.collectFromMeAndParent(
         collect: (HierarchicalScope) -> T?
 ): List<T> {
     var result: MutableList<T>? = null
-    processForMeAndParent {
-        val element = collect(it)
+    processForMeAndParent { scope, discriminateExpect ->
+        val element = collect(scope)
         if (element != null) {
             if (result == null) {
                 result = SmartList()
@@ -163,12 +169,12 @@ inline fun <T: Any> HierarchicalScope.collectAllFromMeAndParent(
         collect: (HierarchicalScope) -> Collection<T>
 ): Collection<T> {
     var result: Collection<T>? = null
-    processForMeAndParent { result = result.concat(collect(it)) }
+    processForMeAndParent { scope, _ -> result = result.concat(collect(scope)) }
     return result ?: emptySet()
 }
 
-inline fun <T: Any> HierarchicalScope.findFirstFromMeAndParent(fetch: (HierarchicalScope) -> T?): T? {
-    processForMeAndParent { fetch(it)?.let { return it } }
+inline fun <T: Any> HierarchicalScope.findFirstFromMeAndParent(fetch: (HierarchicalScope, Boolean) -> T?): T? {
+    processForMeAndParent { scope, discriminateExpect -> fetch(scope, discriminateExpect)?.let { return it } }
     return null
 }
 
@@ -179,7 +185,7 @@ inline fun <T: Any> HierarchicalScope.collectAllFromImportingScopes(
 }
 
 inline fun <T: Any> HierarchicalScope.findFirstFromImportingScopes(fetch: (ImportingScope) -> T?): T? {
-    return findFirstFromMeAndParent { if (it is ImportingScope) fetch(it) else null }
+    return findFirstFromMeAndParent { scope, _ -> if (scope is ImportingScope) fetch(scope) else null }
 }
 
 fun LexicalScope.addImportingScopes(importScopes: List<ImportingScope>): LexicalScope {
@@ -262,6 +268,9 @@ class ThrowingLexicalScope : LexicalScope {
             throw IllegalStateException()
 
     override fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? =
+            throw IllegalStateException()
+
+    override fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor? =
             throw IllegalStateException()
 
     override fun getContributedVariables(name: Name, location: LookupLocation): Collection<VariableDescriptor> =

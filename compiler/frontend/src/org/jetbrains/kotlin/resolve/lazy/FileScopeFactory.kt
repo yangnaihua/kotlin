@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -208,8 +208,12 @@ class FileScopeFactory(
             override fun getContributedPackage(name: Name) = null
 
             override fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? {
+                return getContributedClassifier(name, location, true)
+            }
+
+            override fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor? {
                 if (name in excludedNames) return null
-                val classifier = scope.getContributedClassifier(name, location) ?: return null
+                val classifier = scope.getContributedClassifier(name, location, discriminateExpect) ?: return null
                 val visible = Visibilities.isVisibleIgnoringReceiver(classifier as DeclarationDescriptorWithVisibility, fromDescriptor)
                 return classifier.takeIf { filteringKind == if (visible) FilteringKind.VISIBLE_CLASSES else FilteringKind.INVISIBLE_CLASSES }
             }

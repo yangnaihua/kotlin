@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,9 @@ class LexicalWritableScope(
                 = addedDescriptors.subList(0, descriptorLimit)
 
         override fun getContributedClassifier(name: Name, location: LookupLocation) = variableOrClassDescriptorByName(name, descriptorLimit) as? ClassifierDescriptor
+        override fun getContributedClassifier(name: Name, location: LookupLocation, discriminateExpect: Boolean): ClassifierDescriptor? {
+            return getContributedClassifier(name, location)
+        }
         override fun getContributedVariables(name: Name, location: LookupLocation) = listOfNotNull(variableOrClassDescriptorByName(name, descriptorLimit) as? VariableDescriptor)
 
         override fun getContributedFunctions(name: Name, location: LookupLocation) = functionsByName(name, descriptorLimit)
