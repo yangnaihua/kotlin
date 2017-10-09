@@ -167,9 +167,7 @@ val ModuleDescriptor.implementedDescriptor: ModuleDescriptor?
         return module.cached(CachedValueProvider {
             val modelsProvider = IdeModifiableModelsProviderImpl(module.project)
             val implementedModuleName = module.findImplementedModuleName(modelsProvider)
-            val implementedModule = modelsProvider.modules.firstOrNull { module ->
-                module.name == implementedModuleName
-            }
+            val implementedModule = implementedModuleName?.let { modelsProvider.findIdeModule(it) }
             val implementedModuleInfo = implementedModule?.getModuleInfo(moduleSourceInfo)
             val implementedModuleDescriptor = implementedModuleInfo?.let {
                 KotlinCacheService.getInstance(module.project).getResolutionFacadeByModuleInfo(it, it.platform)?.moduleDescriptor
