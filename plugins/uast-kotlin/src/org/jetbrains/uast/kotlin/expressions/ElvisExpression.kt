@@ -50,7 +50,7 @@ private fun createElvisExpressions(
         psiParent: PsiElement): List<UExpression> {
 
     val declaration = KotlinUDeclarationsExpression(containingElement)
-    val tempVariable = KotlinULocalVariable(UastKotlinPsiVariable.create(left, declaration, psiParent), declaration)
+    val tempVariable = KotlinULocalVariable(UastKotlinPsiVariable.create(left, declaration, psiParent), left, declaration)
     declaration.declarations = listOf(tempVariable)
 
     val ifExpression = object : UIfExpression {
@@ -82,7 +82,9 @@ class KotlinUElvisExpression(
     givenParent: UElement?
 ) : KotlinAbstractUElement(givenParent), UExpressionList, KotlinEvaluatableUElement {
 
-    override val psi: PsiElement? = elvisExpression
+    override val javaPsi: PsiElement? = null
+    override val sourcePsi: PsiElement? = elvisExpression
+    override val psi: PsiElement? = sourcePsi
     override val kind = KotlinSpecialExpressionKinds.ELVIS
     override val annotations: List<UAnnotation> = emptyList()
     override val expressions: List<UExpression> by lz {

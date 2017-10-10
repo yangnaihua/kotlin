@@ -14,6 +14,10 @@ internal class KotlinLocalFunctionUVariable(
         override val psi: PsiVariable,
         givenParent: UElement?
 ) : KotlinAbstractUElement(givenParent), UVariable, PsiVariable by psi {
+
+    override val javaPsi = psi
+    override val sourcePsi = psi
+
     override val uastInitializer: UExpression? by lz {
         createLocalFunctionLambdaExpression(function, this)
     }
@@ -33,7 +37,7 @@ private class KotlinLocalFunctionULambdaExpression(
 
     override val valueParameters by lz {
         psi.valueParameters.mapIndexed { i, p ->
-            KotlinUParameter(UastKotlinPsiParameter.create(p, psi, this, i), this)
+            KotlinUParameter(UastKotlinPsiParameter.create(p, psi, this, i), p,this)
         }
     }
 

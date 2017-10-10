@@ -16,6 +16,7 @@
 
 package org.jetbrains.uast.kotlin
 
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
