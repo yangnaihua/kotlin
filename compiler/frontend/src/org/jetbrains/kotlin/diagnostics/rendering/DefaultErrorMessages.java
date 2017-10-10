@@ -274,6 +274,8 @@ public class DefaultErrorMessages {
         MAP.put(EXPECTED_LATEINIT_PROPERTY, "Expected property cannot be lateinit");
         MAP.put(SUPERTYPE_INITIALIZED_IN_EXPECTED_CLASS, "Expected classes cannot initialize supertypes");
 
+        MAP.put(INHERITANCE_BY_DELEGATION_IN_EXPECT_CLASS, "Inheritance by delegation in expected classes is prohibited");
+
         MAP.put(ACTUAL_TYPE_ALIAS_NOT_TO_CLASS, "Right-hand side of actual type alias should be a class, not another type alias");
         MAP.put(ACTUAL_TYPE_ALIAS_TO_CLASS_WITH_DECLARATION_SITE_VARIANCE, "Aliased class should not have type parameters with declaration-site variance");
         MAP.put(ACTUAL_TYPE_ALIAS_WITH_USE_SITE_VARIANCE, "Right-hand side of actual type alias cannot contain use-site variance or star projections");
@@ -377,7 +379,6 @@ public class DefaultErrorMessages {
         MAP.put(DELEGATION_IN_INTERFACE, "Interfaces cannot use delegation");
         MAP.put(DELEGATION_NOT_TO_INTERFACE, "Only interfaces can be delegated to");
         MAP.put(DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE, "Delegated member ''{0}'' hides supertype override: {1}. Please specify proper override explicitly", COMPACT, commaSeparated(SHORT_NAMES_IN_TYPES));
-        MAP.put(INHERITANCE_BY_DELEGATION_IN_EXPECT_CLASS, "Inheritance by delegation in expected classes is prohibited");
         MAP.put(NO_CONSTRUCTOR, "This class does not have a constructor");
         MAP.put(RESOLUTION_TO_CLASSIFIER, "{2}", NAME, TO_STRING, STRING);
         MAP.put(NOT_A_CLASS, "Not a class");

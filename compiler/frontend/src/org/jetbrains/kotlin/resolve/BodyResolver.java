@@ -307,7 +307,8 @@ public class BodyResolver {
 
                 if (descriptor.isExpect()) {
                     trace.report(INHERITANCE_BY_DELEGATION_IN_EXPECT_CLASS.on(specifier));
-                } else if (primaryConstructor == null) {
+                }
+                else if (primaryConstructor == null) {
                     trace.report(UNSUPPORTED.on(specifier, "Delegation without primary constructor is not supported"));
                 }
             }

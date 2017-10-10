@@ -266,8 +266,6 @@ public interface Errors {
     DiagnosticFactory2<KtClassOrObject, CallableMemberDescriptor, List<CallableMemberDescriptor>> DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE =
             DiagnosticFactory2.create(WARNING, DECLARATION_NAME);
 
-    DiagnosticFactory0<KtDelegatedSuperTypeEntry> INHERITANCE_BY_DELEGATION_IN_EXPECT_CLASS = DiagnosticFactory0.create(ERROR);
-
     DiagnosticFactory0<KtTypeReference> SUPERTYPE_NOT_A_CLASS_OR_INTERFACE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtTypeReference> SUPERTYPE_IS_EXTENSION_FUNCTION_TYPE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtTypeReference> SUPERTYPE_IS_SUSPEND_FUNCTION_TYPE = DiagnosticFactory0.create(ERROR);
@@ -571,6 +569,8 @@ public interface Errors {
     DiagnosticFactory0<KtPropertyDelegate> EXPECTED_DELEGATED_PROPERTY = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<PsiElement> EXPECTED_LATEINIT_PROPERTY = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<PsiElement> SUPERTYPE_INITIALIZED_IN_EXPECTED_CLASS = DiagnosticFactory0.create(ERROR);
+
+    DiagnosticFactory0<KtDelegatedSuperTypeEntry> INHERITANCE_BY_DELEGATION_IN_EXPECT_CLASS = DiagnosticFactory0.create(ERROR);
 
     DiagnosticFactory0<KtTypeAlias> ACTUAL_TYPE_ALIAS_NOT_TO_CLASS = DiagnosticFactory0.create(ERROR, DECLARATION_SIGNATURE);
     DiagnosticFactory0<KtTypeAlias>
