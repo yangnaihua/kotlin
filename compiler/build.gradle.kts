@@ -164,4 +164,6 @@ codegenTest("codegen-target8-jvm9-test", "JDK_9") {
 codegenTest("codegen-target9-jvm9-test", "JDK_9") {
     systemProperty("kotlin.test.default.jvm.target", "1.8")
     systemProperty("kotlin.test.substitute.bytecode.1.8.to.1.9", "true")
+    //TODO: enable after KT-17243 fix
+    exclude("org/jetbrains/kotlin/codegen/BlackBoxCodegenTestGenerated\$Coroutines.class")
 }
