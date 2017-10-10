@@ -458,11 +458,14 @@ public class DescriptorUtils {
                KotlinTypeChecker.DEFAULT.equalTypes(builtIns.getAnyType(), type);
     }
 
-    public static boolean classCanHaveAbstractMembers(@NotNull ClassDescriptor classDescriptor) {
+    public static boolean classCanHaveAbstractMembersFromBaseClassifier(@NotNull ClassDescriptor classDescriptor) {
+        return classCanHaveExplicitAbstractMember(classDescriptor) || classDescriptor.isExpect();
+    }
+
+    public static boolean classCanHaveExplicitAbstractMember(@NotNull ClassDescriptor classDescriptor) {
         return classDescriptor.getModality() == Modality.ABSTRACT
                || isSealedClass(classDescriptor)
-               || classDescriptor.getKind() == ClassKind.ENUM_CLASS
-               || classDescriptor.isExpect();
+               || classDescriptor.getKind() == ClassKind.ENUM_CLASS;
     }
 
     public static boolean classCanHaveOpenMembers(@NotNull ClassDescriptor classDescriptor) {
