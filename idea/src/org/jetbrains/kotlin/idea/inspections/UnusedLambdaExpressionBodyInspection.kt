@@ -17,16 +17,18 @@
 package org.jetbrains.kotlin.idea.inspections
 
 import com.intellij.codeInsight.FileModificationService
-import com.intellij.codeInspection.LocalQuickFix
-import com.intellij.codeInspection.ProblemDescriptor
+import com.intellij.codeInspection.LocalQuickFixOnPsiElement
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.PsiFile
+import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.builtins.isFunctionType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
@@ -59,16 +61,24 @@ class UnusedLambdaExpressionBodyInspection : AbstractKotlinInspection() {
         }
     }
 
-    private fun KtExpression.used(context: BindingContext): Boolean = context[BindingContext.USED_AS_EXPRESSION, this] ?: true
+    private fun KtExpression.used(context: BindingContext): Boolean =
+            isArgument() || (context[BindingContext.USED_AS_EXPRESSION, this] ?: true)
+
+    private fun KtExpression.isArgument(): Boolean {
+        return PsiTreeUtil.getParentOfType<KtValueArgument>(this, KtValueArgument::class.java)
+                ?.takeIf { it.getArgumentExpression()?.deparenthesize() == this } != null
+    }
 
     private fun CallableDescriptor.returnsFunction() = returnType?.isFunctionType ?: false
 
-    class RemoveEqTokenFromFunctionDeclarationFix(val function: KtFunction) : LocalQuickFix {
-        override fun getName(): String = "Remove '=' token from function declaration"
+    class RemoveEqTokenFromFunctionDeclarationFix(function: KtFunction) : LocalQuickFixOnPsiElement(function) {
+        override fun getText(): String = "Remove '=' token from function declaration"
 
-        override fun getFamilyName(): String = name
+        override fun getFamilyName(): String = text
 
-        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+        override fun invoke(project: Project, file: PsiFile, startElement: PsiElement, endElement: PsiElement) {
+            val function = startElement as? KtFunction ?: return
+
             if (!FileModificationService.getInstance().preparePsiElementForWrite(function)) {
                 return
             }

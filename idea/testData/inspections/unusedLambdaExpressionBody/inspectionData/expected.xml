@@ -15,4 +15,12 @@
         <problem_class severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused return value of a function with lambda expression body</problem_class>
         <description>Unused return value of a function with lambda expression body</description>
     </problem>
+    <problem>
+        <file>enumEntryParameter.kt</file>
+        <line>3</line>
+        <module>light_idea_test_case</module>
+        <entry_point TYPE="file" FQNAME="temp:///src/enumEntryParameter.kt" />
+        <problem_class severity="WARNING" attribute_key="WARNING_ATTRIBUTES">Unused return value of a function with lambda expression body</problem_class>
+        <description>Unused return value of a function with lambda expression body</description>
+    </problem>
 </problems>
