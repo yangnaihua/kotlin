@@ -31,7 +31,6 @@ public open external class Promise<out T>(executor: (resolve: (T) -> Unit, rejec
 
     companion object {
         public fun <S> all(promise: Array<out Promise<S>>): Promise<Array<out S>>
-        public fun <S> all(promise: Array<out Any>): Promise<Array<out S>>
 
         public fun <S> race(promise: Array<out Promise<S>>): Promise<S>
 
