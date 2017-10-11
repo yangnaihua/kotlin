@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.tree.TokenSet
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.diagnostics.Errors.ACTUAL_WITHOUT_EXPECT
-import org.jetbrains.kotlin.diagnostics.Errors.NO_ACTUAL_FOR_EXPECT
+import org.jetbrains.kotlin.diagnostics.Errors.*
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
@@ -115,6 +114,8 @@ object PositioningStrategies {
                       NO_ACTUAL_FOR_EXPECT.cast(this).c
                 ACTUAL_WITHOUT_EXPECT ->
                         ACTUAL_WITHOUT_EXPECT.cast(this).b
+                DECLARATION_WITH_INCOMPATIBLE_EXPECT ->
+                    DECLARATION_WITH_INCOMPATIBLE_EXPECT.cast(this).b
                 else ->
                         return null
             }

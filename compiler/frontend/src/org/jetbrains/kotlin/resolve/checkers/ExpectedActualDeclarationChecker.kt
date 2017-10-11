@@ -185,7 +185,10 @@ object ExpectedActualDeclarationChecker : DeclarationChecker {
             assert(compatibility.keys.all { it is Incompatible })
             @Suppress("UNCHECKED_CAST")
             val incompatibility = compatibility as Map<Incompatible, Collection<MemberDescriptor>>
-            diagnosticHolder.report(Errors.ACTUAL_WITHOUT_EXPECT.on(reportOn, descriptor, incompatibility))
+            if (hasActualModifier)
+                diagnosticHolder.report(Errors.ACTUAL_WITHOUT_EXPECT.on(reportOn, descriptor, incompatibility))
+            else
+                diagnosticHolder.report(Errors.DECLARATION_WITH_INCOMPATIBLE_EXPECT.on(reportOn, descriptor, incompatibility))
         }
     }
 
