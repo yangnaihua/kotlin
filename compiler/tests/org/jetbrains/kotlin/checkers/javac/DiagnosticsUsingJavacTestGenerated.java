@@ -1072,6 +1072,12 @@ public class DiagnosticsUsingJavacTestGenerated extends AbstractDiagnosticsUsing
                 doTest(fileName);
             }
 
+            @TestMetadata("illegalRequireKotlinValue.kt")
+            public void testIllegalRequireKotlinValue() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/annotations/illegalRequireKotlinValue.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("illegalSinceKotlinValue.kt")
             public void testIllegalSinceKotlinValue() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/annotations/illegalSinceKotlinValue.kt");
@@ -14061,6 +14067,18 @@ public class DiagnosticsUsingJavacTestGenerated extends AbstractDiagnosticsUsing
                     doTest(fileName);
                 }
 
+                @TestMetadata("dontOverrideMethodsFromInterfaceInCommonCode.kt")
+                public void testDontOverrideMethodsFromInterfaceInCommonCode() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/multiplatform/headerClass/dontOverrideMethodsFromInterfaceInCommonCode.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("expectClassWithExplicitAbstractMember.kt")
+                public void testExpectClassWithExplicitAbstractMember() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/multiplatform/headerClass/expectClassWithExplicitAbstractMember.kt");
+                    doTest(fileName);
+                }
+
                 @TestMetadata("expectClassWithoutConstructor.kt")
                 public void testExpectClassWithoutConstructor() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/multiplatform/headerClass/expectClassWithoutConstructor.kt");
@@ -14070,6 +14088,12 @@ public class DiagnosticsUsingJavacTestGenerated extends AbstractDiagnosticsUsing
                 @TestMetadata("explicitConstructorDelegation.kt")
                 public void testExplicitConstructorDelegation() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/multiplatform/headerClass/explicitConstructorDelegation.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("extendExpectedClassWithoutExplicitOverrideOfMethod.kt")
+                public void testExtendExpectedClassWithoutExplicitOverrideOfMethod() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/multiplatform/headerClass/extendExpectedClassWithoutExplicitOverrideOfMethod.kt");
                     doTest(fileName);
                 }
 
@@ -14106,6 +14130,12 @@ public class DiagnosticsUsingJavacTestGenerated extends AbstractDiagnosticsUsing
                 @TestMetadata("implOpenClass.kt")
                 public void testImplOpenClass() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/multiplatform/headerClass/implOpenClass.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("inheritanceByDelegationInExpectClass.kt")
+                public void testInheritanceByDelegationInExpectClass() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/multiplatform/headerClass/inheritanceByDelegationInExpectClass.kt");
                     doTest(fileName);
                 }
 

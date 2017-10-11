@@ -2,11 +2,12 @@ import org.gradle.api.Project
 import java.util.*
 import java.io.File
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.plugins.ide.idea.model.IdeaModel
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 buildscript {
-    extra["defaultSnapshotVersion"] = "1.1-SNAPSHOT"
+    extra["defaultSnapshotVersion"] = "1.2-SNAPSHOT"
 
     kotlinBootstrapFrom(BootstrapOption.BintrayDev("1.1.60-dev-277"))
 
@@ -34,6 +35,7 @@ buildscript {
 
 plugins {
     `build-scan`
+    idea
 }
 
 buildScan {
@@ -52,7 +54,7 @@ val defaultSnapshotVersion: String by extra
 val buildNumber by extra(findProperty("build.number")?.toString() ?: defaultSnapshotVersion)
 val kotlinVersion by extra(findProperty("deployVersion")?.toString() ?: buildNumber)
 
-val kotlinLanguageVersion by extra("1.1")
+val kotlinLanguageVersion by extra("1.2")
 
 allprojects {
     group = "org.jetbrains.kotlin"
@@ -221,7 +223,7 @@ allprojects {
 
     // There are problems with common build dir:
     //  - some tests (in particular js and binary-compatibility-validator depend on the fixed (default) location
-    //  - idea siims unable to exclude common builddir from indexing
+    //  - idea seems unable to exclude common builddir from indexing
     // therefore it is disabled by default
 //    buildDir = File(commonBuildDir, project.name)
 
@@ -229,8 +231,6 @@ allprojects {
         for (repo in (rootProject.extra["repos"] as List<String>)) {
             maven { setUrl(repo) }
         }
-        mavenCentral()
-        jcenter()
     }
     configureJvmProject(javaHome!!, jvmTarget!!)
 
@@ -339,7 +339,6 @@ tasks {
     }
 
     "jsCompilerTest" {
-        dependsOn("dist")
         dependsOn(":js:js.tests:test")
     }
 
@@ -446,6 +445,23 @@ tasks {
         }
     }
     "check" { dependsOn("test") }
+}
+
+the<IdeaModel>().apply {
+    module {
+        excludeDirs = files(
+                project.buildDir,
+                ".gradle",
+                "dependencies",
+                "dist",
+                "ideaSDK/bin",
+                "ideaSDK/androidSDK",
+                "ideaSDK/config",
+                "ideaSDK/config-idea",
+                "ideaSDK/system",
+                "ideaSDK/system-idea"
+        ).toSet()
+    }
 }
 
 fun jdkPathIfFound(version: String): String? {

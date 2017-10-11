@@ -893,6 +893,24 @@ public class QuickFixTestGenerated extends AbstractQuickFixTest {
             KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("idea/testData/quickfix/addTypeAnnotationToValueParameter"), Pattern.compile("^([\\w\\-_]+)\\.kt$"), TargetBackend.ANY, true);
         }
 
+        @TestMetadata("annotationWithArrayLiteralDouble.kt")
+        public void testAnnotationWithArrayLiteralDouble() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addTypeAnnotationToValueParameter/annotationWithArrayLiteralDouble.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("annotationWithArrayLiteralInt.kt")
+        public void testAnnotationWithArrayLiteralInt() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addTypeAnnotationToValueParameter/annotationWithArrayLiteralInt.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("annotationWithArrayLiteralString.kt")
+        public void testAnnotationWithArrayLiteralString() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addTypeAnnotationToValueParameter/annotationWithArrayLiteralString.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("noDefaultValue.kt")
         public void testNoDefaultValue() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/addTypeAnnotationToValueParameter/noDefaultValue.kt");
@@ -1421,6 +1439,18 @@ public class QuickFixTestGenerated extends AbstractQuickFixTest {
         @TestMetadata("removeUnusedParameter.kt")
         public void testRemoveUnusedParameter() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/changeSignature/removeUnusedParameter.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("removeUnusedPrimaryConstructorParameter.kt")
+        public void testRemoveUnusedPrimaryConstructorParameter() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/changeSignature/removeUnusedPrimaryConstructorParameter.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("removeUnusedPrimaryConstructorParameter2.kt")
+        public void testRemoveUnusedPrimaryConstructorParameter2() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/changeSignature/removeUnusedPrimaryConstructorParameter2.kt");
             doTest(fileName);
         }
     }
@@ -8042,6 +8072,12 @@ public class QuickFixTestGenerated extends AbstractQuickFixTest {
             doTest(fileName);
         }
 
+        @TestMetadata("dontOfferToImplementMembersForExpectedClass.kt")
+        public void testDontOfferToImplementMembersForExpectedClass() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/override/dontOfferToImplementMembersForExpectedClass.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("implemenAsConstructorParameter.kt")
         public void testImplemenAsConstructorParameter() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/override/implemenAsConstructorParameter.kt");
@@ -9068,6 +9104,12 @@ public class QuickFixTestGenerated extends AbstractQuickFixTest {
         @TestMetadata("unusedPropertyAsConstructorParameter.kt")
         public void testUnusedPropertyAsConstructorParameter() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/removeUnused/unusedPropertyAsConstructorParameter.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("unusedPropertyAsConstructorParameter2.kt")
+        public void testUnusedPropertyAsConstructorParameter2() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/quickfix/removeUnused/unusedPropertyAsConstructorParameter2.kt");
             doTest(fileName);
         }
 

@@ -4307,6 +4307,24 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
             doTest(fileName);
         }
 
+        @TestMetadata("inlineFunInConstructorCallWithDisabledNormalization.kt")
+        public void testInlineFunInConstructorCallWithDisabledNormalization() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/constructorCall/inlineFunInConstructorCallWithDisabledNormalization.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("inlineFunInConstructorCallWithEnabledNormalization.kt")
+        public void testInlineFunInConstructorCallWithEnabledNormalization() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/constructorCall/inlineFunInConstructorCallWithEnabledNormalization.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("inlineFunInConstructorCallWithStrictNormalization.kt")
+        public void testInlineFunInConstructorCallWithStrictNormalization() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/constructorCall/inlineFunInConstructorCallWithStrictNormalization.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("inlineFunInInnerClassConstructorCall.kt")
         public void testInlineFunInInnerClassConstructorCall() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/constructorCall/inlineFunInInnerClassConstructorCall.kt");
@@ -7979,6 +7997,18 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
         @TestMetadata("kt1119.kt")
         public void testKt1119() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/enum/kt1119.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("kt20651.kt")
+        public void testKt20651() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/enum/kt20651.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("kt20651_inlineLambda.kt")
+        public void testKt20651_inlineLambda() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/enum/kt20651_inlineLambda.kt");
             doTest(fileName);
         }
 
@@ -12188,6 +12218,78 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
         @TestMetadata("safeAccess.kt")
         public void testSafeAccess() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/safeAccess.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToCompanionObjectInAnonymousObjectInSuperConstructorCall.kt")
+        public void testSelfReferenceToCompanionObjectInAnonymousObjectInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToCompanionObjectInAnonymousObjectInSuperConstructorCall.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToCompanionObjectInInlineLambdaInConstructorBody.kt")
+        public void testSelfReferenceToCompanionObjectInInlineLambdaInConstructorBody() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToCompanionObjectInInlineLambdaInConstructorBody.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToCompanionObjectInInlineLambdaInSuperConstructorCall.kt")
+        public void testSelfReferenceToCompanionObjectInInlineLambdaInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToCompanionObjectInInlineLambdaInSuperConstructorCall.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToCompanionObjectInLambdaInSuperConstructorCall.kt")
+        public void testSelfReferenceToCompanionObjectInLambdaInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToCompanionObjectInLambdaInSuperConstructorCall.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToInterfaceCompanionObjectInAnonymousObjectInSuperConstructorCall.kt")
+        public void testSelfReferenceToInterfaceCompanionObjectInAnonymousObjectInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToInterfaceCompanionObjectInAnonymousObjectInSuperConstructorCall.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToInterfaceCompanionObjectInInlineLambdaInConstructorBody.kt")
+        public void testSelfReferenceToInterfaceCompanionObjectInInlineLambdaInConstructorBody() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToInterfaceCompanionObjectInInlineLambdaInConstructorBody.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToInterfaceCompanionObjectInInlineLambdaInSuperConstructorCall.kt")
+        public void testSelfReferenceToInterfaceCompanionObjectInInlineLambdaInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToInterfaceCompanionObjectInInlineLambdaInSuperConstructorCall.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToInterfaceCompanionObjectInLambdaInSuperConstructorCall.kt")
+        public void testSelfReferenceToInterfaceCompanionObjectInLambdaInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToInterfaceCompanionObjectInLambdaInSuperConstructorCall.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToObjectInAnonymousObjectInSuperConstructorCall.kt")
+        public void testSelfReferenceToObjectInAnonymousObjectInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToObjectInAnonymousObjectInSuperConstructorCall.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToObjectInInlineLambdaInConstructorBody.kt")
+        public void testSelfReferenceToObjectInInlineLambdaInConstructorBody() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToObjectInInlineLambdaInConstructorBody.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToObjectInInlineLambdaInSuperConstructorCall.kt")
+        public void testSelfReferenceToObjectInInlineLambdaInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToObjectInInlineLambdaInSuperConstructorCall.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("selfReferenceToObjectInLambdaInSuperConstructorCall.kt")
+        public void testSelfReferenceToObjectInLambdaInSuperConstructorCall() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/selfReferenceToObjectInLambdaInSuperConstructorCall.kt");
             doTest(fileName);
         }
 

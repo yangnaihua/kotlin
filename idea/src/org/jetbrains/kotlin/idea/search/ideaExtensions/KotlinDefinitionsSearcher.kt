@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.asJava.classes.KtLightClass
 import org.jetbrains.kotlin.asJava.elements.KtLightMethod
 import org.jetbrains.kotlin.asJava.toLightClass
 import org.jetbrains.kotlin.asJava.unwrapped
+import org.jetbrains.kotlin.idea.search.declarationsSearch.forEachImplementation
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.contains
@@ -116,8 +117,7 @@ class KotlinDefinitionsSearcher : QueryExecutor<PsiElement, DefinitionsScopedSea
 
         private fun processFunctionImplementations(function: KtFunction, scope: SearchScope, consumer: Processor<PsiElement>): Boolean {
             val psiMethod = runReadAction { LightClassUtil.getLightClassMethod(function) }
-
-            return psiMethod?.let { MethodImplementationsSearch.processImplementations(it, consumer, scope) } ?: true
+            return psiMethod?.forEachImplementation(scope, consumer::process) ?: true
         }
 
         private fun processPropertyImplementations(parameter: KtParameter, scope: SearchScope, consumer: Processor<PsiElement>): Boolean {
@@ -140,11 +140,13 @@ class KotlinDefinitionsSearcher : QueryExecutor<PsiElement, DefinitionsScopedSea
                 for (implementation in implementations) {
                     if (isDelegated(implementation)) continue
 
-                    val mirrorElement = (implementation as? KtLightMethod)?.kotlinOrigin
-                    val elementToProcess = when(mirrorElement) {
-                        is KtProperty, is KtParameter -> mirrorElement
-                        is KtPropertyAccessor -> if (mirrorElement.parent is KtProperty) mirrorElement.parent else implementation
-                        else -> implementation
+                    val elementToProcess = runReadAction {
+                        val mirrorElement = (implementation as? KtLightMethod)?.kotlinOrigin
+                        when (mirrorElement) {
+                            is KtProperty, is KtParameter -> mirrorElement
+                            is KtPropertyAccessor -> if (mirrorElement.parent is KtProperty) mirrorElement.parent else implementation
+                            else -> implementation
+                        }
                     }
 
                     if (!consumer.process(elementToProcess)) {

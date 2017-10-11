@@ -44,10 +44,12 @@ import org.jetbrains.kotlin.idea.caches.resolve.findModuleDescriptor
 import org.jetbrains.kotlin.idea.core.isInheritable
 import org.jetbrains.kotlin.idea.core.isOverridable
 import org.jetbrains.kotlin.idea.core.toDescriptor
+import org.jetbrains.kotlin.idea.facet.implementedDescriptor
 import org.jetbrains.kotlin.idea.facet.implementingDescriptors
 import org.jetbrains.kotlin.idea.util.ProjectRootsUtil
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.hasExpectModifier
 import org.jetbrains.kotlin.psi.psiUtil.hasActualModifier
 import java.awt.event.MouseEvent
@@ -60,6 +62,12 @@ class KotlinLineMarkerProvider : LineMarkerProvider {
         // all Kotlin markers are added in slow marker pass
         return null
     }
+
+    private fun KtNamedDeclaration.isExpectDeclaration(): Boolean =
+            (toDescriptor() as? MemberDescriptor)?.isExpect == true
+
+    private fun KtNamedDeclaration.isActualDeclaration(): Boolean =
+            (toDescriptor() as? MemberDescriptor)?.isActual == true
 
     override fun collectSlowLineMarkers(elements: List<PsiElement>, result: MutableCollection<LineMarkerInfo<*>>) {
         if (elements.isEmpty()) return
@@ -100,10 +108,10 @@ class KotlinLineMarkerProvider : LineMarkerProvider {
         for (element in elements) {
             if (element !is KtNamedDeclaration) continue
 
-            if (element.hasExpectModifier()) {
+            if (element.isExpectDeclaration()) {
                 collectActualMarkers(element, result)
             }
-            else if (element.hasActualModifier()) {
+            else if (element.isActualDeclaration()) {
                 collectExpectedMarkers(element, result)
             }
         }
@@ -182,22 +190,25 @@ private val OVERRIDDEN_PROPERTY = object : MarkerType(
     }
 }
 
+private val PsiElement.markerDeclaration
+    get() = (this as? KtDeclaration) ?: (parent as? KtDeclaration)
+
 private val PLATFORM_ACTUAL = MarkerType(
         "PLATFORM_ACTUAL",
-        { it?.let { getPlatformActualTooltip(it.parent as KtDeclaration) } },
+        { it?.let { getPlatformActualTooltip(it.markerDeclaration) } },
         object : LineMarkerNavigator() {
             override fun browse(e: MouseEvent?, element: PsiElement?) {
-                element?.let { navigateToPlatformActual(e, it.parent as KtDeclaration) }
+                element?.let { navigateToPlatformActual(e, it.markerDeclaration) }
             }
         }
 )
 
 private val EXPECTED_DECLARATION = MarkerType(
         "EXPECTED_DECLARATION",
-        { it?.let { getExpectedDeclarationTooltip(it.parent as KtDeclaration) } },
+        { it?.let { getExpectedDeclarationTooltip(it.markerDeclaration) } },
         object : LineMarkerNavigator() {
             override fun browse(e: MouseEvent?, element: PsiElement?) {
-                element?.let { navigateToExpectedDeclaration(it.parent as KtDeclaration) }
+                element?.let { navigateToExpectedDeclaration(it.markerDeclaration) }
             }
         }
 )
@@ -286,6 +297,14 @@ private fun collectOverriddenPropertyAccessors(properties: Collection<KtNamedDec
     }
 }
 
+private val KtNamedDeclaration.expectOrActualAnchor
+    get() =
+        nameIdentifier
+        ?: (this as? KtConstructor<*>)?.let {
+            it.getConstructorKeyword() ?: it.getValueParameterList()?.leftParenthesis
+        }
+        ?: this
+
 private fun collectActualMarkers(declaration: KtNamedDeclaration,
                                  result: MutableCollection<LineMarkerInfo<*>>) {
 
@@ -294,7 +313,7 @@ private fun collectActualMarkers(declaration: KtNamedDeclaration,
 
     if (commonModuleDescriptor.implementingDescriptors.none { it.hasActualsFor(descriptor) }) return
 
-    val anchor = declaration.nameIdentifier ?: declaration
+    val anchor = declaration.expectOrActualAnchor
 
     result.add(LineMarkerInfo(
             anchor,
@@ -312,10 +331,10 @@ private fun collectExpectedMarkers(declaration: KtNamedDeclaration,
 
     val descriptor = declaration.toDescriptor() as? MemberDescriptor ?: return
     val platformModuleDescriptor = declaration.containingKtFile.findModuleDescriptor()
-    val commonModuleDescriptor = platformModuleDescriptor.commonModuleOrNull() ?: return
+    val commonModuleDescriptor = platformModuleDescriptor.implementedDescriptor ?: return
     if (!commonModuleDescriptor.hasDeclarationOf(descriptor)) return
 
-    val anchor = declaration.nameIdentifier ?: declaration
+    val anchor = declaration.expectOrActualAnchor
 
     result.add(LineMarkerInfo(
             anchor,

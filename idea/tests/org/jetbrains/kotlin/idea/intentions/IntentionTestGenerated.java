@@ -13615,6 +13615,12 @@ public class IntentionTestGenerated extends AbstractIntentionTest {
             doTest(fileName);
         }
 
+        @TestMetadata("addGeneric.kt")
+        public void testAddGeneric() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/intentions/replaceAddWithPlusAssign/addGeneric.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("addToVar.kt")
         public void testAddToVar() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/intentions/replaceAddWithPlusAssign/addToVar.kt");
@@ -16211,6 +16217,12 @@ public class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("callableReference.kt")
         public void testCallableReference() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/intentions/valToObject/callableReference.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("expected.kt")
+        public void testExpected() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/intentions/valToObject/expected.kt");
             doTest(fileName);
         }
 

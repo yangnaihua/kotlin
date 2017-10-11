@@ -2,6 +2,7 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    compile(protobufFull())
     compile(project(":core"))
     compile(project(":idea"))
     compile(project(":j2k"))
@@ -31,7 +32,6 @@ dependencies {
     compile(projectTests(":kotlin-annotation-processing"))
     compile(projectTests(":plugins:uast-kotlin"))
     compile(projectTests(":js:js.tests"))
-    compile(protobufFull())
     compile(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
     testCompile(project(":compiler.tests-common"))
     testCompile(project(":idea:idea-test-framework")) { isTransitive = false }
@@ -62,10 +62,13 @@ projectTest {
     workingDir = rootDir
 }
 
-val generateTests by task<JavaExec> {
+fun generator(fqName: String) = task<JavaExec> {
     classpath = the<JavaPluginConvention>().sourceSets["test"].runtimeClasspath
-
-    main = "org.jetbrains.kotlin.generators.tests.GenerateTestsKt"
-
+    main = fqName
     workingDir = rootDir
 }
+
+val generateTests by generator("org.jetbrains.kotlin.generators.tests.GenerateTestsKt")
+
+val generateProtoBuf by generator("org.jetbrains.kotlin.generators.protobuf.GenerateProtoBufKt")
+val generateProtoBufCompare by generator("org.jetbrains.kotlin.generators.protobuf.GenerateProtoBufCompare")

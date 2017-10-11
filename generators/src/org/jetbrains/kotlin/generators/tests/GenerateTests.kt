@@ -832,7 +832,7 @@ fun main(args: Array<String>) {
         }
 
         testClass<AbstractFindUsagesTest> {
-            model("findUsages/kotlin", pattern = """^(.+)\.0\.kt$""")
+            model("findUsages/kotlin", pattern = """^(.+)\.0\.(kt|kts)$""")
             model("findUsages/java", pattern = """^(.+)\.0\.java$""")
             model("findUsages/propertyFiles", pattern = """^(.+)\.0\.properties$""")
         }
@@ -1132,8 +1132,8 @@ fun main(args: Array<String>) {
 
     testGroup("idea/idea-gradle/tests", "idea/testData") {
         testClass<AbstractGradleConfigureProjectByChangingFileTest> {
-            model("configuration/gradle", pattern = """(\w+)_before\.gradle$""", testMethod = "doTestGradle")
-            model("configuration/gsk", pattern = """(\w+)_before\.gradle.kts$""", testMethod = "doTestGradle")
+            model("configuration/gradle", extension = null, recursive = false, testMethod = "doTestGradle")
+            model("configuration/gsk", extension = null, recursive = false, testMethod = "doTestGradle")
         }
     }
 
