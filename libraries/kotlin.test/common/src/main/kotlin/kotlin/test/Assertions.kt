@@ -186,7 +186,7 @@ interface Asserter {
      * @param message the message to report if the assertion fails.
      */
     fun assertSame(message: String?, expected: Any?, actual: Any?): Unit {
-        assertTrue({ messagePrefix(message) + "Expected <$expected>, actual <$actual>." }, actual === expected)
+        assertTrue({ messagePrefix(message) + "Expected <$expected>, actual <$actual> is not same." }, actual === expected)
     }
 
     /**
@@ -195,7 +195,7 @@ interface Asserter {
      * @param message the message to report if the assertion fails.
      */
     fun assertNotSame(message: String?, illegal: Any?, actual: Any?): Unit {
-        assertTrue({ messagePrefix(message) + "Illegal value: <$actual>." }, actual !== illegal)
+        assertTrue({ messagePrefix(message) + "Expected not same as <$actual>." }, actual !== illegal)
     }
 
     /**
