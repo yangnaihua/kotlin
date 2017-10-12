@@ -61,13 +61,13 @@ enum class LanguageFeature(
 
 
     JvmPackageName(KOTLIN_1_2),
-    CallableReferencesToClassMembersWithEmptyLHS(KOTLIN_1_2),
-    InnerClassInEnumEntryClass(KOTLIN_1_2),
-    DeprecatedFieldForInvisibleCompanionObject(KOTLIN_1_2),
-    InlineDefaultFunctionalParameters(KOTLIN_1_2),
-    ArrayLiteralsInAnnotations(KOTLIN_1_2),
-    NullabilityAssertionOnExtensionReceiver(KOTLIN_1_2),
-    ThrowNpeOnExplicitEqualsForBoxedNull(KOTLIN_1_2),
+    CallableReferencesToClassMembersWithEmptyLHS(KOTLIN_1_3),
+    InnerClassInEnumEntryClass(KOTLIN_1_3),
+    DeprecatedFieldForInvisibleCompanionObject(KOTLIN_1_3),
+    InlineDefaultFunctionalParameters(KOTLIN_1_3),
+    ArrayLiteralsInAnnotations(KOTLIN_1_3),
+    NullabilityAssertionOnExtensionReceiver(KOTLIN_1_3),
+    ThrowNpeOnExplicitEqualsForBoxedNull(KOTLIN_1_3),
 
     ReturnsEffect(KOTLIN_1_3),
     CallsInPlaceEffect(KOTLIN_1_3),
