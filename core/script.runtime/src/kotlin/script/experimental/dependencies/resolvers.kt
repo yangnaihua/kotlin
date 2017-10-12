@@ -26,8 +26,14 @@ import kotlin.script.experimental.dependencies.DependenciesResolver.ResolveResul
 interface DependenciesResolver : ScriptDependenciesResolver {
     fun resolve(scriptContents: ScriptContents, environment: Environment): ResolveResult
 
-    object NoDependencies : DependenciesResolver {
+    class NoDependencies : DependenciesResolver {
         override fun resolve(scriptContents: ScriptContents, environment: Environment) = ScriptDependencies.Empty.asSuccess()
+
+        // TODO: for binary compatibility with the current usages as object, could be (carefully) dropped after bootstrap
+        companion object {
+            @JvmStatic
+            val INSTANCE = NoDependencies()
+        }
     }
 
     sealed class ResolveResult {
@@ -44,6 +50,11 @@ interface DependenciesResolver : ScriptDependenciesResolver {
 
             override val dependencies: ScriptDependencies? get() = null
         }
+    }
+
+    companion object {
+        // for source compatibility with current usage as object
+        val NoDependencies: NoDependencies = DependenciesResolver.NoDependencies.INSTANCE
     }
 }
 
