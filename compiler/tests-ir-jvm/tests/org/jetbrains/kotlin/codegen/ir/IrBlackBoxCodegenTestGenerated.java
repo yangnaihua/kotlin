@@ -10568,6 +10568,12 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
             KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/codegen/box/jvmPackageName"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.JVM, true);
         }
 
+        @TestMetadata("metadataField.kt")
+        public void testMetadataField() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/jvmPackageName/metadataField.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("rootPackage.kt")
         public void testRootPackage() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/jvmPackageName/rootPackage.kt");
@@ -12038,15 +12044,15 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
             doTest(fileName);
         }
 
-        @TestMetadata("interfaceCompanionObjectReference.kt")
-        public void testInterfaceCompanionObjectReference() throws Exception {
-            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/interfaceCompanionObjectReference.kt");
-            doTest(fileName);
-        }
-
         @TestMetadata("interfaceCompanion.kt")
         public void testInterfaceCompanion() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/interfaceCompanion.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("interfaceCompanionObjectReference.kt")
+        public void testInterfaceCompanionObjectReference() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/objects/interfaceCompanionObjectReference.kt");
             doTest(fileName);
         }
 
